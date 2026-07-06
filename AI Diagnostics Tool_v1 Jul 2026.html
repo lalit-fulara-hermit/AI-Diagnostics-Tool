@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Readiness Assessment</title>
+<style>
+  :root{
+    --ink:#43224d; --signal:#e0044e; --paper:#f7f6f8; --surface:#fff;
+    --line:#e7e3ec; --hair:#efedf2; --muted:#736a79; --soft:#9a91a1; --text:#23202a;
+    --cleared:#1f7a5c; --blocked:#c07a1c;
+    --ink-06:rgba(67,34,77,.06); --ink-10:rgba(67,34,77,.10);
+    --radius:12px;
+    --mono:ui-monospace,"SF Mono","Cascadia Code","Roboto Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:var(--sans);color:var(--text);background:var(--paper);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);font-weight:600}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+  .term{border-bottom:1px dashed var(--soft);cursor:help;position:relative;outline:none}
+  .term:hover,.term:focus{color:var(--ink);border-bottom-color:var(--ink)}
+  .term::after{content:attr(data-tip);position:absolute;left:0;bottom:calc(100% + 9px);width:min(260px,72vw);background:var(--ink);color:#fff;font-size:12.5px;font-weight:400;line-height:1.5;padding:11px 13px;border-radius:10px;opacity:0;visibility:hidden;transition:opacity .12s;z-index:40;box-shadow:0 10px 30px rgba(42,24,48,.28);pointer-events:none;text-transform:none;letter-spacing:normal}
+  .term::before{content:"";position:absolute;left:16px;bottom:calc(100% + 3px);border:6px solid transparent;border-top-color:var(--ink);opacity:0;visibility:hidden;transition:opacity .12s;z-index:40}
+  .term:hover::after,.term:focus::after,.term:hover::before,.term:focus::before{opacity:1;visibility:visible}
+
+  /* shell */
+  header.top{border-bottom:1px solid var(--line);background:var(--surface)}
+  .top-inner{max-width:min(1720px,96vw);margin:0 auto;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{display:flex;align-items:baseline;gap:14px}
+  .brand .mark{font-weight:800;letter-spacing:-.01em;color:var(--ink);font-size:18px}
+  .markbtn{background:none;border:none;padding:0;cursor:pointer;font-family:var(--sans)}
+  .markbtn:hover{text-decoration:underline;text-underline-offset:3px}
+  .hdr-right{display:flex;align-items:center;gap:22px}
+  .hdr-logo{font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.035em;font-family:var(--sans);white-space:nowrap}
+  .brand .mark span{color:var(--signal)}
+  .brand .tool{font-size:12.5px;color:var(--muted);border-left:1px solid var(--line);padding-left:14px}
+
+  .app-body{max-width:min(1720px,96vw);margin:0 auto;display:flex;align-items:flex-start}
+
+  /* left sidebar */
+  .sidebar{width:250px;flex-shrink:0;position:sticky;top:0;align-self:flex-start;padding:26px 16px 40px;border-right:1px solid var(--line)}
+  .side-sel{padding:0 8px 20px;margin-bottom:14px;border-bottom:1px solid var(--hair)}
+  .side-sel label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--soft);font-weight:700;margin-bottom:7px}
+  .side-sel select{width:100%;font-family:var(--sans);font-size:13.5px;font-weight:600;color:var(--text);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:10px 11px;cursor:pointer}
+  .side-nav{display:flex;flex-direction:column;gap:2px}
+  .side-grp{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);font-weight:700;margin:16px 10px 8px}
+  .side-item{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:9px 10px;border-radius:9px;font-family:var(--sans);transition:background .12s}
+  .side-item:hover{background:var(--ink-06)}
+  .side-item:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+  .side-item.on{background:var(--ink-06)}
+  .side-item .si-n{width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--soft);flex-shrink:0}
+  .side-item.on .si-n{background:var(--signal);color:#fff;border-color:var(--signal)}
+  .side-item .si-n.done{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .side-item .si-ic{width:24px;height:24px;color:var(--soft);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .side-item .si-ic svg{width:17px;height:17px}
+  .side-item.on .si-ic{color:var(--signal)}
+  .side-item .si-l{display:flex;flex-direction:column;min-width:0;flex:1}
+  .side-item .si-l b{font-size:13px;font-weight:600;color:var(--text);line-height:1.25}
+  .side-item.on .si-l b{color:var(--ink)}
+  .side-item .si-l span{font-size:11px;color:var(--soft);margin-top:1px}
+  .side-item.lite{margin-bottom:2px}
+  .si-ct{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:1px 6px;flex-shrink:0}
+
+  .main-area{flex:1;min-width:0}
+  .workspace{display:flex;gap:52px;padding:34px 40px 64px;align-items:flex-start}
+  .work-left{flex:1.04;min-width:0}
+  .work-right{flex:0.96;min-width:0;position:sticky;top:20px}
+  .howworks{padding:40px 44px 72px}
+
+  /* live view pane */
+  .live-eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);font-weight:700;margin-bottom:16px}
+  .live-hero{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px;margin-bottom:16px}
+  .live-hero svg{width:100%;height:auto;display:block}
+  .live-hero.center{text-align:center;padding:40px 28px}
+  .live-hero.center svg{max-width:240px;margin:0 auto}
+  .live-cap{font-size:13.5px;color:var(--muted);line-height:1.6;margin-top:20px;max-width:40ch;margin-left:auto;margin-right:auto}
+  .live-cap b{color:var(--ink)}
+  .live-read{font-size:14px;color:var(--muted);line-height:1.62;margin:18px 0 0}
+  .live-read b{color:var(--ink);font-weight:700}
+  .live-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px}
+  .lstat{background:var(--surface);padding:15px 17px;display:flex;flex-direction:column;gap:4px}
+  .lstat span:first-child{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .lstat span:last-child{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--ink)}
+  .lstat span.sig{color:var(--signal)}
+  .live-note{font-size:11.5px;color:var(--soft);text-align:center;margin:-6px 0 16px;font-style:italic}
+  .lstat.fix{grid-column:1/-1;background:var(--ink)}
+  .lstat.fix span:first-child{color:rgba(255,255,255,.6)}
+  .lstat.fix span:last-child{color:#ff7aa6}
+  .live-help{font-size:12.5px;color:var(--muted);line-height:1.6;padding:16px 18px;background:var(--ink-06);border-radius:12px}
+  .live-help b{color:var(--ink);display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+
+  .oppguide{margin-bottom:30px}
+  .oppguide .legend{flex-direction:row;flex-wrap:wrap;gap:18px;margin-bottom:16px}
+
+  main.work-left{}
+
+  .stage{animation:fade .28s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+  /* editorial lede */
+  .lede{max-width:60ch;margin-bottom:34px}
+  .lede h1{font-size:27px;line-height:1.2;letter-spacing:-.015em;color:var(--ink);margin:10px 0 14px;font-weight:700}
+  .lede p{margin:0;font-size:15.5px;color:var(--text);line-height:1.62}
+  .who{margin-top:14px;font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px}
+  .who::before{content:"";width:16px;height:1px;background:var(--soft);display:inline-block}
+
+  .section-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--soft);font-weight:700;margin:0 0 16px}
+  .lbl-help{cursor:help}
+  .lbl-i{display:inline-block;width:13px;height:13px;margin-left:6px;vertical-align:-2px;color:var(--soft);flex-shrink:0}
+  .qnote{width:100%;margin-top:6px;font-family:var(--sans);font-size:11px;color:var(--text);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:5px 9px}
+  .qnote::placeholder{color:var(--soft)}
+  .qnote:focus{outline:1.5px solid var(--ink);outline-offset:-1px;border-color:var(--ink);background:var(--surface)}
+  .qnote.has{border-color:var(--soft);background:var(--surface)}
+  .fx-gaps li .fx-why{display:block;font-size:11px;color:var(--muted);font-style:italic;margin-top:2px;line-height:1.4}
+  .lbl-help:hover .lbl-i{border-color:var(--signal);color:var(--signal)}
+  .scope-actions{display:inline-flex;gap:8px;margin-left:16px;text-transform:none;letter-spacing:0}
+  .scope-act{background:none;border:1px solid var(--line);border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;font-family:var(--sans)}
+  .scope-act:hover{border-color:var(--ink);color:var(--ink)}
+  .lbl-help[data-help]:hover::after,.lbl-help[data-help]:focus-visible::after{max-width:300px}
+
+  /* scope chips */
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{font-size:13px;font-weight:500;padding:9px 15px;border-radius:22px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--muted);display:flex;align-items:center;gap:8px;user-select:none;transition:all .12s}
+  .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--line)}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600}
+  .chip.on .dot{background:var(--signal)}
+  .chip:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+  .hint{font-size:13px;color:var(--muted);margin-top:18px;line-height:1.55;max-width:58ch}
+
+  /* foundations (readiness) */
+  .foundations{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--hair)}
+  .fnd{border-bottom:1px solid var(--hair)}
+  .fnd-head{width:100%;display:flex;align-items:center;gap:16px;padding:18px 4px;background:none;border:none;cursor:pointer;text-align:left;font-family:var(--sans)}
+  .fnd-head:hover .fnd-name{color:var(--ink)}
+  .fnd-head:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+  .fnd-idx{font-family:var(--mono);font-size:12px;color:var(--soft);width:18px;flex-shrink:0}
+  .fnd-main{flex:1;min-width:0}
+  .fnd-name{font-size:15px;font-weight:600;color:var(--text);transition:color .12s}
+  .fnd-role{font-size:12.5px;color:var(--muted);margin-left:9px}
+  .fnd-state{display:flex;align-items:center;gap:14px;flex-shrink:0}
+  .badge{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:4px 9px;border-radius:20px;white-space:nowrap}
+  .badge.ok{background:rgba(31,122,92,.1);color:var(--cleared)}
+  .badge.ind{background:rgba(192,122,28,.13);color:var(--blocked)}
+  .badge.notset{background:var(--ink-06);color:var(--soft)}
+  .fnd-lvl{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--ink);width:34px;text-align:right}
+  .fnd-lvl.empty{color:var(--soft);font-weight:400}
+  .chev{color:var(--soft);font-size:11px;transition:transform .18s;width:11px}
+  .fnd.open .chev{transform:rotate(90deg)}
+  .fnd-body{padding:4px 4px 26px 38px;display:grid;grid-template-columns:1fr 1.15fr;gap:34px}
+  .fnd-body .col-h{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--soft);font-weight:700;margin-bottom:12px}
+  .artefact{display:flex;align-items:flex-start;gap:10px;padding:7px 0;font-size:13.5px;cursor:pointer;line-height:1.45}
+  .artefact input{accent-color:var(--ink);width:16px;height:16px;margin-top:1px;cursor:pointer;flex-shrink:0}
+  .lvlrow{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:9px;margin-bottom:7px;cursor:pointer;font-size:13.5px;line-height:1.4;transition:all .12s}
+  .lvlrow:hover{border-color:var(--soft)}
+  .lvlrow:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+  .lvlrow.sel{border-color:var(--ink);background:var(--ink-06)}
+  .lvlrow .ln{font-family:var(--mono);font-weight:700;color:var(--soft);flex-shrink:0}
+  .lvlrow.sel .ln{color:var(--signal)}
+  .guard{grid-column:1/-1;display:flex;gap:10px;margin-top:6px;font-size:13px;padding:12px 14px;border-radius:9px;background:rgba(192,122,28,.08);border:1px solid rgba(192,122,28,.24);color:#7a4d10;line-height:1.5}
+  .guard b{color:var(--blocked)}
+
+  .notes{margin-top:34px;border-top:1px solid var(--hair);padding-top:26px}
+  .flag{display:flex;gap:11px;align-items:flex-start;font-size:13.5px;padding:2px 0 12px;line-height:1.5}
+  .flag .fi{color:var(--signal);font-weight:800;font-family:var(--mono);flex-shrink:0}
+  .flag b{color:var(--ink)}
+  .flags-empty{font-size:13.5px;color:var(--muted)}
+
+  /* opportunity */
+  .filterbar{display:flex;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+  .toggle{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:500;cursor:pointer;color:var(--muted)}
+  .switch{width:38px;height:22px;border-radius:12px;background:var(--line);position:relative;transition:background .15s}
+  .switch::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .toggle.on{color:var(--text)}
+  .toggle.on .switch{background:var(--ink)}
+  .toggle.on .switch::after{transform:translateX(16px)}
+  .count-note{font-size:12.5px;color:var(--muted)}
+  .count-note b{color:var(--ink);font-family:var(--mono)}
+  table.opps{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.opps th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);font-weight:700;padding:0 12px 12px;border-bottom:1px solid var(--line)}
+  table.opps td{padding:13px 12px;border-bottom:1px solid var(--hair);vertical-align:middle}
+  table.opps tr.dim td{opacity:.5}
+  .arch{font-size:12px;color:var(--muted)}
+  .fit{font-weight:600;font-size:12.5px}
+  .fit.H{color:var(--cleared)} .fit.M{color:var(--blocked)} .fit.L{color:var(--soft)}
+  .status{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .status.ok{color:var(--cleared)} .status.no{color:var(--signal)} .status.pend{color:var(--soft)}
+  .ve{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+  .adjust{display:inline-flex;align-items:center;gap:6px}
+  .adjust button{width:20px;height:20px;border:1px solid var(--line);background:var(--surface);border-radius:6px;cursor:pointer;font-family:var(--mono);line-height:1;color:var(--ink);padding:0}
+  .adjust button:hover{background:var(--ink-06)}
+  .adjust .sv{font-family:var(--mono);font-size:12.5px;min-width:16px;text-align:center}
+
+  .matrix-block{margin-top:38px;border-top:1px solid var(--hair);padding-top:28px}
+  .matrix-wrap{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;align-items:center}
+  .legend{display:flex;flex-direction:column;gap:13px;font-size:13px}
+  .legend .lg{display:flex;gap:10px;align-items:center}
+  .legend .sw{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+  .sw.solid{background:var(--ink)} .sw.hollow{background:#fff;border:1.5px solid var(--blocked)} .sw.pend{background:var(--line)}
+  .quad-note{font-size:12.5px;color:var(--muted);border-top:1px solid var(--hair);padding-top:14px;margin-top:6px;line-height:1.55}
+
+  /* gap */
+  .gap-list{display:flex;flex-direction:column;gap:12px}
+  .gap-item{border:1px solid var(--line);border-left:3px solid var(--signal);border-radius:10px;padding:15px 17px}
+  .gap-item .gi-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .gap-item .gi-name{font-weight:600;font-size:14.5px;color:var(--ink)}
+  .gap-item .gi-val{font-family:var(--mono);font-size:12px;color:var(--soft)}
+  .gap-item .gi-why{font-size:13px;color:var(--muted);margin-top:5px;line-height:1.5}
+  .verdict{background:var(--ink);color:#fff;border-radius:var(--radius);padding:24px 26px;margin-top:22px}
+  .verdict .eyebrow{color:rgba(255,255,255,.55)}
+  .verdict p{margin:10px 0 0;font-size:16px;line-height:1.55}
+  .verdict b{color:#fff}
+  .verdict .hl{color:#ff7aa6;font-weight:700}
+
+  /* roadmap */
+  .lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .lane{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+  .lane .lh{padding:15px 17px;border-bottom:1px solid var(--hair)}
+  .lane .lh .t{font-size:13px;font-weight:700;color:var(--ink)}
+  .lane .lh .s{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .lane.now .lh{border-top:3px solid var(--cleared)}
+  .lane.next .lh{border-top:3px solid var(--signal)}
+  .lane.later .lh{border-top:3px solid var(--ink)}
+  .lane ul{list-style:none;margin:0;padding:8px 17px 16px}
+  .lane li{font-size:13px;padding:9px 0;border-bottom:1px solid var(--hair);display:flex;justify-content:space-between;gap:10px;line-height:1.4}
+  .lane li:last-child{border-bottom:none}
+  .lane li .li-v{font-family:var(--mono);font-size:11px;color:var(--soft);flex-shrink:0}
+  .lane li.empty{color:var(--soft);font-style:italic}
+  .startover{margin-top:30px;border-top:1px solid var(--hair);padding-top:22px;font-size:13px;color:var(--muted)}
+  button.reset{font-size:13px;color:var(--ink);cursor:pointer;text-decoration:underline;background:none;border:none;font-family:var(--sans);padding:0;margin-top:6px}
+
+  .prompt{font-size:14.5px;color:var(--muted);background:var(--ink-06);border-radius:var(--radius);padding:20px 22px;line-height:1.55;max-width:58ch}
+  .prompt b{color:var(--ink)}
+  .backcue{margin-top:26px}
+  .backcue-btn{font-size:13px;color:var(--ink);cursor:pointer;text-decoration:underline;background:none;border:none;font-family:var(--sans);padding:0}
+
+  /* summary panel */
+  .sum{position:relative}
+  .sum-eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);font-weight:700;margin-bottom:18px}
+  .sum-hero{text-align:left;padding-bottom:22px;border-bottom:1px solid var(--hair);margin-bottom:20px}
+  .sum-num{font-family:var(--mono);font-size:52px;font-weight:700;line-height:1;color:var(--signal)}
+  .sum-num.empty{color:var(--line)}
+  .sum-num span{font-size:20px;color:var(--soft);font-weight:400}
+  .sum-cap{font-size:13px;font-weight:600;color:var(--ink);margin-top:10px}
+  .sum-sub{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .sum-rows{display:flex;flex-direction:column;gap:0}
+  .sum-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--hair);font-size:13px}
+  .sum-row:last-child{border-bottom:none}
+  .sum-row .k{color:var(--muted)}
+  .sum-row .val{font-family:var(--mono);font-weight:700;color:var(--text)}
+  .sum-row.fix{margin-top:14px;padding:13px 14px;background:var(--ink);border-radius:10px;border:none}
+  .sum-row.fix .k{color:rgba(255,255,255,.6)}
+  .sum-row.fix .val{color:#ff7aa6}
+  .sum-note{font-size:12px;color:var(--soft);line-height:1.55;margin-top:22px}
+
+  /* visual components */
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .tile{display:flex;flex-direction:column;align-items:flex-start;gap:11px;padding:17px 16px 15px;border:1px solid var(--line);border-radius:12px;background:var(--surface);cursor:pointer;text-align:left;transition:all .14s;color:var(--muted)}
+  .tile:hover{border-color:var(--soft)}
+  .tile:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+  .tile.on{border-color:var(--ink);background:#fff;box-shadow:0 3px 14px rgba(67,34,77,.08)}
+  .tile-ic{width:26px;height:26px;color:var(--soft)}
+  .tile.on .tile-ic{color:var(--signal)}
+  .tile-ic svg{width:100%;height:100%;display:block}
+  .tile-n{font-size:13.5px;font-weight:600;color:var(--text);line-height:1.25}
+  .tile-c{font-size:11.5px;color:var(--soft);font-family:var(--mono)}
+
+  .rad-hero{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;margin-bottom:38px;padding-bottom:34px;border-bottom:1px solid var(--hair)}
+  .rad-vis svg{width:100%;height:auto;display:block}
+  .reading{font-size:15px;line-height:1.62;color:var(--text);margin:0}
+  .reading b{color:var(--ink);font-weight:700}
+
+  .sum-gauge{margin-bottom:2px}
+  .sum-gauge svg{width:150px;height:auto;display:block}
+
+  .opp-hero{display:grid;grid-template-columns:1.2fr 1fr;gap:30px;align-items:center;margin-bottom:38px;padding-bottom:32px;border-bottom:1px solid var(--hair)}
+  .opp-hero svg{width:100%;height:auto;display:block}
+
+  .gapbars{display:flex;flex-direction:column;gap:14px;margin-bottom:6px}
+  .gapbar{display:grid;grid-template-columns:186px 1fr 34px;align-items:center;gap:16px}
+  .gbl{font-size:13.5px;font-weight:600;color:var(--text);display:flex;flex-direction:column;line-height:1.3}
+  .gbn{font-size:11px;color:var(--soft);font-weight:400;margin-top:2px}
+  .gbtrack{height:32px;background:var(--ink-06);border-radius:9px;overflow:hidden}
+  .gbfill{height:100%;background:var(--ink-10);border-radius:9px;display:flex;align-items:center;justify-content:flex-end;transition:width .4s ease;min-width:9%}
+  .gbfill.top{background:var(--signal)}
+  .gbfill span{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#fff;padding-right:12px}
+  .gbv{font-family:var(--mono);font-weight:700;font-size:16px;color:var(--ink);text-align:right}
+
+  .timeline{margin-bottom:26px}
+  .timeline svg{width:100%;height:auto;max-height:110px;display:block}
+
+  /* explanatory scaffolding */
+  .guide{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-top:32px}
+  .guide h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);margin:0 0 15px;font-weight:700;display:flex;align-items:center;gap:9px}
+  .guide h4::before{content:"";width:14px;height:14px;border-radius:50%;border:2px solid var(--signal);flex-shrink:0}
+  .guide p{margin:0 0 12px;font-size:14px;color:var(--text);line-height:1.62;max-width:64ch}
+  .guide p:last-child{margin-bottom:0}
+  .guide-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:13px}
+  .guide-list li{display:flex;gap:12px;font-size:13.5px;line-height:1.55;color:var(--text)}
+  .guide-list li .gi{font-family:var(--mono);font-weight:700;color:var(--signal);flex-shrink:0;min-width:16px}
+  .guide-list li b{color:var(--ink)}
+  .steps-ov{list-style:none;counter-reset:s;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+  .steps-ov li{counter-increment:s;display:flex;gap:14px;font-size:14px;line-height:1.5;color:var(--muted);align-items:baseline}
+  .steps-ov li::before{content:counter(s);font-family:var(--mono);font-weight:700;color:var(--signal);background:var(--ink-06);width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;align-self:flex-start}
+  .steps-ov li b{color:var(--ink);font-weight:600}
+  .quadguide{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:16px}
+  .qg{border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+  .qg.sweet{border-color:var(--cleared);background:rgba(31,122,92,.05)}
+  .qg .qt{font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:4px}
+  .qg .qd{font-size:12px;color:var(--muted);line-height:1.45}
+  .sum-help{margin-top:24px;padding-top:20px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--muted);line-height:1.6}
+  .sum-help b{color:var(--ink);display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+
+  /* how it works */
+  .hw-head{margin-bottom:36px}
+  .hw-head h1{font-size:28px;line-height:1.2;letter-spacing:-.015em;color:var(--ink);margin:10px 0 14px;font-weight:700}
+  .hw-head p{margin:0;font-size:15.5px;color:var(--muted);line-height:1.62;max-width:80ch}
+  .hw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px 46px;align-items:start}
+  .hw-method{background:var(--ink-06);border-radius:16px;padding:26px 30px;margin-bottom:34px}
+  .hw-method-h{margin-bottom:18px}
+  .hw-method-h h2{font-size:19px;color:var(--ink);margin:6px 0 0;font-weight:700}
+  .hw-method-cols{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:18px}
+  .hw-mcol h4{font-size:13.5px;color:var(--ink);margin:0 0 8px;font-weight:700}
+  .hw-mcol p{font-size:13.5px;color:var(--text);line-height:1.6;margin:0}
+  .hw-mcol p b,.hw-worked b{color:var(--ink);font-weight:700}
+  .hw-worked{font-size:13px;color:var(--text);line-height:1.6;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--signal);border-radius:8px;padding:14px 16px}
+  .hw-worked-tag{display:inline-block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--signal);font-weight:700;margin-right:9px}
+  .hw-sec h4{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink);margin:0 0 10px;font-weight:700}
+  .hw-sec p{margin:0;font-size:14.5px;color:var(--text);line-height:1.65}
+  .hw-sec p b{color:var(--ink);font-weight:600}
+  .hw-steps{grid-column:1/-1;border-top:1px solid var(--hair);padding-top:26px;margin-top:8px}
+  .hw-steprow{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:8px}
+  .hw-stepcard{border:1px solid var(--line);border-radius:12px;padding:16px 17px;display:flex;flex-direction:column;gap:9px}
+  .hw-stepcard .hw-num{width:26px;height:26px;border-radius:50%;background:var(--ink-06);color:var(--signal);font-family:var(--mono);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .hw-stepcard b{font-size:13.5px;color:var(--ink);font-weight:600;line-height:1.25}
+  .hw-stepcard span{font-size:12.5px;color:var(--muted);line-height:1.5}
+
+  /* client name in header */
+  .hdr-client{font-size:14px;font-weight:700;color:var(--ink)}
+  .hdr-client:not(:empty){border:1px solid var(--line);border-radius:8px;padding:7px 13px;background:var(--paper)}
+  /* sidebar name field + export */
+  .side-name{width:100%;margin-top:8px;font-family:var(--sans);font-size:12.5px;color:var(--text);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+  .side-name::placeholder{color:var(--soft)}
+  .side-name:focus{outline:2px solid var(--ink);outline-offset:-1px;border-color:var(--ink)}
+  .side-foot{margin-top:20px;padding-top:16px;border-top:1px solid var(--hair)}
+  .side-export{display:flex;align-items:center;gap:9px;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);cursor:pointer;font-family:var(--sans);font-size:12.5px;font-weight:600;color:var(--ink);transition:background .12s}
+  .side-export:hover{background:var(--ink-06)}
+  .side-export svg{width:16px;height:16px;color:var(--signal)}
+  .export-hint{font-size:11px;color:var(--soft);line-height:1.5;margin-top:9px}
+  .export-locked{font-size:11.5px;color:var(--muted);line-height:1.55;background:var(--ink-06);border-radius:9px;padding:11px 12px}
+  .export-locked b{color:var(--ink);display:block;margin-bottom:3px}
+  /* scope tile state */
+  .tile-state{font-size:11.5px;color:var(--soft);font-family:var(--sans)}
+  .tile.on .tile-state{color:var(--cleared);font-weight:600}
+  /* priority matrix (opportunity live view) */
+  .pm-toplbl{display:flex;justify-content:space-between;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);margin-bottom:8px;padding:0 2px}
+  .pm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .pm-cell{border:1px solid var(--line);border-radius:12px;padding:11px 12px;display:flex;flex-direction:column;min-height:118px;background:var(--surface);min-width:0}
+  .live,.live *{overflow-wrap:break-word}
+  .pm-cell.quick{background:rgba(31,122,92,.05)}
+  .pm-cell.active{box-shadow:inset 0 0 0 1.5px var(--ink);border-color:var(--ink)}
+  .pm-cell.quick.active{box-shadow:inset 0 0 0 1.5px var(--cleared);border-color:var(--cleared)}
+  .pm-head{background:none;border:none;text-align:left;cursor:pointer;padding:0 0 9px;font-family:var(--sans);display:flex;flex-direction:column;gap:2px}
+  .pm-t{display:flex;align-items:center;justify-content:space-between}
+  .pm-t b{font-size:12.5px;color:var(--ink)}
+  .pm-ct{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:0 6px}
+  .pm-cap{font-size:10px;color:var(--soft)}
+  .pm-list{display:flex;flex-direction:column;gap:2px}
+  .pm-item{display:flex;align-items:flex-start;gap:7px;background:none;border:none;text-align:left;cursor:pointer;padding:4px 5px;border-radius:6px;font-family:var(--sans);font-size:11.5px;color:var(--text);width:100%;min-width:0}
+  .pm-item:hover{background:var(--ink-06)}
+  .pm-item.blocked .pm-nm{color:var(--muted)}
+  .pm-nm{flex:1;min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.32}
+  .pm-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--line);margin-top:4px}
+  .pm-item.ready .pm-dot,.pm-dot.ready{background:var(--cleared)}
+  .pm-item.blocked .pm-dot,.pm-dot.blocked{background:var(--blocked)}
+  .pm-item.pending .pm-dot,.pm-dot.pending{background:var(--line)}
+  .pm-empty{font-size:11px;color:var(--soft);font-style:italic;padding:3px 5px}
+  .pm-legend{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-top:14px;flex-wrap:wrap}
+  .pm-legend .pm-dot{margin:0 2px 0 10px}
+  .pm-legend .pm-dot:first-child{margin-left:0}
+  /* way forward */
+  .wayforward{background:var(--ink);border-radius:14px;padding:20px 24px;margin-bottom:30px}
+  .wf-lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.6);font-weight:700;margin-bottom:9px}
+  .wayforward p{margin:0;font-size:15px;color:#fff;line-height:1.6}
+  .wayforward p b{color:#ff9cbb;font-weight:700}
+  .wf-note{display:block;margin-top:10px;font-size:13px;color:rgba(255,255,255,.72);line-height:1.55}
+
+  /* rubric (Data foundation) */
+  .rubric-tag{display:inline-block;margin-left:9px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--signal);background:rgba(224,4,78,.08);border:1px solid rgba(224,4,78,.25);border-radius:6px;padding:1px 7px;vertical-align:middle}
+  .fnd-body-full{padding:4px 4px 26px 38px}
+  .rubric-intro{font-size:13px;color:var(--muted);line-height:1.6;background:var(--ink-06);border-radius:10px;padding:14px 16px;margin-bottom:22px;max-width:74ch}
+  .rubric-intro b{color:var(--ink)}
+  .rubric-hovercue{color:var(--signal);font-weight:600}
+  /* single-select maturity ladder */
+  .rung-list{display:flex;flex-direction:column;gap:5px;margin-bottom:9px}
+  .rung{display:flex;align-items:flex-start;gap:11px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:10px 13px;cursor:pointer;font-family:var(--sans);transition:border-color .12s,background .12s}
+  .rung:hover{border-color:var(--soft)}
+  .rung-dot{flex-shrink:0;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);background:var(--surface);margin-top:1px;position:relative}
+  .rung.passed{opacity:.72}
+  .rung.passed .rung-dot{background:var(--soft);border-color:var(--soft)}
+  .rung.passed .rung-dot:after{content:"";position:absolute;left:4px;top:1px;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .rung.on{border-color:var(--signal);background:rgba(224,4,78,.05)}
+  .rung.on .rung-dot{border-color:var(--signal);background:var(--signal)}
+  .rung.on .rung-dot:after{content:"";position:absolute;left:4px;top:4px;width:6px;height:6px;border-radius:50%;background:#fff}
+  .rung-txt{flex:1;font-size:12.5px;color:var(--text);line-height:1.45}
+  .rung.on .rung-txt{color:var(--ink);font-weight:600}
+  .rung-lv{flex-shrink:0;font-family:var(--mono);font-size:10.5px;color:var(--soft);padding-top:2px}
+  .rung.on .rung-lv{color:var(--signal);font-weight:700}
+  /* diagnostic questions */
+  .diag-list{display:flex;flex-direction:column;gap:7px;margin-bottom:9px}
+  .diag-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 13px;border:1px solid var(--line);border-radius:9px;background:var(--surface)}
+  .diag-q{font-size:12.5px;color:var(--text);line-height:1.42;flex:1}
+  .diag-q[data-help]{cursor:help;text-decoration:underline;text-decoration-style:dotted;text-decoration-color:var(--line);text-underline-offset:3px}
+  .diag-q[data-help]:hover{text-decoration-color:var(--soft)}
+  .diag-yn{display:flex;gap:3px;flex-shrink:0;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:2px}
+  .diag-btn{border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:11.5px;font-weight:600;color:var(--muted);padding:5px 13px;border-radius:6px;transition:background .12s,color .12s}
+  .diag-btn:hover{color:var(--ink)}
+  .diag-btn.sel{background:var(--ink);color:#fff}
+  .diag-out{font-size:12.5px;color:var(--muted);line-height:1.55;padding:11px 13px;border-radius:9px;background:var(--paper);border:1px solid var(--line);margin-top:9px}
+  .diag-out b{color:var(--ink)}
+  .diag-out.todo{color:var(--soft);font-style:italic}
+  .diag-item{display:flex;flex-direction:column}
+  .diag-row.flagged{border-color:rgba(192,122,28,.5)}
+  .diag-flag{font-size:11px;color:#a85f17;background:rgba(192,122,28,.08);border:1px solid rgba(192,122,28,.28);border-radius:7px;padding:6px 10px;margin-top:5px;line-height:1.45}
+  .facet{margin-bottom:22px;padding-bottom:20px;border-bottom:1px solid var(--hair)}
+  .facet-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;gap:12px}
+  .facet-name{font-size:13.5px;font-weight:700;color:var(--ink)}
+  .facet-lvl{font-size:11.5px;color:var(--muted);font-family:var(--mono);white-space:nowrap}
+  .facet-lvl.bind{color:var(--signal);font-weight:700}
+  .facet-todo{font-size:11px;color:var(--soft);font-style:italic}
+  .facet-levels{display:flex;flex-direction:column;gap:5px}
+  .flvl{display:flex;align-items:flex-start;gap:11px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:9px 12px;cursor:pointer;font-family:var(--sans);font-size:12.5px;color:var(--text);line-height:1.45;transition:border-color .12s,background .12s}
+  .flvl:hover{border-color:var(--soft)}
+  .flvl .fl-n{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--soft);width:18px;height:18px;border:1px solid var(--line);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .flvl.on{border-color:var(--ink);background:var(--ink-06)}
+  .flvl.on .fl-n{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .flvl.on.floor{border-color:var(--signal);background:rgba(224,4,78,.05)}
+  .flvl.on.floor .fl-n{background:var(--signal);border-color:var(--signal)}
+  .facet-note{width:100%;margin-top:9px;font-family:var(--sans);font-size:12px;color:var(--text);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 11px}
+  .facet-note::placeholder{color:var(--soft)}
+  .facet-note:focus{outline:1.5px solid var(--ink);outline-offset:-1px;border-color:var(--ink)}
+  .rubric-out{font-size:13.5px;color:var(--muted);line-height:1.6;padding:15px 17px;border-radius:10px;background:var(--paper);border:1px solid var(--line)}
+  .rubric-out b{color:var(--ink)}
+  .rubric-out.done{background:rgba(224,4,78,.05);border-color:rgba(224,4,78,.2)}
+  .rubric-out.done b{color:var(--signal)}
+  /* how it works visuals */
+  .hw-visuals{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:36px}
+  .hw-vcard{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:18px 20px}
+  .hw-vcard.hw-vwide{grid-column:1/-1}
+  .hw-vlabel{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--soft);font-weight:700;margin-bottom:10px}
+  .hw-vcard svg{width:100%;height:auto;display:block}
+  /* How it works: single-column narrative */
+  .hw-narrative{max-width:800px;margin:0 auto}
+  .hw-beat{display:flex;gap:20px;padding:28px 0;border-top:1px solid var(--hair)}
+  .hw-beat:first-child{border-top:none;padding-top:6px}
+  .hw-beat-n{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--ink);color:var(--ink);font-family:var(--mono);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center}
+  .hw-beat-b{flex:1;min-width:0}
+  .hw-beat-b h3{font-size:18px;color:var(--ink);margin:3px 0 9px;font-weight:700;letter-spacing:-.01em}
+  .hw-beat-b p{font-size:14.5px;color:var(--text);line-height:1.66;margin:0}
+  .hw-beat-b p b{color:var(--ink)}
+  .hw-inline{margin-top:18px}
+
+  /* interactive quadrant filters */
+  button.qg{background:var(--surface);cursor:pointer;text-align:left;width:100%;font-family:var(--sans);transition:border-color .12s,box-shadow .12s,background .12s}
+  button.qg:hover{border-color:var(--soft)}
+  .qg.on{background:var(--ink-06);box-shadow:inset 0 0 0 1.5px var(--ink);border-color:var(--ink)}
+  .qg.sweet.on{box-shadow:inset 0 0 0 1.5px var(--cleared);border-color:var(--cleared)}
+  .qn{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:0 6px;margin-left:5px}
+  .quadhint{font-size:12px;color:var(--soft);margin:12px 0 0}
+  .quadactive{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:8px}
+  .quadactive b{color:var(--ink)}
+  .clearquad{background:none;border:1px solid var(--line);border-radius:6px;padding:2px 9px;font-size:11px;color:var(--muted);cursor:pointer;font-family:var(--sans)}
+  .clearquad:hover{color:var(--signal);border-color:var(--signal)}
+  /* clickable opportunity name */
+  .opp-name{background:none;border:none;padding:0;text-align:left;cursor:pointer;font-family:var(--sans);display:flex;flex-direction:column;gap:1px}
+  .opp-name b{font-size:13.5px;color:var(--ink);transition:color .12s}
+  .opp-name .opp-caret{font-size:11px;color:var(--soft);transition:color .12s}
+  .opp-name:hover b{color:var(--signal)}
+  .opp-name:hover .opp-caret{color:var(--signal)}
+
+  /* opportunity detail drawer */
+  .drawer-wrap{position:fixed;inset:0;z-index:200}
+  .drawer-backdrop{position:absolute;inset:0;background:rgba(42,24,48,.28);animation:fade .2s ease}
+  .drawer{position:absolute;top:0;right:0;height:100%;width:min(480px,92vw);background:var(--surface);border-left:1px solid var(--line);box-shadow:-8px 0 44px rgba(42,24,48,.15);overflow-y:auto;animation:slidein .22s ease}
+  @keyframes slidein{from{transform:translateX(34px);opacity:.4}to{transform:none;opacity:1}}
+  .drawer-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--surface);cursor:pointer;color:var(--muted);font-size:13px;z-index:2}
+  .drawer-close:hover{background:var(--ink-06);color:var(--ink)}
+  .dw-head{padding:28px 30px 20px;border-bottom:1px solid var(--hair)}
+  .dw-where{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--soft);font-weight:700;margin-bottom:8px}
+  .dw-head h2{font-size:21px;color:var(--ink);margin:0 0 14px;line-height:1.25;font-weight:700;max-width:28ch}
+  .dw-pills{display:flex;flex-wrap:wrap;gap:7px}
+  .dw-pill{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;border:1px solid var(--line);color:var(--muted)}
+  .dw-pill.ok{color:var(--cleared);border-color:rgba(31,122,92,.3);background:rgba(31,122,92,.07)}
+  .dw-pill.no{color:var(--blocked);border-color:rgba(192,122,28,.3);background:rgba(192,122,28,.08)}
+  .dw-pill.pend{color:var(--soft)}
+  .dw-body{padding:24px 30px 44px}
+  .dw-sec{margin-bottom:20px}
+  .dw-q{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--signal);font-weight:700;margin-bottom:6px}
+  .dw-sec p{margin:0;font-size:14px;color:var(--text);line-height:1.6}
+  /* print sheet opportunity lists */
+  .ps-ops{list-style:none;margin:0;padding:0}
+  .ps-ops li{padding:7px 0;border-bottom:1px solid var(--hair);font-size:13px}
+  .ps-ops li b{color:var(--ink)}
+  .ps-ops li span{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4}
+
+  @media (max-width:1240px){
+    .hw-grid{grid-template-columns:1fr 1fr}
+    .hw-steprow{grid-template-columns:repeat(3,1fr)}
+  }
+  @media (max-width:980px){
+    .workspace{flex-direction:column;gap:28px}
+    .work-right{position:static;width:100%;order:-1}
+    .lede{max-width:none}
+    .hw-grid{grid-template-columns:1fr}
+    .hw-method-cols{grid-template-columns:1fr;gap:18px}
+    .hw-steprow{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:820px){
+    .app-body{flex-direction:column}
+    .sidebar{width:100%;position:static;border-right:none;border-bottom:1px solid var(--line);padding:16px}
+    .side-nav{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+    .side-grp{grid-column:1/-1}
+    .workspace{padding:22px 20px 50px}
+    .howworks{padding:24px 20px 60px}
+    .fnd-body,.lanes,.quadguide{grid-template-columns:1fr;gap:16px}
+    .tiles{grid-template-columns:repeat(2,1fr)}
+    .gapbar{grid-template-columns:120px 1fr 28px;gap:10px}
+    .live-stats{grid-template-columns:1fr 1fr}
+    .hw-steprow{grid-template-columns:1fr}
+    .top-inner{padding:16px 20px}
+  }
+  /* one-page takeaway (print) */
+  #printsheet{display:none}
+  .ps-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:20px}
+  .ps-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--signal);font-weight:700}
+  .ps-head h1{font-size:26px;color:var(--ink);margin:6px 0 0;font-weight:700}
+  .ps-date{font-size:13px;color:var(--muted)}
+  .ps-note{font-size:12.5px;color:var(--blocked);background:rgba(192,122,28,.1);border-radius:8px;padding:10px 14px;margin-bottom:18px}
+  .ps-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:22px}
+  .ps-block{margin-bottom:20px}
+  .ps-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--soft);font-weight:700;margin-bottom:10px}
+  .ps-big{font-family:var(--mono);font-size:44px;font-weight:700;color:var(--signal);line-height:1}
+  .ps-big span{font-size:20px;color:var(--soft)}
+  .ps-floor p,.ps-block p{font-size:13px;color:var(--text);line-height:1.55;margin:8px 0 0;max-width:60ch}
+  .ps-fix{font-size:24px;font-weight:700;color:var(--ink)}
+  .ps-lanes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+  .ps-lanes h4{font-size:12px;color:var(--ink);margin:0 0 8px;font-weight:700}
+  .ps-lanes ul{list-style:none;margin:0;padding:0}
+  .ps-lanes li{font-size:12.5px;color:var(--text);padding:5px 0;border-bottom:1px solid var(--hair);line-height:1.4}
+  .ps-lanes li span{display:block;font-size:10.5px;color:var(--soft);font-family:var(--mono)}
+  .ps-lanes li.none{color:var(--soft);font-style:italic;border:none}
+  .ps-foot{font-size:11.5px;color:var(--muted);border-top:1px solid var(--hair);padding-top:12px;margin-top:8px}
+  /* comprehensive report */
+  .rep-sec{margin-bottom:26px}
+  .rep-interpret{border-bottom:1px solid var(--hair);padding-bottom:18px}
+  .rep-interpret p{font-size:13.5px;color:var(--text);line-height:1.6;margin:6px 0 0}
+  .rep-interpret p b{color:var(--ink)}
+  .rep-table{width:100%;border-collapse:collapse;margin-bottom:8px}
+  .rep-table th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);font-weight:700;padding:6px 8px;border-bottom:1px solid var(--line)}
+  .rep-table td{font-size:12.5px;color:var(--text);padding:7px 8px;border-bottom:1px solid var(--hair)}
+  .rep-table td.rd-lvl{font-family:var(--mono);font-weight:700;color:var(--ink);white-space:nowrap}
+  .rep-note{font-size:11.5px;color:var(--muted);line-height:1.5;margin:4px 0 0;max-width:80ch}
+  .rep-move{border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:14px}
+  .rep-move-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .rep-move-h h3{font-size:15px;color:var(--ink);margin:0;font-weight:700}
+  .rep-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:12px;white-space:nowrap}
+  .rep-tag.ready{color:var(--cleared);background:rgba(31,122,92,.08)}
+  .rep-tag.blocked{color:var(--blocked);background:rgba(192,122,28,.1)}
+  .rep-meta{font-size:11.5px;color:var(--muted);margin:4px 0 12px}
+  .rep-qs{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px}
+  .rep-qs>div span{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--signal);font-weight:700}
+  .rep-qs>div p{font-size:12.5px;color:var(--text);line-height:1.5;margin:3px 0 0}
+  /* sidebar save/export tools */
+  .side-tools{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+  .stool{padding:8px 4px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer;font-family:var(--sans);font-size:12px;font-weight:600;color:var(--ink);transition:background .12s}
+  .stool:hover{background:var(--ink-06)}
+  .side-export.locked{opacity:.5}
+  .fac-toggle{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);margin-top:14px;cursor:pointer}
+  .fac-toggle input{cursor:pointer}
+  /* hover help: styled tooltip on any [data-help] control */
+  [data-help]{position:relative}
+  [data-help]:hover::after,[data-help]:focus-visible::after{content:attr(data-help);position:absolute;left:0;top:calc(100% + 7px);z-index:80;background:var(--ink);color:#fff;font-size:11px;font-weight:400;line-height:1.45;text-align:left;letter-spacing:0;text-transform:none;padding:8px 10px;border-radius:8px;width:max-content;max-width:230px;white-space:normal;box-shadow:0 8px 22px rgba(0,0,0,.18);pointer-events:none}
+  [data-help]:hover::before,[data-help]:focus-visible::before{content:"";position:absolute;left:14px;top:calc(100% + 2px);z-index:81;border:5px solid transparent;border-bottom-color:var(--ink);pointer-events:none}
+  [data-help].help-r:hover::after,[data-help].help-r:focus-visible::after{left:auto;right:0}
+  [data-help].help-r:hover::before,[data-help].help-r:focus-visible::before{left:auto;right:14px}
+  .gauge-help{display:inline-block;cursor:help}
+  /* clickable plan rows */
+  .li-click{cursor:pointer;border-radius:7px;transition:background .12s}
+  .li-click:hover{background:var(--ink-06)}
+  .li-click:hover span:first-child{color:var(--ink)}
+  /* fix brief */
+  .fx-facet{border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin-top:10px}
+  .fx-facet-h{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px}
+  .fx-lvl{font-family:var(--mono);font-size:11px;color:var(--signal);font-weight:700}
+  .fx-gaps{margin:0;padding-left:18px}
+  .fx-gaps li{font-size:12.5px;color:var(--text);line-height:1.5;margin-bottom:4px}
+  .fx-none{font-size:12px;color:var(--soft);font-style:italic;margin:2px 0 0}
+  .fx-unlocks{list-style:none;margin:8px 0 0;padding:0}
+  .fx-unlocks li{display:flex;justify-content:space-between;padding:8px 11px;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;font-size:13px}
+  .fx-unlocks .li-v{font-family:var(--mono);color:var(--muted);font-size:12px}
+
+  @media print{
+    header.top,.app-body{display:none!important}
+    #printsheet{display:block!important;padding:6mm 4mm;color:var(--text)}
+    body{background:#fff}
+    @page{margin:12mm}
+    .rep-break{break-before:page;page-break-before:always}
+    .rep-move,.rep-qs>div,.ps-grid,.rep-table tr{break-inside:avoid;page-break-inside:avoid}
+  }
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+    <div class="brand">
+      <button class="mark markbtn" data-view="how" title="Open How it works">AI Readiness <span>Assessment</span></button>
+      <span class="tool">Where you stand, where AI can help, and what to do first</span>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-client" id="hdrclient"></div>
+      <div class="hdr-logo" title="Evalueserve">Evalueserve</div>
+    </div>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="main-area" id="mainarea"></div>
+  </div>
+  <div id="printsheet"></div>
+  <div id="drawer"></div>
+
+<script>
+function tip(term,def){return `<span class="term" tabindex="0" data-tip="${def}">${term}</span>`;}
+const T={
+  ai:'Software that learns from examples to spot patterns or make decisions, rather than following fixed rules.',
+  data:'The information your business already collects, such as sales, orders and customer records.',
+  governance:'The rules and checks that keep AI safe, legal and fair, including data privacy.',
+  adoption:'Whether your staff trust the tools and actually use them day to day.',
+  production:'Live, everyday use for real, not just a one-off test.',
+  evidence:'Something real you can point to, such as a document or a report, rather than an opinion.',
+  fit:'How well suited a task is to AI today. Some jobs it does well; others it does not.',
+  weakest:'The core idea: a chain is only as strong as its weakest link. Your lowest foundation limits all the others.',
+};
+
+const DIMS=[
+  {k:'strategy',  name:'Strategy & ownership', role:'a clear goal, a named owner, a budget'},
+  {k:'data',      name:'Data',                 role:'clean, usable information to learn from'},
+  {k:'tech',      name:'Technology platform', role:'the systems to build and run it'},
+  {k:'talent',    name:'Skills',               role:'people who can build and maintain it'},
+  {k:'governance',name:'Governance',           role:'keeping it safe, legal and fair'},
+  {k:'adoption',  name:'Adoption',             role:'whether staff trust it and use it'},
+  {k:'delivery',  name:'Delivery',             role:'getting from idea to everyday use'},
+];
+const DOMAINS=[
+  {k:'ops',name:'Operations & delivery'},{k:'proc',name:'Supply chain & procurement'},{k:'sales',name:'Sales & marketing'},
+  {k:'cust',name:'Customer service'},{k:'corp',name:'Product, R&D & insight'},{k:'fin',name:'Finance & accounting'},
+  {k:'hr',name:'People & HR'},{k:'legal',name:'Legal, risk & compliance'},{k:'it',name:'Technology & IT'},
+];
+const ARCH={Predict:'Forecasting',Optimise:'Optimisation',Extract:'Reading documents',Classify:'Sorting',Generate:'Drafting',Automate:'Automation'};
+
+const CANDIDATES=[
+  {name:'Predictive maintenance',          dom:'ops',  arch:'Predict', gate:'data',       amen:'H', value:4, effort:3},
+  {name:'Automated quality inspection',    dom:'ops',  arch:'Classify',gate:'tech',       amen:'M', value:4, effort:3},
+  {name:'Production scheduling',           dom:'ops',  arch:'Optimise',gate:'data',       amen:'M', value:4, effort:3},
+  {name:'Process anomaly detection',       dom:'ops',  arch:'Predict', gate:'delivery',   amen:'H', value:3, effort:2},
+  {name:'Smarter procurement decisions',   dom:'proc', arch:'Extract', gate:'data',       amen:'H', value:4, effort:2},
+  {name:'Automated invoice processing',    dom:'fin',  arch:'Automate',gate:'data',       amen:'H', value:3, effort:2},
+  {name:'Customer request triage',         dom:'cust', arch:'Classify',gate:'data',       amen:'H', value:3, effort:2},
+  {name:'Sales lead prioritisation',       dom:'sales',arch:'Predict', gate:'data',       amen:'H', value:3, effort:2},
+  {name:'Demand & inventory forecasting',  dom:'proc', arch:'Predict', gate:'data',       amen:'M', value:4, effort:3},
+  {name:'Attrition risk prediction',       dom:'hr',   arch:'Predict', gate:'data',       amen:'M', value:3, effort:3},
+  {name:'Answers from internal documents', dom:'it',   arch:'Generate',gate:'governance', amen:'H', value:4, effort:2},
+  {name:'AI customer assistant',           dom:'cust', arch:'Generate',gate:'governance', amen:'H', value:4, effort:3},
+  {name:'Contract review',                 dom:'legal',arch:'Extract', gate:'governance', amen:'H', value:4, effort:3},
+  {name:'Competitor & market tracking',    dom:'corp', arch:'Extract', gate:'adoption',   amen:'H', value:4, effort:2},
+  {name:'Accounting anomaly detection',    dom:'fin',  arch:'Predict', gate:'delivery',   amen:'H', value:3, effort:3},
+  {name:'Early IT fault detection',        dom:'it',   arch:'Predict', gate:'delivery',   amen:'H', value:3, effort:2},
+  {name:'Dynamic pricing',                 dom:'sales',arch:'Optimise',gate:'delivery',   amen:'M', value:4, effort:4},
+];
+const BT_CANDIDATES=[
+  {name:'Demand forecasting to cut waste',  dom:'proc', arch:'Predict', gate:'data',       amen:'M', value:4, effort:2},
+  {name:'Predict subscriber churn',         dom:'cust', arch:'Predict', gate:'data',       amen:'H', value:4, effort:2},
+  {name:'Personalised recommendations',     dom:'sales',arch:'Generate',gate:'data',       amen:'H', value:4, effort:2},
+  {name:'Café-level profitability view',    dom:'fin',  arch:'Extract', gate:'data',       amen:'H', value:3, effort:2},
+  {name:'Staff attrition prediction',       dom:'hr',   arch:'Predict', gate:'data',       amen:'M', value:3, effort:3},
+  {name:'Competitor & trend tracking',      dom:'corp', arch:'Extract', gate:'adoption',   amen:'H', value:3, effort:2},
+  {name:'Automated café restocking',        dom:'proc', arch:'Optimise',gate:'delivery',   amen:'M', value:4, effort:4},
+  {name:'New-location site selection',      dom:'corp', arch:'Predict', gate:'delivery',   amen:'M', value:4, effort:4},
+  {name:'Dynamic menu pricing',             dom:'sales',arch:'Optimise',gate:'delivery',   amen:'M', value:3, effort:4},
+  {name:'Staff scheduling optimisation',    dom:'hr',   arch:'Optimise',gate:'delivery',   amen:'M', value:3, effort:3},
+  {name:'AI assistant in the app',          dom:'cust', arch:'Generate',gate:'governance', amen:'H', value:3, effort:3},
+  {name:'Instant answers for staff',        dom:'it',   arch:'Generate',gate:'governance', amen:'H', value:3, effort:2},
+  {name:'Supplier & lease contract review', dom:'legal',arch:'Extract', gate:'governance', amen:'H', value:3, effort:3},
+];
+
+const EVIDENCE={
+ strategy:['A documented AI plan','A named, accountable owner','A dedicated budget','A clear link to business goals'],
+ data:['An inventory of the data you hold','A measure of data quality','Rules on who can access it','A record of where data comes from'],
+ tech:['A view of your technology setup','Tools to build and run models','A list of connected systems','Separate test and live environments'],
+ talent:['A map of who has which skills','A staff training programme','A view of reliance on outside help','Evidence of delivering without outside help'],
+ governance:['A written AI use policy','A way to assess and classify risk','A register of AI in use, with checks','A check against relevant laws and rules'],
+ adoption:['Usage figures for what is deployed','Records of managing the change','Evidence work was redesigned around it','Feedback showing staff trust it'],
+ delivery:['A defined route to production','A list of what is live, and for how long','A regular way to prioritise and fund work','Clear owners and a dedicated team'],
+};
+const LEVELS={
+ strategy:['No plan. AI is discussed but not acted on.','Interest exists, but no clear owner or budget.','A funded plan for one or two areas, with a named owner.','A company-wide, funded plan tied to business goals.','AI shapes strategy by default, in every major decision.'],
+ data:['Information is scattered and inconsistent.','Data exists, but preparing it is largely manual.','Organised and usable across the priority areas.','A single, well-governed source the tools can rely on.','High-quality data everywhere, reused as standard.'],
+ tech:['No proper environment; work happens on individual machines.','Basic cloud access, but no standard setup.','A defined, working setup for one area.','A shared, maintained platform, actively monitored.','Flexible infrastructure, provisioned on demand.'],
+ talent:['No in-house capability; fully reliant on outside help.','A few skilled people, but external help each time.','A small team can build and run in one area.','Capable teams across the business, self-sufficient.','Capability renews itself, not reliant on individuals.'],
+ governance:['No policy and no accountability. Unmanaged risk.','Informal rules; responsibility is unclear.','Documented policy and a way to assess risk.','Enforced controls, with tracking and clear owners.','Risk is assessed continuously, as part of the routine.'],
+ adoption:['Staff distrust or ignore it.','Some interest, but usage is not tracked.','Used for the main tasks; some workflows have changed.','Widely used; work is genuinely built around it.','Use is routine and expected across the business.'],
+ delivery:['No route to production; pilots never go live.','Reaches production occasionally, each one a struggle.','A repeatable route; a few things run in production.','A steady, reliable path from idea to production.','Reaching production is routine, and it happens quickly.'],
+};
+
+// Rubric model (all seven foundations). Each foundation is scored across five
+// observable facets. The foundation level is DERIVED as the weakest facet, and
+// the descriptors chosen ARE the evidence. Nothing is self-rated.
+const RUBRICS={
+ strategy:[
+  {k:'direction',name:'Direction & ambition',levels:[
+    "No stated aim for AI; it comes up in conversation only.",
+    "A general interest in AI, but no articulated direction.",
+    "A clear aim for one or two areas, written down.",
+    "A company-wide direction for AI, understood by leadership.",
+    "AI ambition is explicit in the corporate strategy and revisited regularly."],
+   diag:[
+    "Is there a written statement of what the organisation wants AI to achieve?",
+    "Does that aim name specific business areas or outcomes, not just 'use AI'?",
+    "Is the direction shared and understood beyond the person who set it, including leadership?",
+    "Is the AI direction reviewed and updated on a regular cadence?"],desc:["A Yes means a written statement exists, even a short one; a verbal or implied direction does not count.", "A Yes means the aim points at named functions or outcomes, not a general wish to use AI.", "A Yes means leadership and the relevant teams share the direction, not just its author.", "A Yes means the direction is revisited on a set schedule, not written once and forgotten."],dep:[null, null, null, null]},
+  {k:'ownership',name:'Programme ownership & mandate',levels:[
+    "No one owns AI; it is nobody's job.",
+    "Ownership is informal and shifts between people.",
+    "A named owner for AI, but with limited authority.",
+    "A senior owner with a clear mandate and decision rights.",
+    "Ownership is built into the operating model, at board level."],
+   diag:[
+    "Is there a single named person accountable for AI?",
+    "Does that owner have a clear mandate and decision rights, not just a title?",
+    "Does the owner control budget or resources they can actually direct?",
+    "Is AI ownership held at a senior or board level, not only mid-management?"],desc:["A Yes means one identifiable person is accountable for the AI programme, not a committee by default.", "A Yes means the owner can make and enforce decisions, not just hold the title.", "A Yes means the owner directs real budget or people, not merely requests them.", "A Yes means ownership sits at a senior or board level, with the authority that brings."],dep:[null, 0, 0, 0]},
+  {k:'funding',name:'Funding & resources',levels:[
+    "No budget; work happens on goodwill.",
+    "Ad hoc funding, found project by project.",
+    "A small ring-fenced budget for initial work.",
+    "A recurring, planned budget tied to the roadmap.",
+    "Funding scales with proven return, allocated deliberately."],
+   diag:[
+    "Is there any dedicated budget for AI, rather than borrowing from other lines?",
+    "Is that budget recurring or planned, rather than one-off?",
+    "Is funding tied to a roadmap or plan, rather than ad hoc requests?",
+    "Can funding scale on proven return, with a route to increase it?"],desc:["A Yes means money is set aside for AI specifically, not taken ad hoc from other lines.", "A Yes means the budget recurs or is planned ahead, not found project by project.", "A Yes means funding follows a plan or roadmap, not one-off requests as they arise.", "A Yes means there is a route to increase funding when results justify it."],dep:[null, 0, 0, 0]},
+  {k:'link',name:'Link to goals & value measurement',levels:[
+    "AI is pursued for its own sake, disconnected from goals.",
+    "Loosely justified, but not tied to measured outcomes.",
+    "Linked to business goals for the priority use cases.",
+    "Every initiative is tied to a business outcome and tracked.",
+    "AI is a named lever in how the business plans to grow or save."],
+   diag:[
+    "Is each AI effort justified against a business goal, not pursued for its own sake?",
+    "Are the priority use cases linked to measurable outcomes?",
+    "Is the outcome of each initiative tracked after it goes live?",
+    "Is AI named as a lever in how the business plans to grow or save?"],desc:["A Yes means each effort is tied to a business goal, not pursued because AI is interesting.", "A Yes means the priority use cases have defined, measurable outcomes attached.", "A Yes means results are measured after go-live, not assumed; value is actually checked.", "A Yes means AI appears in the business plan as a lever to grow or save, with numbers."],dep:[null, null, 1, null]},
+  {k:'prioritise',name:'Prioritisation & decisions',levels:[
+    "No way to decide what to do; the loudest voice wins.",
+    "Decisions are made case by case, without criteria.",
+    "A basic way to rank ideas by value and effort.",
+    "A regular, evidence-based process to choose and sequence work.",
+    "A live portfolio, reprioritised as results and needs change."],
+   diag:[
+    "Is there a shared way to decide which AI ideas to pursue, beyond who pushes hardest?",
+    "Are ideas ranked by something concrete, such as value and effort?",
+    "Is prioritisation done on a regular basis, not just once?",
+    "Is the set of initiatives revisited and reprioritised as results come in?"],desc:["A Yes means there is an agreed method for choosing ideas, not whoever pushes hardest.", "A Yes means ideas are scored on concrete criteria like value and effort, not opinion.", "A Yes means prioritisation happens on a rhythm, not once at the start.", "A Yes means the list is revisited and reordered as results and needs change."],dep:[null, null, 0, 0]}],
+ data:[
+  {k:'quality',name:'Quality & reliability',levels:[
+    "Data is often wrong, duplicated or missing, and no one trusts it.",
+    "Known quality problems, cleaned by hand each time the data is used.",
+    "Key datasets are reasonably clean, with some checks in place.",
+    "Automated quality checks on the main datasets; issues are rare and caught.",
+    "Quality is measured and monitored; data is trusted for decisions by default."],diag:["Is the data behind key decisions broadly trusted, rather than people keeping their own copies?", "Are there checks in place that catch obvious errors before the data is used?", "Are quality checks automated on the main datasets, rather than done by hand?", "Is data quality measured and monitored as an ongoing metric?"],desc:["A Yes means people rely on the shared data, rather than private spreadsheets they trust more.", "A Yes means checks catch obvious errors before the data is used.", "A Yes means quality checks run automatically on the main datasets, not only by hand.", "A Yes means data quality is tracked as a metric over time, not just felt."],dep:[null, null, 1, null]},
+  {k:'access',name:'Access & availability',levels:[
+    "Data is locked in separate systems; getting it out is a manual export.",
+    "Some data can be pulled, but joining sources is slow and manual.",
+    "Key systems can be queried and a few integrations exist.",
+    "Most important data is reachable through shared connections or a warehouse.",
+    "Data flows freely across systems through managed, reusable connections."],diag:["Can the data you need be obtained without a manual export each time?", "Can the people and tools that need the data actually get it when required?", "Is most key data reachable from a shared store or warehouse, not scattered in silos?", "Does access run on clear permissions rather than ad hoc requests?"],desc:["A Yes means the data can be reached without asking someone to run an export each time.", "A Yes means the people and tools that need the data can actually get it when required.", "A Yes means most key data lives in a shared store or warehouse, not scattered in silos.", "A Yes means access runs on clear permissions, not ad hoc requests and exceptions."],dep:[null, null, null, null]},
+  {k:'gov',name:'Data ownership & control',levels:[
+    "No ownership; data sits wherever it lands and the rules are unclear.",
+    "Informal ownership; policies exist on paper but are not followed.",
+    "Named owners for key datasets, with basic access and retention policies.",
+    "Clear ownership and enforced policies across the important data.",
+    "Data is run as a managed product, with lineage, access control and stewardship."],diag:["Do key datasets have a named owner accountable for them?", "Is who may access each dataset defined and controlled?", "Is the origin and lineage of key data known and tracked?", "Is data maintained as a managed asset over time, not left to decay?"],desc:["A Yes means each key dataset has a named owner accountable for it, not shared by default.", "A Yes means who may access each dataset is defined and actually controlled.", "A Yes means the origin and lineage of key data is known, not a mystery.", "A Yes means data is maintained as a managed asset over time, not left to decay."],dep:[null, null, null, 0]},
+  {k:'coverage',name:'Coverage of what matters',levels:[
+    "The data needed for decisions is largely not captured.",
+    "Some of it is captured, with big gaps in the areas that matter.",
+    "The main processes are covered; some important signals are still missing.",
+    "Most decisions are backed by data that is actually captured.",
+    "Comprehensive coverage; new data needs are added quickly and deliberately."],diag:["Is the data behind your main processes actually captured somewhere usable?", "Are the important decisions mostly backed by data you hold?", "Are the known blind spots small rather than significant?", "When a new data need appears, is it added deliberately rather than left?"],desc:["A Yes means the data behind your main processes is actually recorded somewhere usable.", "A Yes means most important decisions can be traced to data you hold.", "A Yes means the gaps are minor, not significant holes in areas that drive decisions.", "A Yes means new data needs are captured on purpose, not left until someone notices."],dep:[null, null, null, null]},
+  {k:'fresh',name:'Freshness & pipelines',levels:[
+    "Data is stale, or gathered by hand only when someone asks.",
+    "Refreshed manually on a slow, irregular cycle.",
+    "Regular refresh for key datasets, but mostly manual.",
+    "Automated pipelines keep the main data current on a schedule.",
+    "Near real-time where it matters, with monitored, resilient pipelines."],diag:["Is data refreshed on a regular schedule, not only when someone asks?", "Is the main data kept current by automated pipelines rather than by hand?", "Is data current enough for the decisions that rely on it?", "Where it matters, is data near real-time, on monitored pipelines?"],desc:["A Yes means data refreshes on a schedule, not only when someone asks for it.", "A Yes means pipelines keep the main data current automatically, not by hand.", "A Yes means the data is fresh enough for the decisions that depend on it.", "A Yes means, where it matters, data is near real-time on monitored pipelines."],dep:[null, null, null, null]}],
+ tech:[
+  {k:'environment',name:'Environment & infrastructure',levels:[
+    "No proper environment; work happens on individual laptops.",
+    "Basic cloud access, but no standard setup.",
+    "A defined working environment for one team or area.",
+    "A shared, maintained platform used across teams.",
+    "Infrastructure provisioned on demand, as a standard service."],diag:["Is there a defined place to build and run, beyond individual machines?", "Is that environment shared and maintained, rather than one person's setup?", "Is it used across teams, not just one area?", "Can infrastructure be provisioned on demand, as a standard service?"],desc:["A Yes means there is a proper place to build and run, beyond individual laptops.", "A Yes means the environment is shared and maintained, not one person's personal setup.", "A Yes means more than one team uses it, not a single isolated area.", "A Yes means infrastructure can be provisioned on demand, as a standard service."],dep:[null, 0, 0, null]},
+  {k:'tooling',name:'Tools & tooling',levels:[
+    "No dedicated tools; whatever is to hand.",
+    "A few free or trial tools, used inconsistently.",
+    "A standard toolset for building in the main area.",
+    "A supported, common toolset across the business.",
+    "Tooling is curated and kept current as the field moves."],diag:["Is there a standard toolset for building, rather than whatever is to hand?", "Is that toolset supported and common across the teams that use it?", "Is it consistent across the business, not per-team improvisation?", "Is tooling curated and kept current as the field moves?"],desc:["A Yes means there is a standard set of tools for building, not whatever is to hand.", "A Yes means the toolset is supported and shared across the teams that use it.", "A Yes means tooling is consistent across the business, not improvised per team.", "A Yes means tools are reviewed and kept current as the field moves."],dep:[null, 0, 0, 0]},
+  {k:'integration',name:'Integration & connectivity',levels:[
+    "Nothing is connected; everything is manual.",
+    "One-off connections built by hand when needed.",
+    "Key systems can be reached through defined interfaces.",
+    "Most systems connect through managed, reusable interfaces.",
+    "Systems interconnect by default, through a shared service layer."],diag:["Are connections between systems built to last, not one-off each time?", "Can key systems be reached through defined interfaces or APIs?", "Do most systems connect through managed, reusable interfaces?", "Do systems interconnect by default, through a shared service layer?"],desc:["A Yes means system connections are built to last, not rebuilt one-off each time.", "A Yes means key systems are reachable through defined interfaces or APIs.", "A Yes means most systems connect through managed, reusable interfaces.", "A Yes means systems interconnect by default, through a shared service layer."],dep:[null, null, 1, null]},
+  {k:'scale',name:'Scalability & reliability',levels:[
+    "Anything built cannot handle real load.",
+    "Works for a demo, but falls over in real use.",
+    "Runs reliably for one production use case.",
+    "Scales to several production workloads, and is monitored.",
+    "Elastic and resilient, with capacity managed automatically."],diag:["Can what you build handle real usage, not just a demo?", "Does at least one thing run reliably in production?", "Does it scale to several production workloads, with monitoring?", "Is the platform elastic and resilient, with capacity managed automatically?"],desc:["A Yes means what you build can handle real load, not just a demo.", "A Yes means at least one thing runs reliably in production.", "A Yes means it scales to several production workloads, with monitoring.", "A Yes means capacity is elastic and resilient, managed automatically."],dep:[null, null, 1, null]},
+  {k:'security',name:'Security & separation',levels:[
+    "No separation of test and live, and no security review.",
+    "Informal separation; security is an afterthought.",
+    "Basic separation of environments and access controls.",
+    "Enforced separation, access control and security review.",
+    "Security is built in and continuously tested."],diag:["Are test and live environments kept separate?", "Are there access controls on who can do what?", "Is separation enforced, with security reviewed before things go live?", "Is security built in and continuously tested, not a one-off check?"],desc:["A Yes means test and live environments are kept properly separate.", "A Yes means there are real controls on who can access and do what.", "A Yes means separation is enforced and security is reviewed before go-live.", "A Yes means security is built in and continuously tested, not a one-off check."],dep:[null, null, 0, null]}],
+ talent:[
+  {k:'capability',name:'In-house capability',levels:[
+    "No in-house capability at all.",
+    "One or two individuals with partial skills.",
+    "A small team that can build in one area.",
+    "Capable teams that can build and maintain across areas.",
+    "Deep capability, including at the leading edge."],diag:["Is there anyone in-house who can build, not only outside help?", "Is there a team that can build and run in at least one area?", "Can teams build and maintain across more than one area?", "Does capability reach the leading edge of the field?"],desc:["A Yes means someone in-house can build, not only external help.", "A Yes means a team can build and run in at least one area.", "A Yes means teams can build and maintain across more than one area.", "A Yes means capability reaches the leading edge, not just the basics."],dep:[null, 0, 1, 2]},
+  {k:'reliance',name:'Dependency & concentration risk',levels:[
+    "Fully dependent on outside help for everything.",
+    "Outside help is needed for each new build.",
+    "Can run what exists, but builds with outside help.",
+    "Largely self-sufficient; outside help is a choice, not a need.",
+    "Self-sufficient, and sets the standard others follow."],diag:["Are you free from depending on a single external vendor or partner for AI?", "Would the work continue if a key supplier or contractor withdrew?", "Do you retain ownership of the models, data and know-how, rather than the vendor?", "Is outside help a deliberate choice for specific work, not a blanket dependency?"],desc:["A Yes means you are not dependent on a single external vendor or partner for AI.", "A Yes means the work would continue if a key supplier or contractor withdrew.", "A Yes means you own the models, data and know-how, not the vendor holding them.", "A Yes means outside help is a deliberate choice for specific work, not a blanket dependency."],dep:[null, null, null, null]},
+  {k:'breadth',name:'Breadth across the business',levels:[
+    "Skills sit in one person, or nowhere.",
+    "Concentrated in a single team or function.",
+    "Present in the priority areas.",
+    "Spread across most functions that need it.",
+    "AI literacy is broad, including non-technical staff."],diag:["Do AI skills sit in more than one person?", "Are skills present in the priority areas that need them?", "Are skills spread across most functions that need them?", "Is AI literacy broad, including non-technical staff?"],desc:["A Yes means AI skills sit in more than one person, not a single individual.", "A Yes means the skills are present in the priority areas that need them.", "A Yes means skills are spread across most functions that need them.", "A Yes means AI literacy is broad, reaching non-technical staff too."],dep:[null, 0, 1, 2]},
+  {k:'develop',name:'Learning & development',levels:[
+    "No training; people learn on their own, if at all.",
+    "Occasional, ad hoc training.",
+    "A basic training path for key roles.",
+    "A structured programme with clear progression.",
+    "Continuous development, tied to how the field evolves."],diag:["Is there any training for AI skills, beyond people self-teaching?", "Is there a defined training path for the key roles?", "Is there a structured programme with clear progression?", "Is development continuous, tied to how the field evolves?"],desc:["A Yes means there is real training for AI skills, beyond people self-teaching.", "A Yes means there is a defined training path for the key roles.", "A Yes means a structured programme with clear progression exists.", "A Yes means development is continuous, tracking how the field evolves."],dep:[null, 0, 1, 2]},
+  {k:'resilience',name:'Retention & resilience',levels:[
+    "Capability would vanish if one person left.",
+    "Fragile; it depends on a few individuals.",
+    "Some redundancy in the key skills.",
+    "Roles are covered, with succession in mind.",
+    "Capability renews itself and is not person-dependent."],diag:["Would capability survive if one key person left?", "Is there redundancy in the key skills?", "Are the roles covered, with succession in mind?", "Does capability renew itself, independent of individuals?"],desc:["A Yes means capability would survive one key person leaving.", "A Yes means there is redundancy in the key skills, not a single point of failure.", "A Yes means roles are covered with succession in mind.", "A Yes means capability renews itself, independent of specific individuals."],dep:[null, null, null, null]}],
+ governance:[
+  {k:'policy',name:'Policy & standards',levels:[
+    "No policy on how AI may be used.",
+    "Informal rules, understood by only a few.",
+    "A written policy exists for the main uses.",
+    "Enforced standards across all AI use.",
+    "Policy is kept current as tools and rules change."],diag:["Is there a shared understanding of how AI, and the data it uses, may be used?", "Is that written down as a policy for the main uses?", "Are those standards enforced across all AI use, not just documented?", "Is the policy kept current as tools, data and rules change?"],desc:["A Yes means people share an understanding of how AI, and its data, may be used.", "A Yes means that is written down as a policy covering the main uses.", "A Yes means the standards are enforced across all AI use, not just documented.", "A Yes means the policy is updated as tools, data and rules change."],dep:[null, null, 1, 1]},
+  {k:'risk',name:'Risk assessment',levels:[
+    "No way to judge the risk of an AI use.",
+    "Risk is considered informally, case by case.",
+    "A basic way to assess and classify risk.",
+    "Every use is risk-assessed before it goes live.",
+    "Risk is monitored continuously, not just at the start."],diag:["Is the risk of an AI use considered before it goes ahead?", "Is there a basic, consistent way to assess and classify that risk?", "Is every use risk-assessed before it goes live?", "Is risk monitored continuously, not only at the start?"],desc:["A Yes means the risk of an AI use is considered before it goes ahead.", "A Yes means there is a consistent way to assess and classify that risk.", "A Yes means every use is risk-assessed before it goes live.", "A Yes means risk is monitored continuously, not judged only at the start."],dep:[null, null, 1, 1]},
+  {k:'oversight',name:'Risk oversight & accountability',levels:[
+    "No one is accountable for AI risk.",
+    "Accountability is unclear or loosely shared.",
+    "A named owner and a register of AI in use.",
+    "Clear owners, a live register, and regular review.",
+    "Independent oversight, with clear escalation routes."],diag:["Is someone accountable for AI risk?", "Is there a register of the AI in use, with a named owner?", "Are there clear owners, a live register and regular review?", "Is there independent oversight, with clear escalation routes?"],desc:["A Yes means someone is clearly accountable for AI risk.", "A Yes means there is a register of the AI in use, with named owners.", "A Yes means clear owners, a live register and regular review are in place.", "A Yes means there is independent oversight with clear escalation routes."],dep:[null, null, 1, 0]},
+  {k:'legal',name:'Legal & regulatory compliance',levels:[
+    "No check against relevant laws or rules.",
+    "Assumed to comply, but never verified.",
+    "Key uses are checked against the main obligations.",
+    "Compliance is verified and documented for all uses.",
+    "Compliance is designed in and tracked as rules evolve."],diag:["Are relevant laws and rules identified for AI use?", "Are the key uses checked against the main legal obligations?", "Is compliance verified and documented for all uses?", "Is compliance designed in and tracked as rules evolve?"],desc:["A Yes means the relevant laws and rules for AI use are identified.", "A Yes means the key uses are checked against the main legal obligations.", "A Yes means compliance is verified and documented for all uses.", "A Yes means compliance is designed in and tracked as rules evolve."],dep:[null, 0, 1, null]},
+  {k:'fairness',name:'Fairness, transparency & ethics',levels:[
+    "No consideration of bias, fairness or explainability.",
+    "Raised occasionally, but not acted on.",
+    "Checked for the higher-risk uses.",
+    "Fairness and transparency are assessed as standard.",
+    "Ethical review is routine, with the ability to explain decisions."],diag:["Are bias, fairness and explainability ever considered?", "Are they checked for the higher-risk uses?", "Are fairness and transparency assessed as standard?", "Is ethical review routine, with the ability to explain decisions?"],desc:["A Yes means bias, fairness and explainability are actually considered.", "A Yes means they are checked for the higher-risk uses.", "A Yes means fairness and transparency are assessed as standard practice.", "A Yes means ethical review is routine and decisions can be explained."],dep:[null, 0, 1, 2]}],
+ adoption:[
+  {k:'usage',name:'Actual usage',levels:[
+    "Built but unused; it sits idle.",
+    "Used by a few enthusiasts only.",
+    "Used for the main tasks it was built for.",
+    "Used widely across the intended users.",
+    "Use is routine and expected; not using it is the exception."],diag:["Is what has been built actually used, not sitting idle?", "Is it used for the main tasks it was built for?", "Is it used widely across the intended users?", "Is use routine and expected, so not using it is the exception?"],desc:["A Yes means what was built is actually used, not sitting idle.", "A Yes means it is used for the main tasks it was built for.", "A Yes means it is used widely across the intended users.", "A Yes means use is routine and expected; not using it is the exception."],dep:[null, 0, 1, 2]},
+  {k:'trust',name:'Trust & confidence',levels:[
+    "Staff distrust or actively avoid it.",
+    "Scepticism outweighs use.",
+    "Cautious acceptance for straightforward tasks.",
+    "Broadly trusted for its intended purpose.",
+    "Trusted enough to rely on for important work."],diag:["Do staff use it rather than avoid it?", "Is it accepted for straightforward tasks?", "Is it broadly trusted for its intended purpose?", "Is it trusted enough to rely on for important work?"],desc:["A Yes means staff use it rather than work around or avoid it.", "A Yes means it is accepted for straightforward tasks at least.", "A Yes means it is broadly trusted for its intended purpose.", "A Yes means it is trusted enough to rely on for important work."],dep:[null, 0, 1, 2]},
+  {k:'change',name:'Change management',levels:[
+    "Tools are dropped on people with no support.",
+    "Minimal communication; people work it out alone.",
+    "Basic training and communication at launch.",
+    "Change is actively managed, with support over time.",
+    "Adoption is designed in from the start of each build."],diag:["Is any support or communication provided when tools are introduced?", "Is there training and communication at launch?", "Is change actively managed, with support over time?", "Is adoption designed in from the start of each build?"],desc:["A Yes means people get support or communication when tools are introduced.", "A Yes means there is training and communication at launch.", "A Yes means change is actively managed, with support over time.", "A Yes means adoption is planned from the start of each build."],dep:[null, 0, 1, 2]},
+  {k:'workflow',name:'Workflow integration',levels:[
+    "Bolted on; the old way of working continues alongside.",
+    "Used in parallel, not really integrated.",
+    "Some workflows have changed to use it.",
+    "Work is genuinely redesigned around it.",
+    "The new way is the only way; the old process is retired."],diag:["Is the tool used as part of the work, not just alongside it?", "Have some workflows actually changed to use it?", "Is work genuinely redesigned around it?", "Has the old way been retired, so the new way is the only way?"],desc:["A Yes means the tool is used within the work, not bolted on alongside it.", "A Yes means some workflows have actually changed to use it.", "A Yes means work is genuinely redesigned around it.", "A Yes means the old way has been retired; the new way is the only way."],dep:[null, 0, 1, 2]},
+  {k:'feedback',name:'Feedback & improvement',levels:[
+    "No feedback is gathered; problems go unheard.",
+    "Feedback is occasional and not acted on.",
+    "Feedback is collected for the main tools.",
+    "A regular loop turns feedback into improvements.",
+    "Continuous improvement, with users shaping the roadmap."],diag:["Is user feedback gathered at all?", "Is feedback collected for the main tools?", "Is there a regular loop that turns feedback into improvements?", "Do users shape the roadmap, with continuous improvement?"],desc:["A Yes means user feedback is gathered at all.", "A Yes means feedback is collected for the main tools.", "A Yes means a regular loop turns feedback into improvements.", "A Yes means users shape the roadmap, with continuous improvement."],dep:[null, 0, 1, 2]}],
+ delivery:[
+  {k:'route',name:'Route to production',levels:[
+    "No route to production; pilots never go live.",
+    "A route exists in theory, but is untested.",
+    "A workable route, proven once or twice.",
+    "A defined, repeatable route from idea to live.",
+    "Getting to production is routine and fast."],diag:["Is there a defined route to get an AI idea into production, not just pilots?", "Has that route actually delivered something to production at least once?", "Is the route repeatable, with a few things now running in production?", "Is reaching production routine, a steady flow rather than rare one-offs?"],desc:["A Yes means there is a defined route to production, not just pilots that stall.", "A Yes means that route has actually put something into production at least once.", "A Yes means the route is repeatable, with a few things now running live.", "A Yes means reaching production is routine, a steady flow rather than rare events."],dep:[null, 0, 1, 2]},
+  {k:'lifecycle',name:'Keeping models current',levels:["Once live, a model is left untouched; no one checks if it still works.", "Problems are noticed only when users complain.", "Model performance is checked periodically, by hand.", "Drift is monitored and models are retrained on a schedule or trigger.", "Models are continuously monitored and refreshed, with retraining automated."],diag:["Can you tell when a live model drifts or degrades, rather than assume it holds?", "Are models retrained or updated on a defined trigger or schedule?", "Does someone own models after go-live, not only at launch?", "Is model performance in production tracked over time?"],desc:["A Yes means you can detect when a live model drifts or degrades, not just assume it still works.", "A Yes means models are retrained or refreshed on a defined trigger or schedule.", "A Yes means someone owns each model after go-live, not only at launch.", "A Yes means production performance is tracked over time, not assumed stable."],dep:[null, null, null, null]},
+  {k:'repeat',name:'Repeatability & standards',levels:[
+    "Every delivery is a one-off, built from scratch.",
+    "Some lessons are reused, but there is no standard way.",
+    "A basic standard process, followed loosely.",
+    "A consistent, documented delivery standard.",
+    "Delivery is templated and largely automated."],diag:["Are lessons from one delivery reused in the next?", "Is there a standard process, even if followed loosely?", "Is the delivery standard consistent and documented?", "Is delivery templated and largely automated?"],desc:["A Yes means lessons from one delivery are reused in the next.", "A Yes means there is a standard process, even if followed loosely.", "A Yes means the delivery standard is consistent and documented.", "A Yes means delivery is templated and largely automated."],dep:[null, null, 1, 2]},
+  {k:'operate',name:'Operating & monitoring',levels:[
+    "Once live, nothing is watched or maintained.",
+    "Watched informally; problems are found by users.",
+    "Basic monitoring for the main systems.",
+    "Production is monitored, with alerts and support.",
+    "Full observability, with issues caught before they bite."],diag:["Is anything watched or maintained once it is live?", "Is there basic monitoring of the main systems?", "Is production monitored, with alerts and support?", "Is there full observability, catching issues before they bite?"],desc:["A Yes means live systems are watched and maintained, not left alone.", "A Yes means there is basic monitoring of the main systems.", "A Yes means production is monitored with alerts and support.", "A Yes means full observability catches issues before they bite."],dep:[null, 0, 1, 2]},
+  {k:'deliveryown',name:'Ownership & funding of delivery',levels:[
+    "No one owns getting things live, and there is no funding for it.",
+    "Delivery is squeezed in around other work.",
+    "A named owner, but funding is ad hoc.",
+    "A dedicated team and a funded pipeline.",
+    "Delivery is a managed capability with sustained investment."],diag:["Does someone clearly own getting AI work into production?", "Is there a team or defined capacity for delivery, not just borrowed time?", "Is delivery a recognised function, not squeezed around other work?", "Is delivery run as a managed capability, staffed to sustain it?"],desc:["A Yes means someone clearly owns getting AI work into production.", "A Yes means there is a team or real capacity for delivery, not borrowed time.", "A Yes means delivery is a recognised function, not squeezed around other work.", "A Yes means delivery is run as a managed capability, staffed to sustain it."],dep:[null, 0, 1, 2]}]
+};
+function facetKeys(d){return RUBRICS[d].map(f=>f.k);}
+function facetDef(d,fk){return RUBRICS[d].find(f=>f.k===fk);}
+function rubricFor(d,t){const keys=facetKeys(d);if(t<=0)return Object.fromEntries(keys.map(k=>[k,0]));const b=Math.min(5,t+1);const o=Object.fromEntries(keys.map(k=>[k,b]));o[keys[Math.min(2,keys.length-1)]]=t;return o;}
+function diagForLevel(L){return (L<=0)?[null,null,null,null]:[0,1,2,3].map(i=>i<(L-1));}
+function diagLevel(arr){if(!arr)return 0;if(!arr.every(v=>v===true||v===false))return 0;return 1+arr.filter(v=>v===true).length;}
+function facetLevel(dk,fk){const fac=facetDef(dk,fk);
+  if(fac.diag){return diagLevel(state.diag&&state.diag[dk]&&state.diag[dk][fk]);}
+  return (state.rubric[dk]&&state.rubric[dk][fk])||0;}
+function syncRubric(){
+  if(!state.rubric)return;
+  DIMS.forEach(d=>{
+    const vals=facetKeys(d.k).map(k=>{const lv=facetLevel(d.k,k);if(state.rubric[d.k])state.rubric[d.k][k]=lv;return lv;});
+    const done=vals.every(v=>v>0);
+    state.readiness[d.k]=done?Math.min(...vals):0;
+    if(state.evidence)state.evidence[d.k]=done?[true,true,true,true]:[false,false,false,false];
+  });
+}
+
+const CLIENTS={
+  blank:{label:'New assessment',readiness:{strategy:0,data:0,tech:0,talent:0,governance:0,adoption:0,delivery:0},evTicks:{strategy:0,data:0,tech:0,talent:0,governance:0,adoption:0,delivery:0},candidates:CANDIDATES},
+  bluetokai:{label:'Blue Tokai Coffee',readiness:{strategy:2,data:3,tech:2,talent:1,governance:1,adoption:3,delivery:1},facets:{strategy:{direction:3,ownership:2,funding:2,link:3,prioritise:2},data:{quality:3,access:3,gov:3,coverage:4,fresh:3},tech:{environment:3,tooling:2,integration:2,scale:3,security:2},talent:{capability:2,reliance:1,breadth:1,develop:2,resilience:1},governance:{policy:1,risk:1,oversight:2,legal:2,fairness:1},adoption:{usage:3,trust:3,change:3,workflow:4,feedback:3},delivery:{route:1,repeat:2,operate:1,lifecycle:1,deliveryown:2}},evTicks:{strategy:1,data:1,tech:1,talent:0,governance:0,adoption:2,delivery:0},candidates:BT_CANDIDATES},
+  meridian:{label:'Meridian Group',readiness:{strategy:4,data:4,tech:3,talent:3,governance:2,adoption:2,delivery:2},facets:{strategy:{direction:4,ownership:5,funding:4,link:4,prioritise:5},data:{quality:5,access:4,gov:4,coverage:5,fresh:4},tech:{environment:4,tooling:3,integration:3,scale:4,security:3},talent:{capability:4,reliance:3,breadth:3,develop:4,resilience:3},governance:{policy:3,risk:2,oversight:3,legal:2,fairness:2},adoption:{usage:2,trust:2,change:3,workflow:2,feedback:3},delivery:{route:3,repeat:2,operate:3,lifecycle:2,deliveryown:2}},evTicks:{strategy:3,data:3,tech:2,talent:2,governance:1,adoption:1,delivery:1},candidates:CANDIDATES},
+};
+function evidenceFromTicks(t){const e={};DIMS.forEach(d=>{const n=t[d.k]||0;const a=[false,false,false,false];for(let i=0;i<n;i++)a[i]=true;e[d.k]=a;});return e;}
+function loadClient(key){const cl=CLIENTS[key];state.client=key;state.clientName=(key==='blank')?'':cl.label.replace(' (reference case)','');state.readiness={...cl.readiness};state.candidates=cl.candidates.map(c=>({...c}));state.evidence=evidenceFromTicks(cl.evTicks);state.rubric={};state.artifact={};DIMS.forEach(d=>{state.rubric[d.k]=(cl.facets&&cl.facets[d.k])?{...cl.facets[d.k]}:rubricFor(d.k,cl.readiness[d.k]||0);state.artifact[d.k]={};});state.diag={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.diag)){state.diag[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.diag){const L=(state.rubric[d.k]&&state.rubric[d.k][f.k])||0;state.diag[d.k][f.k]=diagForLevel(L);}});}});state.qnote={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.diag)){state.qnote[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.diag)state.qnote[d.k][f.k]=[null,null,null,null];});}});state.scope=Object.fromEntries(DOMAINS.map(d=>[d.k,true]));state.openDim='strategy';state.hardFilter=true;}
+
+const state={stage:0,view:'step',quadFilter:null,openOpp:null,openFix:null,facilitator:false};
+loadClient('blank');
+let renderedStage=-1, renderedView='';
+
+const STAGES=[
+  {t:'Where to focus',   s:'The parts in scope'},
+  {t:'Where you stand',  s:'Your readiness'},
+  {t:'Where AI can help',s:'The opportunities'},
+  {t:'What is in the way',s:'The one gap'},
+  {t:'What to do first', s:'The plan'},
+];
+
+function compute(){
+  syncRubric();
+  const r=state.readiness, isSet=k=>r[k]>0;
+  const scored=DIMS.filter(d=>isSet(d.k)), sv=scored.map(d=>r[d.k]);
+  const floor=sv.length?Math.min(...sv):null;
+  const mean=sv.length?sv.reduce((a,b)=>a+b,0)/sv.length:null;
+  const floorDims=floor==null?[]:scored.filter(d=>r[d.k]===floor).map(d=>d.k);
+  const inScope=state.candidates.filter(c=>state.scope[c.dom]);
+  const withStatus=inScope.map(c=>{const gs=isSet(c.gate);return {...c,gateScored:gs,cleared:gs&&r[c.gate]>=3,pending:!gs};});
+  const survivors=withStatus.filter(c=>c.cleared), blocked=withStatus.filter(c=>c.gateScored&&!c.cleared), pending=withStatus.filter(c=>c.pending);
+  const blockedHi=blocked.filter(c=>c.value>=4);
+  const byGate={};blocked.forEach(c=>{(byGate[c.gate]=byGate[c.gate]||[]).push(c);});
+  let bestFix=null;Object.entries(byGate).forEach(([g,list])=>{const val=list.reduce((a,c)=>a+c.value,0);if(!bestFix||val>bestFix.val)bestFix={gate:g,list,val,count:list.length};});
+  const flags=[];const both=(a,b)=>isSet(a)&&isSet(b);
+  if(both('data','governance')&&r.data>=4&&r.governance<=2)flags.push({h:'Strong data, weak governance',t:'you could build, but not deploy safely yet.'});
+  if(both('tech','adoption')&&r.tech>=4&&r.adoption<=2)flags.push({h:'Good tools, low adoption',t:'tools get built, then go unused.'});
+  if(both('strategy','delivery')&&r.strategy>=4&&r.delivery<=2)flags.push({h:'Clear plan, no route to production',t:'ambition that never reaches everyday use.'});
+  if(both('talent','data')&&r.talent>=4&&r.data<=2)flags.push({h:'Capable team, poor data',t:'skilled people with nothing clean to work on.'});
+  const evConf=DIMS.map(d=>{const set=isSet(d.k);const lvl=r[d.k];const checked=state.evidence[d.k].filter(Boolean).length;const needed=Math.max(0,lvl-1);return {k:d.k,name:d.name,set,lvl,checked,needed,total:4,verified:set&&checked>=needed};});
+  return {r,floor,mean,floorDims,inScope,survivors,blocked,pending,blockedHi,bestFix,flags,evConf,scoredCount:scored.length,verifiedCount:evConf.filter(e=>e.verified).length};
+}
+function dimName(k){return DIMS.find(d=>d.k===k).name;}
+function domName(k){const d=DOMAINS.find(x=>x.k===k);return d?d.name:k;}
+function quadOf(o){return o.value>3?(o.effort<3?'quick':'bets'):(o.effort<3?'fill':'low');}
+const QUADS={quick:'Quick wins',bets:'Strategic bets',fill:'Fill-ins',low:'Low priority'};
+function oppStatus(o){const gs=state.readiness[o.gate]>0;if(!gs)return'pending';return state.readiness[o.gate]>=3?'ready':'blocked';}
+function whenText(o){const s=oppStatus(o);if(s==='pending')return`Not yet clear. First assess ${dimName(o.gate)} in step 2.`;if(s==='ready')return`Ready to start now. The foundation it needs, ${dimName(o.gate)}, is in place.`;return`After you close the ${dimName(o.gate)} gap. Until then it stays blocked, however valuable.`;}
+
+// Full briefs: what / why / how / who / metric / pilot for each opportunity
+const DETAILS={
+"Predictive maintenance":{what:"Predict when equipment or assets are likely to fail, so they are serviced before they break down.",why:"Unplanned downtime is expensive and disruptive. Catching failures early avoids lost output and emergency repairs.",how:"A model learns from sensor, usage and maintenance history to flag rising risk; maintenance teams schedule work around it.",who:"Owned by the operations or maintenance lead, with the data team to connect the signals.",metric:"Unplanned downtime, and the share of failures caught before they happen.",pilot:"One critical line or asset class for ten to twelve weeks."},
+"Automated quality inspection":{what:"Check output quality automatically, using images or sensor readings, and flag defects for a person.",why:"Faster, more consistent inspection than manual checking, catching defects that tired eyes miss.",how:"A trained model reviews each item against known-good examples; people handle the exceptions and edge cases.",who:"Owned by the operations or quality lead, with IT to connect the cameras or sensors.",metric:"Defect escape rate, and inspection time per unit.",pilot:"One product or line for eight to ten weeks, run alongside manual checks."},
+"Production scheduling":{what:"Optimise the schedule of production or resources against demand, capacity and constraints.",why:"Better use of capacity, fewer bottlenecks, and less idle time or overtime.",how:"An optimisation model proposes schedules within your real constraints; planners review and adjust before they run.",who:"Owned by the planning or operations lead, with the data team.",metric:"Capacity utilisation, on-time output, and overtime.",pilot:"One plant or line for ten weeks, comparing suggested schedules to actual."},
+"Process anomaly detection":{what:"Watch operational processes for deviations and flag them early, before they become failures or waste.",why:"Small drifts caught early prevent scrap, rework and outages downstream.",how:"A model learns what normal looks like and flags outliers; the operations team investigates.",who:"Owned by the operations lead. It needs a dependable route to run live, which is why it hinges on delivery.",metric:"Issues caught early, against the false-positive rate.",pilot:"One process for eight weeks."},
+"Smarter procurement decisions":{what:"Recommend which supplier, quantity and timing to buy, using your own purchasing history, prices and lead times.",why:"Procurement is usually the largest controllable cost. Small improvements in what and when you buy drop straight to the bottom line, and reduce both overspend and stockouts.",how:"A model learns from past orders and prices, then ranks the better options for each buy. Buyers keep the final call; the tool does the analysis they cannot do by hand.",who:"Owned by the procurement lead, with data or IT support to connect the purchasing records, and finance to confirm the savings.",metric:"Landed cost per unit, and the stockout rate on the categories in scope.",pilot:"One spend category for eight to twelve weeks, comparing the AI-suggested buys against what was actually ordered."},
+"Automated invoice processing":{what:"Read incoming invoices, pull out the fields, match them to purchase orders, and flag only the exceptions for a person.",why:"Removes manual keying, speeds up payment, and catches duplicate or incorrect billing that quietly leaks money.",how:"Document reading extracts the fields, simple rules match each invoice to its order, and only the mismatches reach a human.",who:"Owned by the finance or accounts-payable lead, with IT to connect the finance system.",metric:"Cost per invoice, days to pay, and the share needing manual handling.",pilot:"One supplier group for six to eight weeks."},
+"Customer request triage":{what:"Read incoming customer messages, sort them by topic and urgency, and route each to the right team.",why:"Faster first response and fewer misroutes, so staff spend their time resolving issues rather than sorting them.",how:"A classifier tags each message; routing rules send it on; agents handle the actual reply.",who:"Owned by the customer service lead, with IT to connect the helpdesk.",metric:"First-response time and the misroute rate.",pilot:"One channel, such as email, for six weeks."},
+"Sales lead prioritisation":{what:"Score incoming leads by how likely they are to convert, so the team works the best ones first.",why:"More revenue from the same sales effort, and less time spent on leads that will not close.",how:"A model scores each lead from past wins and losses and basic firm details; the ranking shows up in the CRM.",who:"Owned by sales operations, with IT to connect the CRM.",metric:"Conversion rate and time to first contact on the hottest leads.",pilot:"One team or region for eight weeks."},
+"Demand & inventory forecasting":{what:"Predict demand by product and location so you hold the right stock in the right place.",why:"Less working capital tied up in stock, fewer stockouts, and less waste from over-ordering.",how:"A forecasting model uses sales history, seasonality and known signals; planners review and adjust before it drives orders.",who:"Owned by the supply or planning lead, with the data team.",metric:"Forecast accuracy, inventory days, and the stockout rate.",pilot:"The top products at a few sites for ten to twelve weeks."},
+"Attrition risk prediction":{what:"Flag employees at higher risk of leaving, so managers can act before they resign.",why:"Replacing skilled people is slow and costly. Early, sensitive action retains the ones you most want to keep.",how:"A model on tenure, role and engagement signals highlights risk; HR follows up as a supportive conversation, never an automated one.",who:"Owned by HR, with strong privacy and governance guardrails agreed up front.",metric:"Regretted attrition, and retention among the people flagged.",pilot:"One business unit, after a privacy review, run quietly at first."},
+"Answers from internal documents":{what:"A search assistant that answers staff questions from your own policies, manuals and records, and shows the source for every answer.",why:"Saves hours of hunting for information, gives consistent answers, and helps new joiners find their feet faster.",how:"The assistant retrieves from your documents and drafts an answer with a citation, respecting the same access rules your systems already enforce.",who:"Owned by IT or a knowledge owner, with governance for access and retention.",metric:"Time to find an answer, and the drop in repeat internal queries.",pilot:"One document set, such as HR or operations, for six to eight weeks."},
+"AI customer assistant":{what:"A customer-facing assistant that answers common questions and completes simple tasks, handing off to a person for anything hard.",why:"Faster service around the clock and lower cost per contact, while freeing agents for the cases that need judgement.",how:"A guarded assistant grounded only in your approved content, with a clear handoff to a human and limits on what it may say.",who:"Owned by customer service, with governance and legal setting the boundaries.",metric:"Share of contacts resolved without a human, customer satisfaction, and cost per contact.",pilot:"One narrow topic, such as order status, tightly scoped, for eight to ten weeks."},
+"Contract review":{what:"Read contracts, pull out the key terms, and flag any clause that differs from your standard position.",why:"Faster reviews, fewer missed risks, and a consistent line across every deal.",how:"Document reading extracts the terms and compares them to your playbook; lawyers make every decision.",who:"Owned by the legal lead, with governance for confidentiality.",metric:"Review time, and issues caught before signature.",pilot:"One contract type, such as NDAs, for six weeks."},
+"Competitor & market tracking":{what:"Continuously gather and summarise moves by competitors, regulators and the wider market.",why:"Earlier awareness of change, far less manual scanning, and sharper board briefings.",how:"Sources are collected, de-duplicated and summarised; an analyst curates what matters before it goes further.",who:"Owned by the strategy or research lead. Value depends on analysts trusting and actually using it, which is why it hinges on adoption.",metric:"Time saved, and signals surfaced before they reach the mainstream news.",pilot:"One sector or theme for six weeks."},
+"Accounting anomaly detection":{what:"Scan transactions for errors, duplicates and unusual patterns that a person would miss at volume.",why:"Catches leakage and possible fraud early, and makes the period close cleaner.",how:"A model learns what normal looks like and flags the outliers for a human to review.",who:"Owned by finance and controls. It needs a dependable route to run in production, which is why it hinges on delivery.",metric:"Value of errors caught, against the false-positive rate.",pilot:"One ledger area for eight weeks."},
+"Early IT fault detection":{what:"Watch system signals to predict and flag faults before they turn into outages.",why:"Less downtime, and problems fixed before customers ever notice them.",how:"A model on logs and metrics flags anomalies; the operations team investigates.",who:"Owned by IT operations. It needs the monitoring plumbing to run live, which is why it hinges on delivery.",metric:"Incidents prevented, and mean time to detect.",pilot:"One critical system for eight weeks."},
+"Dynamic pricing":{what:"Adjust prices in response to demand, cost and competition, always within rules you set.",why:"Protects margin and captures demand that flat, manual pricing leaves on the table.",how:"A model recommends prices inside firm guardrails; a person approves changes, and everything is monitored.",who:"Owned by the commercial lead. It needs a robust route to production and live monitoring, which is why it hinges on delivery.",metric:"Margin, revenue per unit, and rule breaches, which should be zero.",pilot:"One product line, closely monitored, for ten to twelve weeks."}
+};
+function oppBrief(o){
+  const d=DETAILS[o.name];
+  if(d)return d;
+  const wh=(ARCH[o.arch]||o.arch).toLowerCase();
+  return {what:`A ${wh} use case in ${domName(o.dom)}.`,
+    why:`It targets a real job in ${domName(o.dom)} where AI can lift quality or speed.`,
+    how:`Built on the ${wh} pattern, grounded in your own data, with people keeping the decision.`,
+    who:`Owned by the ${domName(o.dom)} lead, with data or IT support.`,
+    metric:`A measure the ${domName(o.dom)} team already tracks.`,
+    pilot:`A narrow, time-boxed pilot in one part of ${domName(o.dom)}.`};
+}
+
+function renderSidebar(c){
+  const sb=document.getElementById('sidebar');
+  const opts=Object.entries(CLIENTS).filter(([k])=>state.facilitator||k==='blank').map(([k,v])=>`<option value="${k}"${state.client===k?' selected':''}>${v.label}</option>`).join('');
+  const steps=STAGES.map((st,i)=>{
+    const on=(state.view==='step'&&state.stage===i)?' on':'';
+    const done=state.view==='step'&&i<state.stage;
+    let tag='';
+    if(i===1&&c.scoredCount>0) tag=`<span class="si-ct">${c.scoredCount}/7</span>`;
+    else if(i===2&&c.survivors.length) tag=`<span class="si-ct">${c.survivors.length}</span>`;
+    return `<button class="side-item${on}" data-step="${i}"><span class="si-n${done?' done':''}">${done?'&#10003;':i+1}</span><span class="si-l"><b>${st.t}</b><span>${st.s}</span></span>${tag}</button>`;
+  }).join('');
+  sb.innerHTML=`
+    <div class="side-sel"><label>Assessment</label>
+      <select id="clientsel">${opts}</select>
+      <input id="clientname" class="side-name" type="text" value="${(state.clientName||'').replace(/"/g,'&quot;')}" placeholder="Name this assessment, e.g. Acme Foods" autocomplete="off"></div>
+    <nav class="side-nav">
+      <button class="side-item lite${state.view==='how'?' on':''}" data-view="how"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span><span class="si-l"><b>How it works</b><span>What the tool does</span></span></button>
+      <div class="side-grp">The five steps</div>
+      ${steps}
+    </nav>
+    <div class="side-foot">
+      <div class="side-grp">Save &amp; export</div>
+      <div class="side-tools">
+        <button class="stool" id="btnSave" data-help="Save this assessment to a file you can re-open later to resume exactly where you left off.">Save</button>
+        <button class="stool" id="btnLoad" data-help="Load a previously saved assessment file and continue it.">Load</button>
+        <button class="stool" id="btnXlsx" data-help="Export every answer and result to an Excel workbook: readiness, opportunities and the plan.">Excel</button>
+      </div>
+      <button class="side-export${c.scoredCount>=7?'':' locked'}" id="btnReport" data-help="Generate the full client report as a printable PDF. Unlocks once all seven foundations are scored."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12M8 11l4 4 4-4M4 20h16"/></svg>Export report (PDF)</button>
+      <div class="export-hint">${c.scoredCount>=7?'For a clean PDF, in the print dialog choose "Save as PDF", set paper to A4 and margins to Default, and switch off "Headers and footers" so your file path and the date do not print.':'The report unlocks once all seven foundations are scored ('+c.scoredCount+' of 7 done).'}</div>
+      <label class="fac-toggle" data-help="Shows or hides the two built-in example companies, Blue Tokai and Meridian, in the assessment dropdown at the top left. On for rehearsing or demoing a full worked example; off in a live client session. It only changes the dropdown, never your current answers."><input type="checkbox" id="facToggle" ${state.facilitator?'checked':''}> Facilitator mode: show reference cases</label>
+      <input type="file" id="loadFile" accept="application/json,.json" style="display:none">
+    </div>`;
+}
+
+const SUMHELP=[
+  'Choose the business areas in scope. Everything that follows is limited to what you select here.',
+  'Score each foundation from evidence. Your weakest one, shown in red, sets the ceiling.',
+  'Solid points are ready now. Hollow points near the top are real value you cannot reach yet.',
+  'The longest red bar is the single fix that frees the most value.',
+  'Quick wins first, then lift your weakest foundation, then the bigger moves.',
+];
+function priorityMatrix(c){
+  const items=c.inScope.map(o=>({name:o.name,value:o.value,effort:o.effort,st:oppStatus(o),q:quadOf(o)}));
+  const cap={quick:'High impact, low effort',bets:'High impact, high effort',fill:'Low impact, low effort',low:'Low impact, high effort'};
+  const cell=q=>{
+    const list=items.filter(x=>x.q===q).sort((a,b)=>b.value-a.value||a.effort-b.effort);
+    const rows=list.length?list.map(o=>`<button class="pm-item ${o.st}" data-opp="${o.name}"><span class="pm-dot"></span><span class="pm-nm">${o.name}</span></button>`).join(''):'<div class="pm-empty">None here</div>';
+    const act=state.quadFilter===q?' active':'';
+    return `<div class="pm-cell ${q}${act}"><button class="pm-head" data-quad="${q}"><span class="pm-t"><b>${QUADS[q]}</b><span class="pm-ct">${list.length}</span></span><span class="pm-cap">${cap[q]}</span></button><div class="pm-list">${rows}</div></div>`;
+  };
+  return `<div class="pmatrix">
+    <div class="pm-toplbl"><span>&#8592; less effort</span><span>more effort &#8594;</span></div>
+    <div class="pm-grid">${cell('quick')}${cell('bets')}${cell('fill')}${cell('low')}</div>
+    <div class="pm-legend"><span class="pm-dot ready"></span> ready now <span class="pm-dot blocked"></span> blocked <span class="pm-dot pending"></span> not assessed</div>
+  </div>`;
+}
+function renderLive(c){
+  const st=state.stage;
+  let hero;
+  if(st===0){
+    hero=`<div class="live-hero center"><span class="gauge-help lbl-help" data-help="Your readiness ceiling out of five. It fills in once you score the seven foundations in step 2, and equals your weakest foundation, since you can only be as ready as your weakest one.">${gaugeSVG(c.floor)}</span><div class="live-cap">This assessment will cover <b>${c.inScope.length}</b> opportunities across the areas you selected. Your readiness ceiling appears here once you complete step 2.</div></div>`;
+  } else if(st===1){
+    hero=`<div class="live-hero">${readinessBars(c)}<p class="live-read">${readingText(c)}</p></div>`;
+  } else if(st===2){
+    hero=`<div class="live-hero">${priorityMatrix(c)}</div>`;
+  } else if(st===3){
+    hero=`<div class="live-hero">${gapBars(c)}</div>`;
+  } else {
+    hero=`<div class="live-hero">${timelineSVG(c)}</div>`;
+  }
+  const fix=(c.bestFix&&c.blockedHi.length)?`<div class="lstat fix"><span>Fix first</span><span>${dimName(c.bestFix.gate)}</span></div>`:'';
+  const stats=`<div class="live-stats">
+    <div class="lstat"><span class="lbl-help" data-help="Your lowest of the seven foundations. It sets your readiness ceiling, because you are only as ready as your weakest one. It fills in as you score step 2.">Weakest foundation<svg class="lbl-i" viewBox="0 0 20 20" aria-hidden="true" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/><circle cx="10" cy="6.4" r="1.2"/><rect x="9" y="8.7" width="2" height="5.6" rx="1"/></svg></span><span class="sig">${c.floor==null?'?':c.floor+' / 5'}</span></div>
+    <div class="lstat"><span class="lbl-help help-r" data-help="How many of the seven foundations you have scored so far, out of seven.">Assessed<svg class="lbl-i" viewBox="0 0 20 20" aria-hidden="true" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/><circle cx="10" cy="6.4" r="1.2"/><rect x="9" y="8.7" width="2" height="5.6" rx="1"/></svg></span><span>${c.scoredCount}/7</span></div>
+    <div class="lstat"><span class="lbl-help" data-help="Opportunities you can start now, because the one foundation each depends on is already in place.">Ideas ready<svg class="lbl-i" viewBox="0 0 20 20" aria-hidden="true" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/><circle cx="10" cy="6.4" r="1.2"/><rect x="9" y="8.7" width="2" height="5.6" rx="1"/></svg></span><span>${c.survivors.length}</span></div>
+    <div class="lstat"><span class="lbl-help help-r" data-help="Opportunities blocked for now, because the foundation each depends on is not yet strong enough. Blocked is not lost; it is the reason to fix that foundation.">Held back<svg class="lbl-i" viewBox="0 0 20 20" aria-hidden="true" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/><circle cx="10" cy="6.4" r="1.2"/><rect x="9" y="8.7" width="2" height="5.6" rx="1"/></svg></span><span>${c.blocked.length}</span></div>
+    ${fix}</div>${c.scoredCount===0?'<div class="live-note">These fill in as you assess the seven foundations in step 2.</div>':''}`;
+  return `<div class="live-eyebrow">Live view, builds as you work</div>${hero}${stats}<div class="live-help"><b>On this step</b>${SUMHELP[st]}</div>`;
+}
+
+/* Step 1 */
+function stageScope(){
+  const tiles=DOMAINS.map(d=>{const on=state.scope[d.k];
+    return `<button class="tile${on?' on':''}" data-dom="${d.k}"><span class="tile-ic">${icon(d.k)}</span><span class="tile-n">${d.name}</span><span class="tile-state">${on?'&#10003; in scope':'not in scope'}</span></button>`;}).join('');
+  return `<div class="stage">
+    <div class="lede"><div class="eyebrow">Step 1 of 5</div><h1>Where to focus</h1>
+    <p>${tip('AI',T.ai)} creates value inside real business processes, not in the abstract. Before we assess anything, let's agree which parts of your business are in scope, so everything that follows stays relevant to you.</p>
+    <div class="who">Decided with leadership</div></div>
+    <div class="section-label lbl-help" data-help="The parts of your organisation where AI could add value, your business functions. Pick the ones in play. This is the 'where the value sits' axis, and it is deliberately separate from the seven foundations, which are capabilities that cut across all of these areas.">Parts of the business in scope<svg class="lbl-i" viewBox="0 0 20 20" aria-hidden="true" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/><circle cx="10" cy="6.4" r="1.2"/><rect x="9" y="8.7" width="2" height="5.6" rx="1"/></svg><span class="scope-actions"><button class="scope-act" data-scope="all">Select all</button><button class="scope-act" data-scope="none">Clear all</button></span></div>
+    <div class="tiles" id="tiles">${tiles}</div>
+    <p class="hint">Pick the parts of the business this assessment should cover. Everything after this looks only at the areas you choose, so leave out what is not relevant.</p>
+    <div class="guide">
+      <h4>What this assessment does</h4>
+      <p>Five steps take you from a blank page to a sequenced plan. It separates two questions that are easy to confuse: <b>where</b> AI could help, and whether you are <b>ready</b> to capture it.</p>
+      <ol class="steps-ov">
+        <li><span><b>Where to focus.</b> The parts of your business in scope. You are here.</span></li>
+        <li><span><b>Where you stand.</b> Your readiness, scored from evidence across seven organisation-wide foundations.</span></li>
+        <li><span><b>Where AI can help.</b> The opportunities, mapped by impact and effort.</span></li>
+        <li><span><b>What is in the way.</b> The single foundation blocking the most value.</span></li>
+        <li><span><b>What to do first.</b> A sequenced plan: quick wins, the one key fix, then the bigger moves.</span></li>
+      </ol>
+      <p style="margin-top:16px">Tip: include the areas where you feel real pressure or already hold usable ${tip('data',T.data)}. You can change this at any time, and every later step updates.</p>
+    </div>
+  </div>`;
+}
+
+/* Step 2 */
+function rungLadder(dk,fac){
+  const sel=(state.rubric[dk]&&state.rubric[dk][fac.k])||0;
+  const rows=[5,4,3,2,1].map(gl=>{
+    const on=sel===gl, passed=sel>gl;
+    const hm=(fac.marks&&fac.marks[gl-1])?` data-help="${fac.marks[gl-1].replace(/"/g,'&quot;')}"`:'';
+    return `<button class="rung${on?' on':''}${passed?' passed':''}"${hm} data-rung="${dk}" data-rf="${fac.k}" data-rl="${gl}" aria-pressed="${on}"><span class="rung-dot"></span><span class="rung-txt">${fac.levels[gl-1]}</span><span class="rung-lv">L${gl}</span></button>`;
+  }).join('');
+  const ev=(state.artifact[dk]&&state.artifact[dk][fac.k])||'';
+  return `<div class="rung-list">${rows}</div><input class="facet-note" type="text" data-notedim="${dk}" data-note="${fac.k}" placeholder="Evidence, optional: what shows you are at this level" value="${ev.replace(/"/g,'&quot;')}">`;
+}
+function diagBody(dk,fac){
+  const arr=(state.diag[dk]&&state.diag[dk][fac.k])||[null,null,null,null];
+  const notes=(state.qnote[dk]&&state.qnote[dk][fac.k])||[null,null,null,null];
+  const answered=arr.every(v=>v===true||v===false);
+  const yes=arr.filter(v=>v===true).length;
+  const lvl=answered?1+yes:0;
+  const backed=arr.filter((v,i)=>v===true&&notes[i]&&(''+notes[i]).trim()).length;
+  const rows=fac.diag.map((q,i)=>{const v=arr[i];const dsc=(fac.desc&&fac.desc[i])?` data-help="${fac.desc[i].replace(/"/g,'&quot;')}"`:'';
+    const dep=(fac.dep&&fac.dep[i]!==null&&fac.dep[i]!==undefined)?fac.dep[i]:null;
+    const conflict=(v===true&&dep!==null&&arr[dep]===false);
+    const flag=conflict?`<div class="diag-flag">Unusual: answering Yes here normally needs question ${dep+1} to be Yes as well. Left as you set it, worth a recheck.</div>`:'';
+    const note=notes[i]||'';
+    const noteField=(v===true||v===false)?`<input class="qnote${note&&(''+note).trim()?' has':''}" type="text" data-qnote="${dk}" data-qf="${fac.k}" data-qi="${i}" placeholder="${v===true?'What shows this? A document, system, owner or metric (optional)':'Why not, and what would change it? (optional)'}" value="${(''+note).replace(/"/g,'&quot;')}">`:'';
+    return `<div class="diag-item"><div class="diag-row${conflict?' flagged':''}"><span class="diag-q"${dsc}>${q}</span><span class="diag-yn"><button class="diag-btn${v===true?' sel':''}" data-diag="${dk}" data-df="${fac.k}" data-di="${i}" data-dv="yes">Yes</button><button class="diag-btn${v===false?' sel':''}" data-diag="${dk}" data-df="${fac.k}" data-di="${i}" data-dv="no">No</button></span></div>${flag}${noteField}</div>`;}).join('');
+  const readout=answered
+    ? `<div class="diag-out">Worked out: <b>Level ${lvl}</b>, one plus the <b>${yes} of 4</b> markers in place.${yes>0?` <b>${backed} of ${yes}</b> Yes answers backed by evidence.`:''}${lvl<5?' Each further Yes raises it by one.':''}</div>`
+    : `<div class="diag-out todo">Answer all four questions. The level is computed as one plus the number of Yes answers, so it is worked out from facts, not chosen.</div>`;
+  return `<div class="diag-list">${rows}</div>${readout}`;
+}
+function rubricBody(dk){
+  const facetsDef=RUBRICS[dk], f=state.rubric[dk], keys=facetKeys(dk);
+  const vals=keys.map(k=>f[k]||0);
+  const complete=vals.every(v=>v>0);
+  const derived=complete?Math.min(...vals):null;
+  const fname=dimName(dk);
+  const hasDiag=facetsDef.some(fac=>fac.diag);
+  const minCount=complete?vals.filter(v=>v===derived).length:0;
+  const facets=facetsDef.map(fac=>{
+    const sel=f[fac.k]||0, bind=complete&&sel===derived&&minCount===1;
+    const header=`<div class="facet-h"><span class="facet-name">${fac.name}</span>${sel?`<span class="facet-lvl${bind?' bind':''}">Level ${sel}${bind?' &middot; holds '+fname:''}</span>`:'<span class="facet-todo">not assessed</span>'}</div>`;
+    return `<div class="facet">${header}${fac.diag?diagBody(dk,fac):rungLadder(dk,fac)}</div>`;
+  }).join('');
+  const binderFacets=complete?facetsDef.filter(fac=>f[fac.k]===derived):[];
+  const binderTxt = binderFacets.length===facetsDef.length ? `with all ${facetsDef.length} facets sitting at Level ${derived}`
+    : binderFacets.length===1 ? `held there by <b>${binderFacets[0].name}</b>`
+    : `held there by <b>${binderFacets.map(x=>x.name).join(', ')}</b>, which are tied at this level`;
+  const out=complete
+    ? `<div class="rubric-out done">${fname} comes out at <b>${derived} of 5</b>, ${binderTxt}. The weakest facet caps the foundation, exactly as the weakest foundation caps your overall readiness.</div>`
+    : `<div class="rubric-out">Work through all five facets and the ${fname} level is derived automatically. <b>${vals.filter(v=>v>0).length} of 5</b> done.</div>`;
+  const intro=hasDiag
+    ? `For each facet, answer four concrete questions Yes or No. The facet level is <b>computed</b> as one plus the number of Yes answers, so it is worked out from facts rather than chosen. ${fname} is only as strong as its weakest facet. <span class="rubric-hovercue">Hover any question to see what a Yes means.</span>`
+    : `For each facet, select the highest milestone that is genuinely true. Everything below it is taken as already met, so you record one level, not several. The ${fname} level is that milestone, and ${fname} is only as strong as its weakest facet.`;
+  return `<div class="rubric"><div class="rubric-intro">${intro} Nothing is self-rated.</div>${facets}${out}</div>`;
+}
+function stageReadiness(c){
+  const evByK=Object.fromEntries(c.evConf.map(e=>[e.k,e]));
+  const items=DIMS.map((d,idx)=>{
+    const ev=evByK[d.k], open=state.openDim===d.k;
+    const badge=!ev.set?'<span class="badge notset">Not assessed</span>':'<span class="badge ok">Derived from rubric</span>';
+    const body=open?`<div class="fnd-body-full">${rubricBody(d.k)}</div>`:'';
+    return `<div class="fnd${open?' open':''}">
+      <button class="fnd-head" data-open="${d.k}" aria-expanded="${open}">
+        <span class="fnd-idx">${idx+1}</span>
+        <span class="fnd-main"><span class="fnd-name">${d.name}</span><span class="fnd-role">${d.role}</span></span>
+        <span class="fnd-state">${badge}<span class="fnd-lvl${ev.set?'':' empty'}">${ev.set?ev.lvl:'&ndash;'}</span><span class="chev">&#9656;</span></span>
+      </button>${body}</div>`;
+  }).join('');
+  const flags=c.flags.length?c.flags.map(f=>`<div class="flag"><span class="fi">!</span><span><b>${f.h}:</b> ${f.t}</span></div>`).join(''):`<div class="flags-empty">No conflicting signals at these scores.</div>`;
+  return `<div class="stage">
+    <div class="lede"><div class="eyebrow">Step 2 of 5</div><h1>Where you stand</h1>
+    <p>Step 1 mapped <b>where</b> AI could help. This step is different: these seven foundations are organisation-wide capabilities that apply across every area you selected, and they decide what any of them can actually reach ${tip('production',T.production)}. We assess each from ${tip('evidence',T.evidence)}, and your true readiness is the weakest of them, because your ${tip('weakest foundation',T.weakest)} sets the ceiling for everything above.</p>
+    <div class="who">Answered with leadership and the heads of each area, backed by evidence</div></div>
+    <div class="section-label lbl-help" data-help="The organisation-wide capabilities any AI needs to work, such as data or governance. They cut across every business area, so there are only seven. This is the 'are we ready' axis, separate from the business areas in scope. Readiness is set by the weakest of the seven.">The seven foundations<svg class="lbl-i" viewBox="0 0 20 20" aria-hidden="true" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/><circle cx="10" cy="6.4" r="1.2"/><rect x="9" y="8.7" width="2" height="5.6" rx="1"/></svg></div>
+    <div class="foundations">${items}</div>
+    <div class="guide">
+      <h4>How to complete this step</h4>
+      <ul class="guide-list">
+        <li><span class="gi">1</span><span>Open a foundation and answer each of its five facets by picking the descriptor that matches reality.</span></li>
+        <li><span class="gi">2</span><span>The foundation's level is <b>derived</b> automatically as its weakest facet. The descriptors you pick <b>are</b> the evidence; optionally note the document or system behind each.</span></li>
+        <li><span class="gi">3</span><span>Nothing is self-rated, so nothing can be inflated. The score is whatever your own answers imply.</span></li>
+      </ul>
+      <p style="margin-top:16px">Why the weakest, not the average, at both levels: a single weak facet caps a foundation, and a single weak foundation caps your readiness. A route to ${tip('production',T.production)} that does not exist stops otherwise strong ideas from ever going live. Averaging hides that; the weakest link does not.</p>
+    </div>
+    <div class="notes"><div class="section-label">Worth a closer look</div>${flags}</div>
+  </div>`;
+}
+
+/* Step 3 */
+function stageOpportunity(c){
+  const withStatus=c.inScope.map(x=>{const gs=state.readiness[x.gate]>0;return {...x,gateScored:gs,cleared:gs&&state.readiness[x.gate]>=3,pending:!gs};});
+  const qcount={quick:0,bets:0,fill:0,low:0};c.inScope.forEach(o=>qcount[quadOf(o)]++);
+  const qf=state.quadFilter;
+  let ordered=state.hardFilter?[...c.survivors,...c.blocked,...c.pending]:withStatus;
+  if(qf) ordered=ordered.filter(o=>quadOf(o)===qf);
+  const rows=ordered.map(o=>{
+    const cls=o.pending?' class="dim"':(state.hardFilter&&!o.cleared?' class="dim"':'');
+    const status=o.pending?`<span class="status pend">&#9679; not assessed</span>`:o.cleared?`<span class="status ok">&#9679; ready</span>`:`<span class="status no">&#9679; blocked</span>`;
+    const fitTxt=o.amen==='H'?'High':o.amen==='M'?'Medium':'Low';
+    return `<tr${cls}>
+      <td><button class="opp-name" data-opp="${o.name}"><b>${o.name}</b><span class="opp-caret">View brief &#8250;</span></button></td>
+      <td><span class="arch">${ARCH[o.arch]||o.arch}</span></td>
+      <td>${dimName(o.gate)}</td>
+      <td><span class="fit ${o.amen}">${fitTxt}</span></td>
+      <td class="ve"><span class="adjust"><button data-cal="${o.name}" data-f="value" data-d="-1" aria-label="less impact">&minus;</button><span class="sv">${o.value}</span><button data-cal="${o.name}" data-f="value" data-d="1" aria-label="more impact">+</button></span> &nbsp; <span class="adjust"><button data-cal="${o.name}" data-f="effort" data-d="-1" aria-label="less effort">&minus;</button><span class="sv">${o.effort}</span><button data-cal="${o.name}" data-f="effort" data-d="1" aria-label="more effort">+</button></span></td>
+      <td>${status}</td></tr>`;}).join('');
+  const qbox=(k,t,d)=>`<button class="qg ${k==='quick'?'sweet ':''}${qf===k?'on':''}" data-quad="${k}"><div class="qt">${t} <span class="qn">${qcount[k]}</span></div><div class="qd">${d}</div></button>`;
+  return `<div class="stage">
+    <div class="lede"><div class="eyebrow">Step 3 of 5</div><h1>Where AI can help</h1>
+    <p>These are the opportunities available in the areas you selected in step 1. They are the menu of what AI could do for you. Each one depends on a single foundation, so whether it is ready to start is decided by your readiness in step 2. The matrix on the right places every opportunity by impact and effort; click any one for the full brief.</p></div>
+    ${c.scoredCount<7?`<div class="prompt"><b>Readiness not scored yet (${c.scoredCount} of 7).</b> The opportunities below come from your selected areas, so they appear before scoring. Which are ready or blocked is decided in step 2, so those stay pending until you finish it.</div>`:''}
+    <div class="section-label">Every opportunity in detail</div>
+    <div class="filterbar">
+      <div class="toggle${state.hardFilter?' on':''}" id="hf" tabindex="0" role="switch" aria-checked="${state.hardFilter}" data-help="Sorts the list so opportunities you can start now sit on top, with blocked and not-yet-assessed ones below and dimmed. It re-orders and emphasises, it does not filter, so the total stays the same."><div class="switch"></div>Ready ideas first</div>
+      ${qf?`<span class="quadactive">Showing <b>${QUADS[qf]}</b> only<button class="clearquad" data-quad="clear">Show all</button></span>`:''}
+      <span class="count-note"><b>${c.survivors.length}</b> ready &middot; <b>${c.blocked.length}</b> blocked &middot; <b>${c.pending.length}</b> not assessed &middot; of <b>${c.inScope.length}</b></span>
+    </div>
+    <table class="opps">
+      <thead><tr><th>Opportunity</th><th>Type</th><th>Depends on</th><th>${tip('AI fit',T.fit)}</th><th>Impact / Effort</th><th>Status</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <p class="hint">Click an opportunity to open its brief. Impact is how much it helps (1 to 5); effort is how hard it is (1 to 5). Adjust either to fit your business.</p>
+    <div class="guide">
+      <h4>How to read this step</h4>
+      <ul class="guide-list">
+        <li><span class="gi">&#9679;</span><span><b>The matrix on the right</b> sorts every opportunity by impact and effort into four groups: quick wins (high impact, low effort), strategic bets, fill-ins and low priority. Start where the return is high and the effort is low.</span></li>
+        <li><span class="gi">&#9679;</span><span><b>Colour shows readiness.</b> Green is ready to start now. Amber is blocked, because the one foundation it depends on is not yet in place. Grey is not yet assessed.</span></li>
+        <li><span class="gi">&#9679;</span><span><b>Blocked is not lost.</b> A blocked, high-value opportunity is the reason to fix the foundation it waits on, which is what the next two steps work out.</span></li>
+      </ul>
+      <p style="margin-top:16px">The practical read: act on the ready quick wins now, and treat the blocked high-value ones as the case for fixing your weakest foundation.</p>
+    </div>
+  </div>`;
+}
+function matrixSVG(c){
+  const W=430,H=360,pad=52;
+  const px=v=>pad+((v-0.5)/5)*(W-pad*2), py=v=>H-pad-((v-0.5)/5)*(H-pad*2);
+  const mx=px(3), my=py(3);
+  const pts=c.inScope.map(o=>({...o,gs:state.readiness[o.gate]>0,cleared:state.readiness[o.gate]>=3})).map(o=>{
+    const x=px(o.effort),y=py(o.value);const cur=' style="cursor:pointer" data-opp="'+o.name+'"';
+    if(!o.gs)return `<circle cx="${x}" cy="${y}" r="6" fill="var(--line)" opacity="0.8"${cur}><title>${o.name}: not assessed</title></circle>`;
+    if(o.cleared)return `<circle cx="${x}" cy="${y}" r="8" fill="var(--ink)"${cur}><title>${o.name}: ready</title></circle>`;
+    return `<circle cx="${x}" cy="${y}" r="7.5" fill="#fff" stroke="var(--blocked)" stroke-width="1.8" stroke-dasharray="2.4 2.2"${cur}><title>${o.name}: blocked by ${dimName(o.gate)}</title></circle>`;}).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Impact versus effort map">
+    <rect x="${pad}" y="${pad}" width="${mx-pad}" height="${my-pad}" fill="rgba(31,122,92,.07)"/>
+    <text x="${pad+8}" y="${pad+16}" font-size="9.5" fill="var(--cleared)" font-weight="700" letter-spacing=".08em">SWEET SPOT</text>
+    <line x1="${mx}" y1="${pad-8}" x2="${mx}" y2="${H-pad+8}" stroke="var(--hair)"/>
+    <line x1="${pad-8}" y1="${my}" x2="${W-pad+8}" y2="${my}" stroke="var(--hair)"/>
+    <text x="${pad-10}" y="${pad-18}" font-size="10" fill="var(--soft)" letter-spacing=".1em">HIGH IMPACT</text>
+    <text x="${pad-10}" y="${H-pad+26}" font-size="10" fill="var(--soft)" letter-spacing=".1em">LOW IMPACT</text>
+    <text x="${pad-8}" y="${H-12}" font-size="10" fill="var(--soft)" letter-spacing=".1em">LOW EFFORT</text>
+    <text x="${W-pad-8}" y="${H-12}" font-size="10" fill="var(--soft)" letter-spacing=".1em" text-anchor="end">HIGH EFFORT</text>
+    ${pts}</svg>`;
+}
+
+/* Step 4 */
+function stageGap(c){
+  if(c.scoredCount<7){
+    return `<div class="stage"><div class="lede"><div class="eyebrow">Step 4 of 5</div><h1>What is in the way</h1>
+      <p>The best opportunities are often held back by the same missing foundation. That is the useful part: one focused fix can unlock several at once. This step pinpoints that fix, once your readiness is complete.</p></div>
+      <div class="prompt"><b>${c.scoredCount} of 7 foundations assessed.</b> Finish scoring in step 2 and this step will rank the gaps by the value locked behind each, and name the single fix that frees the most.</div>
+      <div class="guide">
+        <h4>What you will see here</h4>
+        <ul class="guide-list">
+          <li><span class="gi">1</span><span>A chart of the value waiting behind each unbuilt foundation, longest bar first.</span></li>
+          <li><span class="gi">2</span><span>The one foundation that, once fixed, unlocks the most opportunities at once.</span></li>
+          <li><span class="gi">3</span><span>The specific high-value opportunities that fix would release.</span></li>
+        </ul>
+        <p style="margin-top:16px">The point of this step is the difference between a wish list and a plan. A list ranks ideas; this ranks the <b>constraints</b> that decide which ideas you can actually reach.</p>
+      </div>
+      <div class="backcue"><button class="reset backcue-btn">Back to step 2 to finish scoring</button></div></div>`;
+  }
+  const items=c.blockedHi.length?c.blockedHi.map(o=>`<div class="gap-item">
+      <div class="gi-top"><span class="gi-name">${o.name}</span><span class="gi-val">impact ${o.value}, effort ${o.effort}</span></div>
+      <div class="gi-why">Held back only by <b>${dimName(o.gate)}</b>. The opportunity is sound; that one foundation is missing.</div></div>`).join(''):`<div class="flags-empty">No high-value opportunities are currently blocked.</div>`;
+  let verdict;
+  if(c.bestFix&&c.blockedHi.length){
+    const names=c.bestFix.list.filter(x=>x.value>=4).map(x=>x.name);
+    verdict=`<div class="verdict"><div class="eyebrow">The one thing to fix</div>
+      <p>The strongest blocked opportunities all depend on the same foundation: <span class="hl">${dimName(c.bestFix.gate)}</span>. So the highest-leverage first move is not a new use case. It is closing that one gap, which unlocks <b>${c.bestFix.count}</b> ${c.bestFix.count>1?'opportunities':'opportunity'} at once${names.length?`, including ${names.slice(0,2).join(' and ')}`:''}.</p></div>`;
+  } else {
+    verdict=`<div class="verdict"><div class="eyebrow">The one thing to fix</div><p>Nothing significant is blocked. You can move straight to sequencing the ready opportunities.</p></div>`;
+  }
+  return `<div class="stage">
+    <div class="lede"><div class="eyebrow">Step 4 of 5</div><h1>What is in the way</h1>
+    <p>The best opportunities are often held back by the same missing foundation. That is the useful part: one focused fix can unlock several at once. The chart on the right shows the value waiting behind each gap.</p></div>
+    <div class="guide">
+      <h4>How to read this step</h4>
+      <p>Each bar totals the value of the opportunities waiting on one foundation. The longest bar, in red, is where a single fix frees the most value at once. That is your highest-leverage first move, and it is usually not a new use case but closing that one gap.</p>
+      <p>This is the difference between a wish list and a plan. A list ranks ideas; this ranks the <b>constraints</b> that decide which ideas you can actually reach.</p>
+    </div>
+    ${verdict}
+    <div class="section-label" style="margin-top:30px">The high-value opportunities held back</div>
+    <div class="gap-list">${items}</div></div>`;
+}
+
+/* Step 5 */
+function stageRoadmap(c){
+  if(c.scoredCount<7){
+    return `<div class="stage"><div class="lede"><div class="eyebrow">Step 5 of 5</div><h1>What to do first</h1>
+      <p>The final step turns everything above into a sequenced plan: what to start now, the one thing to fix next, and the bigger moves to reach later. It is generated once your readiness is complete.</p></div>
+      <div class="prompt"><b>${c.scoredCount} of 7 foundations assessed.</b> Finish scoring in step 2 and your plan builds automatically, phased across three horizons.</div>
+      <div class="guide">
+        <h4>How the plan will be built</h4>
+        <ul class="guide-list">
+          <li><span class="gi">&#9679;</span><span><b>Start now.</b> The ready, low-effort, high-impact opportunities. Beginning here builds momentum and helps fund what follows.</span></li>
+          <li><span class="gi">&#9679;</span><span><b>Fix next.</b> The one foundation blocking the most value. Closing it lifts your ceiling and releases the ideas held back.</span></li>
+          <li><span class="gi">&#9679;</span><span><b>Later.</b> The higher-value, heavier moves that become reachable once the ceiling has risen.</span></li>
+        </ul>
+        <p style="margin-top:16px">The order is deliberate. Quick wins first is not about doing the smallest thing; it is about earning the room and the credibility to attempt the harder ones.</p>
+      </div>
+      <div class="backcue"><button class="reset backcue-btn">Back to step 2 to finish scoring</button></div></div>`;
+  }
+  const now=[...c.survivors].sort((a,b)=>(b.value-b.effort)-(a.value-a.effort)).slice(0,5);
+  const later=[...c.survivors].filter(x=>x.effort>=4||(x.value>=4&&x.effort>=3));
+  const nextFix=c.bestFix&&c.blockedHi.length?c.bestFix:null;
+  const li=o=>`<li class="li-click" data-opp="${o.name.replace(/"/g,'&quot;')}"><span>${o.name}</span><span class="li-v">${o.value}/${o.effort}</span></li>`;
+  const nowL=now.length?now.map(li).join(''):(nextFix?`<li class="empty">Nothing is ready yet. Your foundations are not strong enough, so the plan starts with the fix to the right.</li>`:'<li class="empty">Nothing is ready yet.</li>');
+  const laterL=later.length?later.map(li).join(''):'<li class="empty">No higher-value moves in scope.</li>';
+  const nextL=nextFix?`<li class="li-click" data-fix="${nextFix.gate}"><span>Close the ${dimName(nextFix.gate)} gap</span><span class="li-v">how to &rsaquo;</span></li>`+nextFix.list.filter(x=>x.value>=4).map(o=>`<li class="li-click" data-opp="${o.name.replace(/"/g,'&quot;')}"><span>&#8627; then ${o.name}</span><span class="li-v">${o.value}</span></li>`).join(''):'<li class="empty">Nothing to unblock.</li>';
+  const topNow=now[0]?now[0].name:null;
+  const wf=(now.length===0&&nextFix)
+    ? `Nothing is ready to start yet, because your foundations are not strong enough. Begin by fixing <b>${dimName(nextFix.gate)}</b>, which unlocks <b>${nextFix.count}</b> ${nextFix.count>1?'opportunities':'opportunity'}. Click <b>Close the ${dimName(nextFix.gate)} gap</b> below for exactly what to do. As it rises, the quick wins appear.`
+    : nextFix
+    ? `Start now with <b>${topNow||'the ready quick wins'}</b>${now.length>1?' and the other quick wins':''}. Fix <b>${dimName(nextFix.gate)}</b> next, which unlocks <b>${nextFix.count}</b> higher-value ${nextFix.count>1?'opportunities':'opportunity'}. Click <b>Close the ${dimName(nextFix.gate)} gap</b> for the specific steps. Then take on the bigger builds once your ceiling has risen.`
+    : `Start now with <b>${topNow||'the ready quick wins'}</b>${now.length>1?' and the other quick wins':''}. Nothing significant is blocked, so work through the ready shortlist by priority and revisit readiness as you grow.`;
+  let coFloor='';
+  if(nextFix){const af={...state.readiness};af[nextFix.gate]=Math.max(3,af[nextFix.gate]||0);const nfv=Math.min(...DIMS.map(d=>af[d.k]||0));const nfd=DIMS.filter(d=>(af[d.k]||0)===nfv).map(d=>dimName(d.k));if(nfv<5)coFloor=` <span class="wf-note">Readiness stays capped at ${nfv} of 5 by ${nfd.join(', ')} until ${nfd.length>1?'those are':'that is'} raised too, so value flows after the first fix but the number moves only once ${nfd.length>1?'they are':'it is'} lifted as well.</span>`;}
+  return `<div class="stage">
+    <div class="lede"><div class="eyebrow">Step 5 of 5</div><h1>What to do first</h1>
+    <p>A sequenced plan. Quick wins first, to build momentum and fund the work. Then the single fix that lifts your weakest foundation. Then the higher-value moves it makes reachable. The timeline on the right shows readiness rising as you work through it.</p></div>
+    <div class="wayforward"><div class="wf-lbl">Your way forward</div><p>${wf}${coFloor}</p></div>
+    <div class="lanes">
+      <div class="lane now"><div class="lh"><div class="t">Start now</div><div class="s">Quick wins, ready today</div></div><ul>${nowL}</ul></div>
+      <div class="lane next"><div class="lh"><div class="t">Fix next</div><div class="s">Close the blocking gap</div></div><ul>${nextL}</ul></div>
+      <div class="lane later"><div class="lh"><div class="t">Later</div><div class="s">Higher-value, reachable once ready</div></div><ul>${laterL}</ul></div>
+    </div>
+    <div class="guide">
+      <h4>How the plan works</h4>
+      <ul class="guide-list">
+        <li><span class="gi">&#9679;</span><span><b>Start now.</b> Ready today, low effort, high impact. Beginning here builds momentum, earns confidence, and helps fund what follows.</span></li>
+        <li><span class="gi">&#9679;</span><span><b>Fix next.</b> The one foundation blocking the most value. Closing it lifts your ceiling and releases the ideas that were held back.</span></li>
+        <li><span class="gi">&#9679;</span><span><b>Later.</b> The higher-value, heavier moves that only become reachable once the ceiling has risen.</span></li>
+      </ul>
+      <p style="margin-top:16px">The order is deliberate. Quick wins first is not about doing the smallest thing; it is about earning the room and the credibility to attempt the harder ones.</p>
+    </div>
+    <div class="startover">Working on: ${CLIENTS[state.client].label}. Adjust your answers in step 2, or switch business at the top, and every step updates.<br><button class="reset" id="resetbtn">Reset this business</button></div>
+  </div>`;
+}
+
+/* ===== graphics ===== */
+const SHORT={strategy:'Strategy',data:'Data',tech:'Platform',talent:'Skills',governance:'Governance',adoption:'Adoption',delivery:'Delivery'};
+const ICONS={
+ fin:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v9M9.6 10.2h3.3a1.7 1.7 0 010 3.4H9.9"/>',
+ proc:'<path d="M4 8l8-4 8 4v8l-8 4-8-4z"/><path d="M4 8l8 4 8-4M12 12v8"/>',
+ hr:'<circle cx="9.5" cy="9" r="2.8"/><path d="M4.5 18.5c0-2.8 2.2-4.5 5-4.5s5 1.7 5 4.5"/><path d="M15.5 7.2a2.8 2.8 0 010 5.6M20 18.5c0-2.3-1.4-3.8-3.3-4.3"/>',
+ legal:'<path d="M7 3.5h6.5L18 8v12.5H7z"/><path d="M13.5 3.5V8H18M9.5 12.5h6M9.5 16h6"/>',
+ sales:'<path d="M4.5 19.5V4.5M4.5 19.5h15"/><path d="M7.5 15l3.2-3.2 3 2 4.3-5.3"/>',
+ cust:'<path d="M5 5.5h14v10H9.5l-4 3.5z"/>',
+ it:'<rect x="4.5" y="4.5" width="15" height="6" rx="1.2"/><rect x="4.5" y="13.5" width="15" height="6" rx="1.2"/><path d="M8 7.5h.01M8 16.5h.01"/>',
+ corp:'<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2.2 4.8-4.8 2.2 2.2-4.8z"/>',
+ ops:'<circle cx="12" cy="12" r="3.2"/><path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/>',
+};
+function icon(k){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]||''}</svg>`;}
+
+function readinessBars(c){
+  const x0=88, unit=38.8, trackW=unit*5, top=40, rowH=29, barH=13, n=DIMS.length;
+  const xFor=v=>x0+v*unit, bottom=top+n*rowH;
+  let grid='';
+  for(let u=1;u<=5;u++){const x=xFor(u);grid+=`<line x1="${x}" y1="${top-8}" x2="${x}" y2="${bottom-rowH+7}" stroke="var(--hair)"/><text x="${x}" y="${bottom-rowH+22}" font-size="9" fill="var(--soft)" text-anchor="middle">${u}</text>`;}
+  let rows='';
+  DIMS.forEach((d,i)=>{const y=top+i*rowH, v=state.readiness[d.k]||0, fl=c.floorDims.includes(d.k)&&v>0;
+    rows+=`<text x="${x0-8}" y="${y}" font-size="10" fill="${fl?'var(--signal)':'var(--muted)'}" font-weight="${fl?700:400}" text-anchor="end" dominant-baseline="middle">${SHORT[d.k]}</text>`;
+    rows+=`<rect x="${x0}" y="${y-barH/2}" width="${trackW}" height="${barH}" rx="3" fill="var(--surface)" stroke="var(--hair)"/>`;
+    if(v>0) rows+=`<rect x="${x0}" y="${y-barH/2}" width="${v*unit}" height="${barH}" rx="3" fill="${fl?'var(--signal)':'var(--ink)'}"/>`;
+    else rows+=`<text x="${x0+7}" y="${y}" font-size="8.5" fill="var(--soft)" dominant-baseline="middle" font-style="italic">not assessed</text>`;
+  });
+  let floorLine='';
+  if(c.floor!=null&&c.scoredCount>0){const fx=xFor(c.floor);
+    floorLine=`<line x1="${fx}" y1="${top-22}" x2="${fx}" y2="${bottom-rowH+7}" stroke="var(--signal)" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${fx}" y="${top-26}" font-size="10" fill="var(--signal)" text-anchor="middle" font-weight="700">Readiness ${c.floor}/5</text>`;
+  }
+  return `<svg viewBox="0 0 344 ${bottom+6}" role="img" aria-label="Readiness across the seven foundations, capped at the weakest">${grid}${floorLine}${rows}</svg>`;
+}
+function radarSVG(c){
+  const cx=172,cy=150,R=108,n=DIMS.length;
+  const ang=i=>-Math.PI/2+i*2*Math.PI/n;
+  const pt=(i,f)=>[cx+Math.cos(ang(i))*R*f, cy+Math.sin(ang(i))*R*f];
+  let grid='';for(let r=1;r<=5;r++){grid+=`<polygon points="${DIMS.map((d,i)=>pt(i,r/5).join(',')).join(' ')}" fill="none" stroke="var(--hair)"/>`;}
+  let axes='',labels='';
+  DIMS.forEach((d,i)=>{const[x,y]=pt(i,1);axes+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--hair)"/>`;
+    const[lx,ly]=pt(i,1.17);const cs=Math.cos(ang(i));const anc=Math.abs(cs)<0.3?'middle':(cs>0?'start':'end');const fl=c.floorDims.includes(d.k);
+    labels+=`<text x="${lx}" y="${ly}" font-size="10.5" font-weight="${fl?700:400}" fill="${fl?'var(--signal)':'var(--muted)'}" text-anchor="${anc}" dominant-baseline="middle">${SHORT[d.k]}</text>`;});
+  const hasData=DIMS.some(d=>state.readiness[d.k]>0);
+  const dpts=DIMS.map((d,i)=>pt(i,(state.readiness[d.k]||0)/5).join(',')).join(' ');
+  const poly=hasData?`<polygon points="${dpts}" fill="rgba(67,34,77,.13)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>`:'';
+  let verts='';DIMS.forEach((d,i)=>{const v=state.readiness[d.k];if(v>0){const[x,y]=pt(i,v/5);const fl=c.floorDims.includes(d.k);verts+=`<circle cx="${x}" cy="${y}" r="${fl?5:3.4}" fill="${fl?'var(--signal)':'var(--ink)'}"/>`;}});
+  return `<svg viewBox="0 0 344 300" role="img" aria-label="Readiness profile across the seven foundations">${grid}${axes}${poly}${verts}${labels}</svg>`;
+}
+function gaugeSVG(floor){
+  const cx=80,cy=84,r=62,polar=a=>[cx+r*Math.cos(a),cy-r*Math.sin(a)];
+  const arc=(v0,v1)=>{const a0=Math.PI*(1-v0/5),a1=Math.PI*(1-v1/5);const[x0,y0]=polar(a0),[x1,y1]=polar(a1);return `M ${x0} ${y0} A ${r} ${r} 0 0 1 ${x1} ${y1}`;};
+  const val=floor==null?'':`<path d="${arc(0,floor)}" stroke="var(--signal)" stroke-width="11" fill="none" stroke-linecap="round"/>`;
+  return `<svg viewBox="0 0 160 104" role="img" aria-label="Readiness ceiling out of five">
+    <path d="${arc(0,5)}" stroke="var(--hair)" stroke-width="11" fill="none" stroke-linecap="round"/>${val}
+    <text x="80" y="80" text-anchor="middle" font-family="var(--mono)" font-size="34" font-weight="700" fill="${floor==null?'var(--line)':'var(--signal)'}">${floor==null?'?':floor}</text>
+    <text x="80" y="98" text-anchor="middle" font-size="10" fill="var(--soft)" letter-spacing=".08em">CEILING / 5</text></svg>`;
+}
+function readingText(c){
+  if(!c.scoredCount) return 'Assess the foundations below and the bars fill in here. Readiness is set by the shortest bar, your weakest foundation, not the average.';
+  const strengths=DIMS.filter(d=>state.readiness[d.k]>=4).map(d=>d.name);
+  let s=`Your readiness is capped at <b>${c.floor} of 5</b> by ${c.floorDims.map(dimName).join(', ')}, the shortest ${c.floorDims.length>1?'bars':'bar'} in red. Everything taller is a strength held back until you raise that floor.`;
+  if(strengths.length) s+=` Your strongest ground is ${strengths.join(', ')}.`;
+  if(c.scoredCount<7) s+=` So far ${c.scoredCount} of 7 assessed.`;
+  return s;
+}
+function gapBars(c){
+  const g={};c.blocked.forEach(o=>{(g[o.gate]=g[o.gate]||{v:0,n:0});g[o.gate].v+=o.value;g[o.gate].n++;});
+  const arr=Object.entries(g).map(([k,x])=>({k,...x})).sort((a,b)=>b.v-a.v);
+  if(!arr.length) return '<div class="flags-empty">Nothing is blocked, so there is no gap to close right now.</div>';
+  const max=Math.max(...arr.map(a=>a.v));
+  return `<div class="gapbars">`+arr.map((a,i)=>`<div class="gapbar">
+     <div class="gbl">${dimName(a.k)}<span class="gbn">${a.n} ${a.n>1?'opportunities':'opportunity'} waiting</span></div>
+     <div class="gbtrack"><div class="gbfill${i===0?' top':''}" style="width:${Math.max(9,a.v/max*100)}%">${i===0?'<span>fix first</span>':''}</div></div>
+     <div class="gbv">${a.v}</div></div>`).join('')+`</div>`;
+}
+function timelineSVG(c){
+  const hasFix=c.bestFix&&c.blockedHi.length;
+  return `<svg viewBox="0 0 620 100" role="img" aria-label="Sequence over time, readiness rising after the fix" preserveAspectRatio="xMidYMid meet">
+    <polyline points="60,70 250,70 320,46 400,46 560,26" fill="none" stroke="var(--line)" stroke-width="2" stroke-dasharray="${hasFix?'0':'5 4'}"/>
+    <circle cx="60" cy="70" r="7" fill="var(--cleared)"/><circle cx="320" cy="46" r="7" fill="var(--signal)"/><circle cx="560" cy="26" r="7" fill="var(--ink)"/>
+    <text x="60" y="92" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cleared)">Start now</text>
+    <text x="320" y="92" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--signal)">Fix next</text>
+    <text x="560" y="92" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)">Later</text>
+    <text x="612" y="16" text-anchor="end" font-size="9.5" fill="var(--soft)" letter-spacing=".1em">READINESS RISING</text></svg>`;
+}
+
+function hwPipeline(){
+  const st=[['1','Focus'],['2','Readiness'],['3','Opportunities'],['4','The gap'],['5','The plan']];
+  const n=st.length,W=640,x0=54,x1=W-54,cx=i=>x0+i*((x1-x0)/(n-1));
+  const nodes=st.map((s,i)=>`<circle cx="${cx(i)}" cy="48" r="15" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.5"/><text x="${cx(i)}" y="53" font-size="12" font-family="var(--mono)" font-weight="700" fill="var(--ink)" text-anchor="middle">${s[0]}</text><text x="${cx(i)}" y="82" font-size="10.5" fill="var(--muted)" text-anchor="middle">${s[1]}</text>`).join('');
+  return `<svg viewBox="0 0 ${W} 98" role="img" aria-label="The five steps">
+    <line x1="${x0}" y1="48" x2="${x1}" y2="48" stroke="var(--line)" stroke-width="2"/>
+    <path d="M${x1-6} 44 L${x1+2} 48 L${x1-6} 52" fill="none" stroke="var(--soft)" stroke-width="1.5"/>
+    ${nodes}
+    <text x="${x0-2}" y="20" font-size="10" fill="var(--soft)" letter-spacing=".07em">THE TOOL STRUCTURES THE QUESTIONS</text>
+    <text x="${x1+2}" y="20" font-size="10" fill="var(--signal)" letter-spacing=".07em" text-anchor="end" font-weight="700">YOU DECIDE</text>
+  </svg>`;
+}
+function hwGate(){
+  const col=(cx,opp,found,lvl,ready)=>{
+    const c1=ready?'var(--cleared)':'var(--blocked)';
+    return `<rect x="${cx-64}" y="16" width="128" height="30" rx="7" fill="none" stroke="var(--ink)" stroke-width="1.3"/>
+      <text x="${cx}" y="35" font-size="11" fill="var(--ink)" text-anchor="middle" font-weight="600">${opp}</text>
+      <text x="${cx+8}" y="64" font-size="9" fill="var(--soft)">needs</text>
+      <path d="M${cx} 48 L${cx} 74" stroke="var(--soft)" stroke-width="1.3"/><path d="M${cx-4} 69 L${cx} 75 L${cx+4} 69" fill="none" stroke="var(--soft)" stroke-width="1.3"/>
+      <rect x="${cx-64}" y="78" width="128" height="34" rx="7" fill="var(--paper)" stroke="var(--line)"/>
+      <text x="${cx}" y="94" font-size="10.5" fill="var(--muted)" text-anchor="middle">${found}</text>
+      <text x="${cx}" y="107" font-size="10" fill="var(--ink)" text-anchor="middle" font-family="var(--mono)">level ${lvl}</text>
+      <path d="M${cx} 114 L${cx} 138" stroke="var(--soft)" stroke-width="1.3"/><path d="M${cx-4} 133 L${cx} 139 L${cx+4} 133" fill="none" stroke="var(--soft)" stroke-width="1.3"/>
+      <rect x="${cx-48}" y="142" width="96" height="24" rx="12" fill="${ready?'rgba(31,122,92,.1)':'rgba(192,122,28,.12)'}"/>
+      <text x="${cx}" y="158" font-size="11" fill="${c1}" text-anchor="middle" font-weight="700">${ready?'Ready':'Blocked'}</text>`;
+  };
+  return `<svg viewBox="0 0 600 210" role="img" aria-label="Opportunities gated by the foundation each needs">
+    ${col(150,'Document search','Governance',2,false)}
+    ${col(450,'Competitor scan','Adoption',3,true)}
+    <text x="300" y="186" font-size="10" fill="var(--soft)" text-anchor="middle">Each opportunity needs one foundation.</text>
+    <text x="300" y="200" font-size="10" fill="var(--soft)" text-anchor="middle">Below the bar it is blocked, not lost.</text>
+  </svg>`;
+}
+function hwScoringChain(){
+  const cell=(x,y,w,label,lvl,red)=>`<rect x="${x}" y="${y}" width="${w}" height="30" rx="6" fill="${red?'var(--signal)':'var(--surface)'}" stroke="${red?'none':'var(--line)'}" stroke-width="1.3"/><text x="${x+w/2}" y="${y+20}" font-size="13" font-family="var(--mono)" font-weight="700" fill="${red?'#fff':'var(--ink)'}" text-anchor="middle">${lvl}</text><text x="${x+w/2}" y="${y+43}" font-size="8" fill="${red?'var(--signal)':'var(--soft)'}" text-anchor="middle" font-weight="${red?700:400}">${label}</text>`;
+  const arrow=(x,y)=>`<path d="M${x} ${y} L${x+18} ${y}" stroke="var(--soft)" stroke-width="1.4"/><path d="M${x+13} ${y-4} L${x+19} ${y} L${x+13} ${y+4}" fill="none" stroke="var(--soft)" stroke-width="1.4"/>`;
+  const result=(x,y,label,val)=>`<text x="${x}" y="${y}" font-size="12" fill="var(--muted)">${label} = <tspan font-size="15" font-weight="700" fill="var(--signal)" font-family="var(--mono)">${val}</tspan></text>`;
+  const f=[['Quality',4,false],['Access',3,false],['Gov',2,true],['Coverage',4,false],['Fresh',3,false]];
+  const fw=64,fg=8,fx0=14,fy=40;let r1='';f.forEach((c,i)=>r1+=cell(fx0+i*(fw+fg),fy,fw,c[0],c[1],c[2]));
+  const f1end=fx0+5*(fw+fg)-fg;
+  const fo=[['Strategy',3,false],['Data',2,true],['Tech',3,false],['Skills',3,false],['Gov',3,false],['Adopt.',3,false],['Deliv.',3,false]];
+  const ow=46,og=7,ox0=14,oy=132;let r2='';fo.forEach((c,i)=>r2+=cell(ox0+i*(ow+og),oy,ow,c[0],c[1],c[2]));
+  const o1end=ox0+7*(ow+og)-og;
+  return `<svg viewBox="0 0 640 208" role="img" aria-label="The scoring chain from facets to foundation to readiness">
+    <text x="14" y="28" font-size="9" fill="var(--soft)" letter-spacing=".06em">A FOUNDATION, FROM ITS FIVE FACETS</text>
+    ${r1}${arrow(f1end+10,fy+15)}${result(f1end+34,fy+20,'Data','2')}
+    <text x="14" y="120" font-size="9" fill="var(--soft)" letter-spacing=".06em">READINESS, FROM ITS SEVEN FOUNDATIONS</text>
+    ${r2}${arrow(o1end+10,oy+15)}${result(o1end+34,oy+20,'Readiness','2')}
+    <text x="14" y="198" font-size="9.5" fill="var(--soft)">The same weakest-link rule at both levels: the weakest facet caps the foundation, the weakest foundation caps readiness.</text>
+  </svg>`;
+}
+function hwRubric(){
+  const facets=[['Quality',4],['Access',3],['Governance',2],['Coverage',4],['Freshness',3]];
+  const x0=110,cw=28,rh=30,y0=36;
+  let hdr='';for(let c=1;c<=5;c++)hdr+=`<text x="${x0+(c-1)*cw+11}" y="26" font-size="9" fill="var(--soft)" text-anchor="middle">${c}</text>`;
+  let cells='';
+  facets.forEach((f,r)=>{const y=y0+r*rh;
+    cells+=`<text x="100" y="${y+14}" font-size="10" fill="var(--muted)" text-anchor="end">${f[0]}</text>`;
+    for(let c=1;c<=5;c++){const x=x0+(c-1)*cw,on=f[1]===c,weak=on&&f[1]===2;
+      cells+=`<rect x="${x}" y="${y}" width="22" height="20" rx="4" fill="${on?(weak?'var(--signal)':'var(--ink)'):'var(--surface)'}" stroke="${on?'none':'var(--line)'}" stroke-width="1"/>`;}});
+  const gy=y0+2*rh+14;
+  return `<svg viewBox="0 0 360 208" role="img" aria-label="A five by five rubric deriving a level">
+    ${hdr}${cells}
+    <path d="M262 ${gy-5} L280 ${gy-5}" stroke="var(--soft)" stroke-width="1.3"/><path d="M275 ${gy-9} L281 ${gy-5} L275 ${gy-1}" fill="none" stroke="var(--soft)" stroke-width="1.3"/>
+    <text x="288" y="${gy}" font-size="12" fill="var(--muted)">Data = <tspan font-size="15" fill="var(--signal)" font-weight="700" font-family="var(--mono)">2</tspan></text>
+    <text x="20" y="200" font-size="10" fill="var(--soft)">Five facets, one to five. The level is the weakest facet.</text>
+  </svg>`;
+}
+function hwWeakestLink(){
+  const row=(y,count,weakIdx,x0,label,result,val)=>{
+    let c=`<text x="10" y="${y+16}" font-size="10.5" fill="var(--muted)">${label}</text>`;
+    for(let i=0;i<count;i++){const x=x0+i*30,weak=i===weakIdx;
+      c+=`<rect x="${x}" y="${y}" width="24" height="24" rx="6" fill="${weak?'var(--signal)':'var(--surface)'}" stroke="${weak?'none':'var(--line)'}" stroke-width="1.4"/>`;}
+    const ex=x0+count*30-6;
+    c+=`<path d="M${ex} ${y+12} L${ex+16} ${y+12}" stroke="var(--soft)" stroke-width="1.4"/><path d="M${ex+11} ${y+8} L${ex+17} ${y+12} L${ex+11} ${y+16}" fill="none" stroke="var(--soft)" stroke-width="1.4"/>`;
+    c+=`<text x="${ex+24}" y="${y+16}" font-size="12" fill="var(--muted)">${result} = <tspan font-size="14" fill="var(--signal)" font-weight="700" font-family="var(--mono)">${val}</tspan></text>`;
+    return c;
+  };
+  return `<svg viewBox="0 0 640 168" role="img" aria-label="The weakest link at two levels">
+    ${row(28,5,2,214,'A foundation, from its five facets','Data','2')}
+    ${row(94,7,4,214,'Readiness, from its seven foundations','Readiness','2')}
+    <text x="10" y="150" font-size="10.5" fill="var(--soft)">The same rule at both levels: the weakest link sets the ceiling, and it is what you fix.</text>
+  </svg>`;
+}
+
+function howItWorks(){
+  return `
+    <div class="hw-head"><div class="eyebrow">How it works</div><h1>What this tool does, in plain terms</h1>
+      <p>Read top to bottom, this is the whole assessment: why it exists, what you get, how the number is worked out, how it runs, and who it is for.</p></div>
+    <div class="hw-narrative">
+
+      <section class="hw-beat"><div class="hw-beat-n">1</div><div class="hw-beat-b">
+        <h3>Why it exists</h3>
+        <p>Most AI programmes stall on missing groundwork, not on bad ideas. A promising use case fails because the data is not ready, or no one owns the risk, or nothing ever reaches production. This tool finds those gaps before money is spent, so you build on what is actually there rather than what you hoped was.</p>
+      </div></section>
+
+      <section class="hw-beat"><div class="hw-beat-n">2</div><div class="hw-beat-b">
+        <h3>What you get</h3>
+        <p>Three things: a readiness score out of five, your weakest foundation (the capability that most limits what you can do with AI), and a plan of what to do now, next and later. It is a diagnosis and an ordered set of moves, not a pitch for AI.</p>
+      </div></section>
+
+      <section class="hw-beat"><div class="hw-beat-n">3</div><div class="hw-beat-b">
+        <h3>The one rule: your weakest link</h3>
+        <p>Your readiness is set by your weakest foundation, not the average of the seven. If six are strong and one is weak, the weak one decides what you can actually do, the way a chain breaks at its weakest link. Strong data cannot rescue weak governance if governance is what blocks the work. So the tool reports the lowest of the seven, because that is the one to fix.</p>
+      </div></section>
+
+      <section class="hw-beat"><div class="hw-beat-n">4</div><div class="hw-beat-b">
+        <h3>How the score is worked out</h3>
+        <p>Your score is built from facts, not opinions. Each foundation breaks into five parts, each part into four Yes or No questions, and more Yes answers mean a higher score. A foundation scores as low as its weakest part; your readiness scores as low as your weakest foundation. The picture below shows it, from parts to foundation to readiness.</p>
+        <div class="hw-vcard hw-inline">${hwScoringChain()}</div>
+      </div></section>
+
+      <section class="hw-beat"><div class="hw-beat-n">5</div><div class="hw-beat-b">
+        <h3>The five steps, and who does what</h3>
+        <p>The assessment runs as five steps. The tool structures the questions and does the scoring; you and your team supply the evidence and make every decision. It makes the reasoning visible so the room can agree on it. It does not decide for you.</p>
+        <div class="hw-vcard hw-inline">${hwPipeline()}</div>
+      </div></section>
+
+      <section class="hw-beat"><div class="hw-beat-n">6</div><div class="hw-beat-b">
+        <h3>How a gap becomes a plan: ready or blocked</h3>
+        <p>Every opportunity needs one foundation to reach level 3 of 5 or above. At or above that bar, the opportunity is <b>ready</b> to start. Below it, the opportunity is <b>blocked</b> for now, which makes it the reason to strengthen that foundation. In the picture, Document search needs Governance, which is at 2 and below the bar, so it is blocked; Competitor scan needs Adoption, at 3, so it is ready.</p>
+        <div class="hw-vcard hw-inline">${hwGate()}</div>
+      </div></section>
+
+      <section class="hw-beat"><div class="hw-beat-n">7</div><div class="hw-beat-b">
+        <h3>Who runs it, where and when</h3>
+        <p>It is run by a facilitator with your leadership and the heads of each area, not filled in alone, because the answers need people who know the ground truth. It is sector-agnostic: the seven foundations are universal, and the business areas span the whole organisation, from operations to finance, so nothing is left out. Use it at the start to set a baseline, and again later to measure how far you have moved.</p>
+      </div></section>
+
+    </div>`;
+}
+
+/* ===== exports: dependency-free xlsx, JSON save/load ===== */
+function crc32(buf){let c,t=crc32.t;if(!t){t=crc32.t=[];for(let n=0;n<256;n++){c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}}c=0xFFFFFFFF;for(let i=0;i<buf.length;i++)c=t[(c^buf[i])&0xFF]^(c>>>8);return(c^0xFFFFFFFF)>>>0;}
+function strBytes(s){return new TextEncoder().encode(s);}
+function xesc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function colName(n){let s='';n++;while(n>0){let m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=(n-m-1)/26;}return s;}
+function sheetXml(rows){
+  let x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>';
+  rows.forEach((row,ri)=>{x+=`<row r="${ri+1}">`;row.forEach((cell,ci)=>{const ref=colName(ci)+(ri+1);if(cell===null||cell===undefined||cell==='')return;if(typeof cell==='number'&&isFinite(cell))x+=`<c r="${ref}"><v>${cell}</v></c>`;else x+=`<c r="${ref}" t="inlineStr"><is><t xml:space="preserve">${xesc(cell)}</t></is></c>`;});x+='</row>';});
+  return x+'</sheetData></worksheet>';
+}
+function buildXlsx(sheets){
+  const files=[];
+  files.push({name:'[Content_Types].xml',data:strBytes('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'+sheets.map((s,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')+'</Types>')});
+  files.push({name:'_rels/.rels',data:strBytes('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>')});
+  files.push({name:'xl/workbook.xml',data:strBytes('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>'+sheets.map((s,i)=>`<sheet name="${xesc(s.name)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')+'</sheets></workbook>')});
+  files.push({name:'xl/_rels/workbook.xml.rels',data:strBytes('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+sheets.map((s,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')+'</Relationships>')});
+  sheets.forEach((s,i)=>files.push({name:`xl/worksheets/sheet${i+1}.xml`,data:strBytes(sheetXml(s.rows))}));
+  const chunks=[],central=[];let offset=0;const u16=n=>[n&255,(n>>8)&255],u32=n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255];
+  files.forEach(f=>{const nameB=strBytes(f.name),crc=crc32(f.data),sz=f.data.length;
+    const lh=[].concat([0x50,0x4b,0x03,0x04],u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(sz),u32(sz),u16(nameB.length),u16(0));
+    chunks.push(new Uint8Array(lh),nameB,f.data);
+    const cd=[].concat([0x50,0x4b,0x01,0x02],u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(sz),u32(sz),u16(nameB.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset));
+    central.push(new Uint8Array(cd),nameB);offset+=lh.length+nameB.length+sz;});
+  let cdSize=0;central.forEach(c=>cdSize+=c.length);const cdOffset=offset;
+  const eocd=[].concat([0x50,0x4b,0x05,0x06],u16(0),u16(0),u16(files.length),u16(files.length),u32(cdSize),u32(cdOffset),u16(0));
+  const all=[...chunks,...central,new Uint8Array(eocd)];let total=0;all.forEach(a=>total+=a.length);
+  const out=new Uint8Array(total);let p=0;all.forEach(a=>{out.set(a,p);p+=a.length;});return out;
+}
+function fileStem(){return (state.clientName||'assessment').replace(/[^a-z0-9]+/gi,'_').replace(/^_|_$/g,'')+'_AI_readiness';}
+function downloadBytes(bytes,name,mime){const blob=new Blob([bytes],{type:mime});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},400);}
+function buildAssessmentXlsx(c){
+  const dateStr=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  const fix=(c.bestFix&&c.blockedHi.length)?c.bestFix:null;
+  const inScopeAreas=DOMAINS.filter(d=>state.scope[d.k]).map(d=>d.name).join(', ');
+  const summary=[['AI Readiness Assessment'],['Client',state.clientName||'-'],['Date',dateStr],[],
+    ['Readiness (weakest foundation)',c.floor==null?'-':c.floor+' / 5'],
+    ['Set by',c.floorDims.map(dimName).join(', ')||'-'],
+    ['Opportunities ready',c.survivors.length],['Opportunities blocked',c.blocked.length],
+    ['The one thing to fix first',fix?dimName(fix.gate):'-'],['Unlocked by fixing it',fix?fix.count:0],[],
+    ['Areas in scope',inScopeAreas]];
+  const readiness=[['Foundation','Derived level','Facet','Facet level','Descriptor','Evidence note']];
+  DIMS.forEach(d=>{const facs=RUBRICS[d.k];const derived=state.readiness[d.k]||0;
+    facs.forEach(fac=>{const lvl=state.rubric[d.k][fac.k]||0;const desc=lvl?fac.levels[lvl-1]:'';
+      readiness.push([d.name,derived||'-',fac.name,lvl||'-',desc,state.artifact[d.k][fac.k]||'']);});});
+  const opps=[['Opportunity','Area','Type','Depends on','Impact','Effort','Status','Priority']];
+  c.inScope.forEach(o=>opps.push([o.name,domName(o.dom),ARCH[o.arch]||o.arch,dimName(o.gate),o.value,o.effort,oppStatus(o),QUADS[quadOf(o)]]));
+  const now=[...c.survivors].sort((a,b)=>(b.value-b.effort)-(a.value-a.effort)).slice(0,6);
+  const unlocks=fix?fix.list.filter(x=>x.value>=4):[];
+  const later=[...c.survivors].filter(x=>x.effort>=4||(x.value>=4&&x.effort>=3));
+  const short=o=>oppBrief(o).what;
+  const plan=[['Horizon','Item','Detail']];
+  now.forEach(o=>plan.push(['Start now',o.name,short(o)]));
+  if(fix){plan.push(['Fix next','Close the '+dimName(fix.gate)+' gap','Unlocks '+fix.count]);unlocks.forEach(o=>plan.push(['Fix next','then '+o.name,short(o)]));}
+  later.forEach(o=>plan.push(['Later',o.name,short(o)]));
+  return buildXlsx([{name:'Summary',rows:summary},{name:'Readiness',rows:readiness},{name:'Opportunities',rows:opps},{name:'Plan',rows:plan}]);
+}
+function exportExcel(){try{const c=compute();downloadBytes(buildAssessmentXlsx(c),fileStem()+'.xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');}catch(e){alert('Excel export failed: '+e.message);}}
+function exportSave(){const data={v:4,clientName:state.clientName,scope:state.scope,rubric:state.rubric,artifact:state.artifact,diag:state.diag,qnote:state.qnote,candidates:state.candidates.map(x=>({name:x.name,dom:x.dom,arch:x.arch,gate:x.gate,amen:x.amen,value:x.value,effort:x.effort}))};downloadBytes(strBytes(JSON.stringify(data,null,2)),fileStem()+'.json','application/json');}
+function importSave(file){const rd=new FileReader();rd.onload=()=>{try{const d=JSON.parse(rd.result);
+  state.client='blank';state.clientName=d.clientName||'';state.scope=d.scope||state.scope;state.rubric=d.rubric||state.rubric;state.artifact=d.artifact||{};DIMS.forEach(x=>{if(!state.artifact[x.k])state.artifact[x.k]={};});
+  if(d.candidates)state.candidates=d.candidates.map(x=>({...x}));
+  state.diag=d.diag||{};state.qnote=d.qnote||{};
+  DIMS.forEach(dd=>{if(RUBRICS[dd.k].some(f=>f.diag)){state.qnote[dd.k]=state.qnote[dd.k]||{};RUBRICS[dd.k].forEach(f=>{if(f.diag&&!state.qnote[dd.k][f.k])state.qnote[dd.k][f.k]=[null,null,null,null];});}});
+  DIMS.forEach(dd=>{if(RUBRICS[dd.k].some(f=>f.diag)){state.diag[dd.k]=state.diag[dd.k]||{};RUBRICS[dd.k].forEach(f=>{if(f.diag&&!state.diag[dd.k][f.k]){const L=(state.rubric[dd.k]&&state.rubric[dd.k][f.k])||0;state.diag[dd.k][f.k]=diagForLevel(L);}});}});
+  state.readiness={};state.evidence={};state.view='step';state.stage=0;state.openDim='strategy';state.hardFilter=true;state.quadFilter=null;state.openOpp=null;renderedStage=-1;renderedView='';renderAll();
+}catch(e){alert('Could not load this file: '+e.message);}};rd.readAsText(file);}
+function printReport(){const c=compute();if(!(state.clientName||'').trim()){alert('Enter a name for this assessment (top left) before exporting, so the report is not addressed to "Your organisation".');return;}if(c.scoredCount<7){alert('Complete all seven foundations in step 2 before exporting the report.');return;}renderReport(c);window.print();}
+function interpretationText(c){
+  const f=c.floor;
+  const s = f<=1
+    ? {l:'Very early',b:`Your readiness sits at ${f} of 5, which means the foundations AI relies on are largely not yet in place. The priority now is not a use case; it is building the basics, starting with the weakest foundation. Ambitious AI attempted from here would most likely stall.`}
+    : f===2
+    ? {l:'Early',b:`Your readiness sits at 2 of 5. You have footholds, but at least one foundation is weak enough to hold back most of the value. The right move is to bank the few ready quick wins and fix the single binding foundation before scaling.`}
+    : f===3
+    ? {l:'Developing',b:`Your readiness sits at 3 of 5. You can run targeted AI use cases today. The work now is to standardise what is working and lift the weakest foundations, so you move from isolated wins to broader use.`}
+    : f===4
+    ? {l:'Advanced',b:`Your readiness sits at 4 of 5. Most foundations are solid. The focus shifts from readiness to scale and control: extend proven use cases and tighten governance so growth stays safe.`}
+    : {l:'Leading',b:`Your readiness sits at 5 of 5. Foundations are strong across the board. The agenda is to operate at the frontier and hold the edge, not to build basics.`};
+  return `<div class="rep-sec rep-interpret"><div class="ps-lbl">What this means</div><p><b>${s.l}.</b> ${s.b}</p><p class="rep-note">How to use this report: the summary gives the headline and the one thing to fix first; the recommended moves set out what to do and how; the next steps put them in order. Read it as a plan, not a scorecard.</p></div>`;
+}
+
+function renderHeaderName(){
+  const el=document.getElementById('hdrclient');
+  if(el) el.textContent = state.clientName ? state.clientName : '';
+}
+function renderReport(c){
+  const ps=document.getElementById('printsheet');
+  if(!ps) return;
+  const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const name=state.clientName||'Your organisation';
+  const head=`<div class="ps-head"><div><div class="ps-eyebrow">AI Readiness Assessment</div><h1>${name}</h1></div><div class="ps-date">${date}</div></div>`;
+  if(c.scoredCount<7){
+    ps.innerHTML=head+`<div class="ps-note">This assessment is incomplete: <b>${c.scoredCount} of 7</b> foundations scored. Complete step 2 before exporting a client report. This page exists so an accidental print never produces a misleading result.</div>`;
+    return;
+  }
+  const floorTxt=`${c.floor} of 5, set by ${c.floorDims.map(dimName).join(', ')}`;
+  const fix=(c.bestFix&&c.blockedHi.length)?c.bestFix:null;
+  const now=[...c.survivors].sort((a,b)=>(b.value-b.effort)-(a.value-a.effort)).slice(0,6);
+  const unlocks=fix?fix.list.filter(x=>x.value>=4):[];
+  const later=[...c.survivors].filter(x=>x.effort>=4||(x.value>=4&&x.effort>=3));
+  // recommended moves = quick wins + those unlocked by the fix, de-duplicated
+  const seen={}; const recs=[]; [...now,...unlocks].forEach(o=>{if(!seen[o.name]){seen[o.name]=1;recs.push(o);}});
+  // readiness detail
+  const rdRows=DIMS.map(d=>{const lvl=state.readiness[d.k];const facs=RUBRICS[d.k];const bf=facs.filter(f=>state.rubric[d.k][f.k]===lvl);const binder=bf.length===facs.length?'all facets at this level':bf.length===1?bf[0].name:bf.map(f=>f.name).join(', ')+' (tied)';
+    return `<tr><td>${d.name}</td><td class="rd-lvl">${lvl} / 5</td><td>${binder||'&ndash;'}</td></tr>`;}).join('');
+  // recommended move briefs
+  const moveHtml=recs.map(o=>{const b=oppBrief(o),st=oppStatus(o);
+    const when=st==='ready'?'Ready to start now.':st==='blocked'?`After the ${dimName(o.gate)} gap is closed.`:'';
+    return `<div class="rep-move">
+      <div class="rep-move-h"><h3>${o.name}</h3><span class="rep-tag ${st}">${st==='ready'?'Ready now':'Unblocked by the fix'}</span></div>
+      <div class="rep-meta">${domName(o.dom)} &middot; ${ARCH[o.arch]||o.arch} &middot; impact ${o.value}, effort ${o.effort}</div>
+      <div class="rep-qs">
+        <div><span>What it is</span><p>${b.what}</p></div>
+        <div><span>Why it matters</span><p>${b.why}</p></div>
+        <div><span>How it works</span><p>${b.how}</p></div>
+        <div><span>Where it sits</span><p>${domName(o.dom)}. It draws on the data and processes of that function.</p></div>
+        <div><span>What it needs</span><p>${dimName(o.gate)}. ${when}</p></div>
+        <div><span>Who owns it</span><p>${b.who}</p></div>
+        <div><span>How to measure it</span><p>${b.metric}</p></div>
+        <div><span>A first pilot</span><p>${b.pilot}</p></div>
+      </div>
+    </div>`;}).join('');
+  ps.innerHTML=head+interpretationText(c)+`
+    <div class="rep-sec">
+      <div class="ps-grid">
+        <div class="ps-block ps-floor"><div class="ps-lbl">Readiness</div><div class="ps-big">${c.floor}<span> / 5</span></div>
+          <p>Weakest foundation ${floorTxt}. Readiness is read off the weakest foundation, which caps everything above it. ${c.survivors.length} of ${c.inScope.length} opportunities are ready to start; ${c.blocked.length} are blocked.</p></div>
+        <div class="ps-block"><div class="ps-lbl">The one thing to fix first</div>
+          ${fix?`<div class="ps-fix">${dimName(fix.gate)}</div><p>Closing this single gap unlocks ${fix.count} high-value ${fix.count>1?'opportunities':'opportunity'}. It is the highest-leverage first move: not a new use case, but removing the constraint that holds several back.</p>`:`<p>No high-value opportunity is currently blocked. Proceed straight to the quick wins.</p>`}</div>
+      </div>
+    </div>
+    <div class="rep-sec">
+      <div class="ps-lbl">Readiness in detail</div>
+      <table class="rep-table"><thead><tr><th>Foundation</th><th>Level</th><th>Held there by</th></tr></thead><tbody>${rdRows}</tbody></table>
+      <p class="rep-note">Each foundation is scored across five observable facets; its level is the weakest facet. The facet named above is the one holding it back.</p>
+    </div>
+    <div class="rep-sec rep-break">
+      <div class="ps-lbl">Recommended moves, in detail</div>
+      <p class="rep-note">The opportunities to act on now, and those the fix unlocks. Each answers what it is, why it matters, how it works, where it sits, what it needs, who owns it, how to measure it, and a first pilot.</p>
+      ${moveHtml||'<p class="rep-note">No recommended moves are ready yet.</p>'}
+    </div>
+    <div class="rep-sec rep-break">
+      <div class="ps-lbl">Next steps</div>
+      <div class="ps-lanes">
+        <div><h4>Start now</h4><ul>${now.map(o=>`<li>${o.name}</li>`).join('')||'<li class="none">None yet</li>'}</ul></div>
+        <div><h4>Fix next</h4><ul>${fix?`<li>Close the ${dimName(fix.gate)} gap <span>unlocks ${fix.count}</span></li>`+unlocks.map(o=>`<li>&#8627; ${o.name}</li>`).join(''):'<li class="none">Nothing to unblock</li>'}</ul></div>
+        <div><h4>Later</h4><ul>${later.map(o=>`<li>${o.name}</li>`).join('')||'<li class="none">None yet</li>'}</ul></div>
+      </div>
+    </div>
+    <div class="ps-foot">Every figure is derived from the evidence gathered in your session. Readiness levels come from the rubric; impact and effort are calibrated against your own numbers.</div>`;
+}
+function renderPrintSheet(c){return renderReport(c);}
+function fixBrief(c){
+  const gate=state.openFix, lvl=state.readiness[gate];
+  const facs=RUBRICS[gate];
+  const weak=facs.filter(f=>state.rubric[gate][f.k]===lvl);
+  const sec=(q,body)=>`<div class="dw-sec"><div class="dw-q">${q}</div>${body}</div>`;
+  const gapItems=weak.map(f=>{
+    const ans=(state.diag[gate]&&state.diag[gate][f.k])||[];
+    const qn=(state.qnote[gate]&&state.qnote[gate][f.k])||[];
+    const nos=f.diag.map((q,i)=>({q,i})).filter(x=>ans[x.i]===false);
+    const list=nos.length?`<ul class="fx-gaps">${nos.map(x=>{const r=(qn[x.i]||'').trim();return `<li>${x.q}${r?`<span class="fx-why">Why: ${r.replace(/</g,'&lt;')}</span>`:''}</li>`;}).join('')}</ul>`:`<p class="fx-none">All four questions here are already Yes.</p>`;
+    return `<div class="fx-facet"><div class="fx-facet-h"><span>${f.name}</span><span class="fx-lvl">Level ${state.rubric[gate][f.k]}</span></div>${list}</div>`;
+  }).join('');
+  const unlocks=(c.bestFix&&c.bestFix.gate===gate)?c.bestFix.list:c.blocked.filter(o=>o.gate===gate);
+  const unlockList=unlocks.length?`<ul class="fx-unlocks">${unlocks.map(o=>`<li class="li-click" data-opp="${o.name.replace(/"/g,'&quot;')}"><span>${o.name}</span><span class="li-v">${o.value}/${o.effort}</span></li>`).join('')}</ul>`:'<p>Nothing in scope is blocked by this foundation right now.</p>';
+  const afterFix={...state.readiness};afterFix[gate]=Math.max(3,afterFix[gate]||0);
+  const nf=Math.min(...DIMS.map(d=>afterFix[d.k]||0));
+  const nfDims=DIMS.filter(d=>(afterFix[d.k]||0)===nf).map(d=>dimName(d.k));
+  const nextCap=nf>=5
+    ? `Once ${dimName(gate)} clears, every remaining foundation is already strong, so your readiness is no longer capped.`
+    : `Closing this frees value immediately. But note: your readiness number stays capped at <b>${nf} of 5</b> by <b>${nfDims.join(', ')}</b> until ${nfDims.length>1?'those are':'that is'} raised too. So the value starts flowing after this fix, while the headline number only moves once ${nfDims.length>1?'they are':'it is'} lifted as well. ${nfDims.join(', ')} ${nfDims.length>1?'are':'is'} your next fix.`;
+  return `<div class="drawer-wrap"><div class="drawer-backdrop" data-close></div>
+    <aside class="drawer" role="dialog" aria-label="How to close the gap">
+      <button class="drawer-close" data-close aria-label="Close">&#10005;</button>
+      <div class="dw-head">
+        <div class="dw-where">The fix that frees the most value</div>
+        <h2>Raise ${dimName(gate)} from level ${lvl}</h2>
+        <div class="dw-pills"><span class="dw-pill no">Now ${lvl} of 5</span><span class="dw-pill flat">Unlocks ${unlocks.length}</span></div>
+      </div>
+      <div class="dw-body">
+        ${sec('Why this one first',`<p>${dimName(gate)} is your weakest foundation, so it caps your readiness. Opportunities that depend on it stay blocked until it reaches level 3 of 5. Raising it is the single move that frees the most value.</p>`)}
+        ${sec('What is holding it down, and the work to do',`<p>The ${dimName(gate)} level is set by its weakest facets. The specific questions still answered No, below, are the concrete tasks. Turn each into an action with an owner and a date.</p>${gapItems}`)}
+        ${sec('What closing it unlocks',unlockList)}
+        ${sec('What caps you next',`<p>${nextCap}</p>`)}
+        ${sec('How you track it',`<p>As you complete each item, re-answer that question in step 2. ${dimName(gate)}, and your overall readiness, rise as the No answers turn to Yes.</p>`)}
+      </div>
+    </aside></div>`;
+}
+function renderDrawer(c){
+  if(state.openFix) return fixBrief(c);
+  if(!state.openOpp) return '';
+  const o=c.inScope.find(x=>x.name===state.openOpp)||state.candidates.find(x=>x.name===state.openOpp);
+  if(!o) return '';
+  const d=oppBrief(o), st=oppStatus(o);
+  const pill=st==='ready'?'<span class="dw-pill ok">Ready to start now</span>':st==='blocked'?`<span class="dw-pill no">Blocked by ${dimName(o.gate)}</span>`:'<span class="dw-pill pend">Not yet assessed</span>';
+  const needTxt=st==='ready'?'This foundation is in place, so the opportunity can proceed.':st==='blocked'?'This foundation is not yet at a workable level, which is exactly what blocks it.':'This foundation has not been assessed yet.';
+  const sec=(q,body)=>`<div class="dw-sec"><div class="dw-q">${q}</div><p>${body}</p></div>`;
+  return `<div class="drawer-wrap"><div class="drawer-backdrop" data-close></div>
+    <aside class="drawer" role="dialog" aria-label="Opportunity brief">
+      <button class="drawer-close" data-close aria-label="Close">&#10005;</button>
+      <div class="dw-head">
+        <div class="dw-where">${domName(o.dom)} &middot; ${ARCH[o.arch]||o.arch}</div>
+        <h2>${o.name}</h2>
+        <div class="dw-pills">${pill}<span class="dw-pill flat">${QUADS[quadOf(o)]}</span><span class="dw-pill flat">Impact ${o.value} / Effort ${o.effort}</span></div>
+      </div>
+      <div class="dw-body">
+        ${sec('What it is',d.what)}
+        ${sec('Why it matters',d.why)}
+        ${sec('How it works',d.how)}
+        ${sec('Where it sits',domName(o.dom)+'. It draws on the data and processes of that function.')}
+        ${sec('What it needs',dimName(o.gate)+'. '+needTxt)}
+        ${sec('When you can start',whenText(o))}
+        ${sec('Who owns it',d.who)}
+        ${sec('How you would measure it',d.metric)}
+        ${sec('A sensible first pilot',d.pilot)}
+      </div>
+    </aside></div>`;
+}
+
+function renderAll(){
+  const c=compute();renderSidebar(c);
+  const ma=document.getElementById('mainarea');
+  if(state.view==='how'){
+    ma.innerHTML=`<div class="howworks">${howItWorks()}</div>`;
+  } else {
+    ma.innerHTML=`<div class="workspace"><main class="work-left">${[stageScope,stageReadiness,stageOpportunity,stageGap,stageRoadmap][state.stage](c)}</main><aside class="work-right"><div class="live">${renderLive(c)}</div></aside></div>`;
+  }
+  renderHeaderName();
+  renderPrintSheet(c);
+  document.getElementById('drawer').innerHTML=renderDrawer(c);
+  if(state.stage!==renderedStage||state.view!==renderedView){window.scrollTo({top:0});renderedStage=state.stage;renderedView=state.view;}
+  bind();
+}
+function bind(){
+  document.querySelectorAll('[data-dom]').forEach(ch=>{ch.onclick=()=>{const d=ch.dataset.dom;state.scope[d]=!state.scope[d];renderAll();};});
+  document.querySelectorAll('[data-scope]').forEach(b=>{b.onclick=(e)=>{e.stopPropagation();const v=b.dataset.scope==='all';DOMAINS.forEach(d=>state.scope[d.k]=v);renderAll();};});
+  document.querySelectorAll('.fnd-head[data-open]').forEach(b=>{b.onclick=()=>{const k=b.dataset.open;const before=b.getBoundingClientRect().top;state.openDim=(state.openDim===k?null:k);renderAll();const nb=document.querySelector('.fnd-head[data-open="'+k+'"]');if(nb){const after=nb.getBoundingClientRect().top;const dy=after-before;if(Math.abs(dy)>1)window.scrollBy(0,dy);}};});
+  document.querySelectorAll('input[data-ev]').forEach(cb=>{cb.onchange=()=>{state.evidence[cb.dataset.ev][+cb.dataset.i]=cb.checked;renderAll();};});
+  document.querySelectorAll('.lvlrow[data-lvl]').forEach(row=>{const set=()=>{state.readiness[row.dataset.lvl]=+row.dataset.l;renderAll();};row.onclick=set;row.onkeydown=(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();set();}};});
+  document.querySelectorAll('[data-rung]').forEach(b=>{b.onclick=()=>{state.rubric[b.dataset.rung][b.dataset.rf]=+b.dataset.rl;renderAll();};});
+  document.querySelectorAll('[data-diag]').forEach(b=>{b.onclick=()=>{const dk=b.dataset.diag,fk=b.dataset.df,i=+b.dataset.di,val=b.dataset.dv==='yes';const arr=state.diag[dk][fk];arr[i]=(arr[i]===val)?null:val;renderAll();};});
+  document.querySelectorAll('[data-qnote]').forEach(inp=>{inp.oninput=()=>{const dk=inp.dataset.qnote,fk=inp.dataset.qf,i=+inp.dataset.qi;state.qnote[dk]=state.qnote[dk]||{};state.qnote[dk][fk]=state.qnote[dk][fk]||[null,null,null,null];state.qnote[dk][fk][i]=inp.value;};});
+  document.querySelectorAll('.facet-note[data-note]').forEach(inp=>{inp.oninput=()=>{state.artifact[inp.dataset.notedim][inp.dataset.note]=inp.value;};});
+  document.querySelectorAll('button[data-cal]').forEach(b=>{b.onclick=()=>{const cand=state.candidates.find(x=>x.name===b.dataset.cal);const f=b.dataset.f;cand[f]=Math.max(1,Math.min(5,cand[f]+(+b.dataset.d)));renderAll();};});
+  const hf=document.getElementById('hf');if(hf){const t=()=>{state.hardFilter=!state.hardFilter;renderAll();};hf.onclick=t;hf.onkeydown=(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}};}
+  const cs=document.getElementById('clientsel');if(cs)cs.onchange=(e)=>{loadClient(e.target.value);renderedStage=-1;state.view='step';state.stage=0;renderAll();};
+  const nm=document.getElementById('clientname');if(nm)nm.oninput=(e)=>{state.clientName=e.target.value;renderHeaderName();};
+  const bs=document.getElementById('btnSave');if(bs)bs.onclick=exportSave;
+  const bl=document.getElementById('btnLoad');if(bl)bl.onclick=()=>{const f=document.getElementById('loadFile');if(f)f.click();};
+  const lf=document.getElementById('loadFile');if(lf)lf.onchange=(e)=>{if(e.target.files&&e.target.files[0])importSave(e.target.files[0]);};
+  const bx=document.getElementById('btnXlsx');if(bx)bx.onclick=exportExcel;
+  const br=document.getElementById('btnReport');if(br)br.onclick=printReport;
+  const ft=document.getElementById('facToggle');if(ft)ft.onchange=()=>{state.facilitator=ft.checked;renderAll();};
+  const rb=document.getElementById('resetbtn');if(rb)rb.onclick=()=>{loadClient(state.client);renderAll();};
+  document.querySelectorAll('.backcue-btn').forEach(b=>{b.onclick=()=>{state.view='step';state.stage=1;renderAll();};});
+  document.querySelectorAll('.side-item[data-step]').forEach(b=>{b.onclick=()=>{state.view='step';state.stage=+b.dataset.step;renderAll();};});
+  document.querySelectorAll('[data-view]').forEach(b=>{b.onclick=()=>{state.view=b.dataset.view;renderAll();};});
+  document.querySelectorAll('[data-quad]').forEach(b=>{b.onclick=()=>{const q=b.dataset.quad;state.quadFilter=(q==='clear'||state.quadFilter===q)?null:q;renderAll();};});
+  document.querySelectorAll('[data-opp]').forEach(el=>{el.onclick=()=>{state.openOpp=el.getAttribute('data-opp');state.openFix=null;renderAll();};});
+  document.querySelectorAll('[data-fix]').forEach(el=>{el.onclick=()=>{state.openFix=el.getAttribute('data-fix');state.openOpp=null;renderAll();};});
+  document.querySelectorAll('[data-close]').forEach(el=>{el.onclick=()=>{state.openOpp=null;state.openFix=null;renderAll();};});
+}
+renderAll();
+window.addEventListener('beforeprint',()=>{try{renderReport(compute());}catch(e){}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&(state.openOpp||state.openFix)){state.openOpp=null;state.openFix=null;renderAll();}});
+</script>
+</body>
+</html>

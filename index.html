@@ -611,6 +611,69 @@
   }
 
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== v5 additions: mixed scale, modes, captures, MBB report ===== */
+.hw-head-row{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.mode-toggle{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:5px 7px}
+.mode-lbl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);font-weight:700;padding:0 2px}
+.mode-btn{border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:12px;font-weight:600;color:var(--muted);padding:6px 12px;border-radius:7px;transition:background .12s,color .12s}
+.mode-btn:hover{color:var(--ink)}
+.mode-btn.on{background:var(--ink);color:#fff}
+.diag-yn.s4{display:inline-flex;gap:4px;flex-wrap:wrap}
+.diag-btn.b4{min-width:52px}
+.diag-btn.full{background:var(--ink);color:#fff}
+.diag-scale{display:inline-block;margin-left:8px;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);font-weight:700;vertical-align:middle}
+.diag-abr{display:inline-block;margin-left:8px;font-size:10px;color:var(--ink);background:var(--hair);border-radius:5px;padding:1px 7px;font-weight:600}
+.qnote.gap{border-left:2px solid var(--ink);padding-left:8px}
+.capture{margin-top:22px;padding:18px 18px 20px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+.cap-note{font-size:12px;color:var(--muted);margin:2px 0 14px}
+.cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cap-f{display:flex;flex-direction:column;gap:5px}
+.cap-f>span{font-size:11.5px;font-weight:600;color:var(--ink)}
+.cap-f textarea,.cap-f select{font-family:var(--sans);font-size:13px;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical;background:var(--paper)}
+.cap-f textarea:focus,.cap-f select:focus{outline:none;border-color:var(--ink)}
+.cap-trim{grid-column:1 / -1;font-size:12px;color:var(--soft);font-style:italic;align-self:center}
+/* report */
+.ps-headr{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.ps-mode{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--ink);background:var(--hair);border-radius:5px;padding:2px 8px}
+.rep-exec .exec-lead{font-size:14.5px;line-height:1.62;color:var(--text);margin:0 0 10px}
+.rep-exec .exec-mid{font-size:13px;line-height:1.6;color:var(--text);margin:0 0 12px}
+.exec-bul{margin:0 0 12px;padding-left:0;list-style:none}
+.exec-bul li{position:relative;padding-left:18px;margin-bottom:7px;font-size:12.5px;line-height:1.5;color:var(--text)}
+.exec-bul li:before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;border-radius:2px;background:var(--ink)}
+.exec-close{font-size:12px;color:var(--muted);line-height:1.55;margin:0}
+.rd-floor td{background:rgba(224,4,78,.05)}
+.rd-cap{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;color:var(--signal);margin-left:6px}
+.w5h{margin:12px 0 4px;border:1px solid var(--line);border-radius:10px;overflow:hidden;page-break-inside:avoid;break-inside:avoid}
+.w5h-grid{display:grid;grid-template-columns:1fr 1fr 1fr}
+.w-cell{padding:11px 13px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.w-cell:nth-child(3n){border-right:none}
+.w-cell:nth-child(n+4){border-bottom:none}
+.w-k{display:block;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--ink);margin-bottom:4px}
+.w-v{display:block;font-size:11.5px;line-height:1.42;color:var(--text)}
+.w5h-sup{border-top:1px solid var(--line);background:var(--paper)}
+.w5h-sup>div{padding:8px 13px;font-size:11px;line-height:1.4;color:var(--muted);border-bottom:1px solid var(--hair)}
+.w5h-sup>div:last-child{border-bottom:none}
+.w5h-sup span{font-weight:700;color:var(--ink);text-transform:uppercase;font-size:9.5px;letter-spacing:.06em;margin-right:8px}
+.w5h-fix{border-color:var(--signal)}
+.w5h-fix .w-k{color:var(--signal)}
+.w5h-fix .w5h-sup span{color:var(--signal)}
+.gd-dim{margin-top:16px}
+.gd-dim h4{font-size:12.5px;color:var(--signal);margin:0 0 8px;font-weight:700}
+.gd-facet{margin-bottom:10px}
+.gd-h{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.gd-h span{font-weight:400;color:var(--soft);font-size:11px}
+.gd-facet ul{margin:0;padding-left:16px}
+.gd-facet li{font-size:11.5px;line-height:1.45;color:var(--text);margin-bottom:3px}
+.gd-why{color:var(--muted);font-style:italic}
+.gd-none{color:var(--soft);list-style:none;margin-left:-16px}
+.cx-row{margin-bottom:10px}
+.cx-row>span{display:block;font-size:11px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.cx-row>p{margin:0;font-size:12.5px;line-height:1.5;color:var(--text)}
+.rep-method .rep-note{font-size:11px;color:var(--soft)}
+.rep-move{page-break-inside:avoid;break-inside:avoid}
+@media print{.mode-toggle{display:none}}
+
 </style>
 </head>
 <body>
@@ -722,7 +785,7 @@ const LEVELS={
 // the descriptors chosen ARE the evidence. Nothing is self-rated.
 const RUBRICS={
  strategy:[
-  {k:'direction',name:'Direction & ambition',levels:[
+  {k:'direction',name:'Direction & ambition',sc:[2,2,2,2],levels:[
     "No stated aim for AI; it comes up in conversation only.",
     "A general interest in AI, but no articulated direction.",
     "A clear aim for one or two areas, written down.",
@@ -733,7 +796,7 @@ const RUBRICS={
     "Does that aim name specific business areas or outcomes, not just 'use AI'?",
     "Is the direction shared and understood beyond the person who set it, including leadership?",
     "Is the AI direction reviewed and updated on a regular cadence?"],desc:["A Yes means a written statement exists, even a short one; a verbal or implied direction does not count.", "A Yes means the aim points at named functions or outcomes, not a general wish to use AI.", "A Yes means leadership and the relevant teams share the direction, not just its author.", "A Yes means the direction is revisited on a set schedule, not written once and forgotten."],dep:[null, null, null, null]},
-  {k:'ownership',name:'Programme ownership & mandate',levels:[
+  {k:'ownership',name:'Programme ownership & mandate',sc:[2,2,2,2],levels:[
     "No one owns AI; it is nobody's job.",
     "Ownership is informal and shifts between people.",
     "A named owner for AI, but with limited authority.",
@@ -744,7 +807,7 @@ const RUBRICS={
     "Does that owner have a clear mandate and decision rights, not just a title?",
     "Does the owner control budget or resources they can actually direct?",
     "Is AI ownership held at a senior or board level, not only mid-management?"],desc:["A Yes means one identifiable person is accountable for the AI programme, not a committee by default.", "A Yes means the owner can make and enforce decisions, not just hold the title.", "A Yes means the owner directs real budget or people, not merely requests them.", "A Yes means ownership sits at a senior or board level, with the authority that brings."],dep:[null, 0, 0, 0]},
-  {k:'funding',name:'Funding & resources',levels:[
+  {k:'funding',name:'Funding & resources',sc:[2,2,2,2],levels:[
     "No budget; work happens on goodwill.",
     "Ad hoc funding, found project by project.",
     "A small ring-fenced budget for initial work.",
@@ -755,7 +818,7 @@ const RUBRICS={
     "Is that budget recurring or planned, rather than one-off?",
     "Is funding tied to a roadmap or plan, rather than ad hoc requests?",
     "Can funding scale on proven return, with a route to increase it?"],desc:["A Yes means money is set aside for AI specifically, not taken ad hoc from other lines.", "A Yes means the budget recurs or is planned ahead, not found project by project.", "A Yes means funding follows a plan or roadmap, not one-off requests as they arise.", "A Yes means there is a route to increase funding when results justify it."],dep:[null, 0, 0, 0]},
-  {k:'link',name:'Link to goals & value measurement',levels:[
+  {k:'link',name:'Link to goals & value measurement',sc:[2,2,2,2],levels:[
     "AI is pursued for its own sake, disconnected from goals.",
     "Loosely justified, but not tied to measured outcomes.",
     "Linked to business goals for the priority use cases.",
@@ -766,7 +829,7 @@ const RUBRICS={
     "Are the priority use cases linked to measurable outcomes?",
     "Is the outcome of each initiative tracked after it goes live?",
     "Is AI named as a lever in how the business plans to grow or save?"],desc:["A Yes means each effort is tied to a business goal, not pursued because AI is interesting.", "A Yes means the priority use cases have defined, measurable outcomes attached.", "A Yes means results are measured after go-live, not assumed; value is actually checked.", "A Yes means AI appears in the business plan as a lever to grow or save, with numbers."],dep:[null, null, 1, null]},
-  {k:'prioritise',name:'Prioritisation & decisions',levels:[
+  {k:'prioritise',name:'Prioritisation & decisions',sc:[2,2,2,2],levels:[
     "No way to decide what to do; the loudest voice wins.",
     "Decisions are made case by case, without criteria.",
     "A basic way to rank ideas by value and effort.",
@@ -778,181 +841,181 @@ const RUBRICS={
     "Is prioritisation done on a regular basis, not just once?",
     "Is the set of initiatives revisited and reprioritised as results come in?"],desc:["A Yes means there is an agreed method for choosing ideas, not whoever pushes hardest.", "A Yes means ideas are scored on concrete criteria like value and effort, not opinion.", "A Yes means prioritisation happens on a rhythm, not once at the start.", "A Yes means the list is revisited and reordered as results and needs change."],dep:[null, null, 0, 0]}],
  data:[
-  {k:'quality',name:'Quality & reliability',levels:[
+  {k:'quality',name:'Quality & reliability',sc:[4,2,4,4],levels:[
     "Data is often wrong, duplicated or missing, and no one trusts it.",
     "Known quality problems, cleaned by hand each time the data is used.",
     "Key datasets are reasonably clean, with some checks in place.",
     "Automated quality checks on the main datasets; issues are rare and caught.",
     "Quality is measured and monitored; data is trusted for decisions by default."],diag:["Is the data behind key decisions broadly trusted, rather than people keeping their own copies?", "Are there checks in place that catch obvious errors before the data is used?", "Are quality checks automated on the main datasets, rather than done by hand?", "Is data quality measured and monitored as an ongoing metric?"],desc:["A Yes means people rely on the shared data, rather than private spreadsheets they trust more.", "A Yes means checks catch obvious errors before the data is used.", "A Yes means quality checks run automatically on the main datasets, not only by hand.", "A Yes means data quality is tracked as a metric over time, not just felt."],dep:[null, null, 1, null]},
-  {k:'access',name:'Access & availability',levels:[
+  {k:'access',name:'Access & availability',sc:[4,4,4,2],levels:[
     "Data is locked in separate systems; getting it out is a manual export.",
     "Some data can be pulled, but joining sources is slow and manual.",
     "Key systems can be queried and a few integrations exist.",
     "Most important data is reachable through shared connections or a warehouse.",
     "Data flows freely across systems through managed, reusable connections."],diag:["Can the data you need be obtained without a manual export each time?", "Can the people and tools that need the data actually get it when required?", "Is most key data reachable from a shared store or warehouse, not scattered in silos?", "Does access run on clear permissions rather than ad hoc requests?"],desc:["A Yes means the data can be reached without asking someone to run an export each time.", "A Yes means the people and tools that need the data can actually get it when required.", "A Yes means most key data lives in a shared store or warehouse, not scattered in silos.", "A Yes means access runs on clear permissions, not ad hoc requests and exceptions."],dep:[null, null, null, null]},
-  {k:'gov',name:'Data ownership & control',levels:[
+  {k:'gov',name:'Data ownership & control',sc:[4,4,4,4],levels:[
     "No ownership; data sits wherever it lands and the rules are unclear.",
     "Informal ownership; policies exist on paper but are not followed.",
     "Named owners for key datasets, with basic access and retention policies.",
     "Clear ownership and enforced policies across the important data.",
     "Data is run as a managed product, with lineage, access control and stewardship."],diag:["Do key datasets have a named owner accountable for them?", "Is who may access each dataset defined and controlled?", "Is the origin and lineage of key data known and tracked?", "Is data maintained as a managed asset over time, not left to decay?"],desc:["A Yes means each key dataset has a named owner accountable for it, not shared by default.", "A Yes means who may access each dataset is defined and actually controlled.", "A Yes means the origin and lineage of key data is known, not a mystery.", "A Yes means data is maintained as a managed asset over time, not left to decay."],dep:[null, null, null, 0]},
-  {k:'coverage',name:'Coverage of what matters',levels:[
+  {k:'coverage',name:'Coverage of what matters',sc:[4,4,4,2],levels:[
     "The data needed for decisions is largely not captured.",
     "Some of it is captured, with big gaps in the areas that matter.",
     "The main processes are covered; some important signals are still missing.",
     "Most decisions are backed by data that is actually captured.",
     "Comprehensive coverage; new data needs are added quickly and deliberately."],diag:["Is the data behind your main processes actually captured somewhere usable?", "Are the important decisions mostly backed by data you hold?", "Are the known blind spots small rather than significant?", "When a new data need appears, is it added deliberately rather than left?"],desc:["A Yes means the data behind your main processes is actually recorded somewhere usable.", "A Yes means most important decisions can be traced to data you hold.", "A Yes means the gaps are minor, not significant holes in areas that drive decisions.", "A Yes means new data needs are captured on purpose, not left until someone notices."],dep:[null, null, null, null]},
-  {k:'fresh',name:'Freshness & pipelines',levels:[
+  {k:'fresh',name:'Freshness & pipelines',sc:[2,4,4,4],levels:[
     "Data is stale, or gathered by hand only when someone asks.",
     "Refreshed manually on a slow, irregular cycle.",
     "Regular refresh for key datasets, but mostly manual.",
     "Automated pipelines keep the main data current on a schedule.",
     "Near real-time where it matters, with monitored, resilient pipelines."],diag:["Is data refreshed on a regular schedule, not only when someone asks?", "Is the main data kept current by automated pipelines rather than by hand?", "Is data current enough for the decisions that rely on it?", "Where it matters, is data near real-time, on monitored pipelines?"],desc:["A Yes means data refreshes on a schedule, not only when someone asks for it.", "A Yes means pipelines keep the main data current automatically, not by hand.", "A Yes means the data is fresh enough for the decisions that depend on it.", "A Yes means, where it matters, data is near real-time on monitored pipelines."],dep:[null, null, null, null]}],
  tech:[
-  {k:'environment',name:'Environment & infrastructure',levels:[
+  {k:'environment',name:'Environment & infrastructure',sc:[2,2,4,4],levels:[
     "No proper environment; work happens on individual laptops.",
     "Basic cloud access, but no standard setup.",
     "A defined working environment for one team or area.",
     "A shared, maintained platform used across teams.",
     "Infrastructure provisioned on demand, as a standard service."],diag:["Is there a defined place to build and run, beyond individual machines?", "Is that environment shared and maintained, rather than one person's setup?", "Is it used across teams, not just one area?", "Can infrastructure be provisioned on demand, as a standard service?"],desc:["A Yes means there is a proper place to build and run, beyond individual laptops.", "A Yes means the environment is shared and maintained, not one person's personal setup.", "A Yes means more than one team uses it, not a single isolated area.", "A Yes means infrastructure can be provisioned on demand, as a standard service."],dep:[null, 0, 0, null]},
-  {k:'tooling',name:'Tools & tooling',levels:[
+  {k:'tooling',name:'Tools & tooling',sc:[2,4,4,4],levels:[
     "No dedicated tools; whatever is to hand.",
     "A few free or trial tools, used inconsistently.",
     "A standard toolset for building in the main area.",
     "A supported, common toolset across the business.",
     "Tooling is curated and kept current as the field moves."],diag:["Is there a standard toolset for building, rather than whatever is to hand?", "Is that toolset supported and common across the teams that use it?", "Is it consistent across the business, not per-team improvisation?", "Is tooling curated and kept current as the field moves?"],desc:["A Yes means there is a standard set of tools for building, not whatever is to hand.", "A Yes means the toolset is supported and shared across the teams that use it.", "A Yes means tooling is consistent across the business, not improvised per team.", "A Yes means tools are reviewed and kept current as the field moves."],dep:[null, 0, 0, 0]},
-  {k:'integration',name:'Integration & connectivity',levels:[
+  {k:'integration',name:'Integration & connectivity',sc:[2,4,4,4],levels:[
     "Nothing is connected; everything is manual.",
     "One-off connections built by hand when needed.",
     "Key systems can be reached through defined interfaces.",
     "Most systems connect through managed, reusable interfaces.",
     "Systems interconnect by default, through a shared service layer."],diag:["Are connections between systems built to last, not one-off each time?", "Can key systems be reached through defined interfaces or APIs?", "Do most systems connect through managed, reusable interfaces?", "Do systems interconnect by default, through a shared service layer?"],desc:["A Yes means system connections are built to last, not rebuilt one-off each time.", "A Yes means key systems are reachable through defined interfaces or APIs.", "A Yes means most systems connect through managed, reusable interfaces.", "A Yes means systems interconnect by default, through a shared service layer."],dep:[null, null, 1, null]},
-  {k:'scale',name:'Scalability & reliability',levels:[
+  {k:'scale',name:'Scalability & reliability',sc:[2,2,4,4],levels:[
     "Anything built cannot handle real load.",
     "Works for a demo, but falls over in real use.",
     "Runs reliably for one production use case.",
     "Scales to several production workloads, and is monitored.",
     "Elastic and resilient, with capacity managed automatically."],diag:["Can what you build handle real usage, not just a demo?", "Does at least one thing run reliably in production?", "Does it scale to several production workloads, with monitoring?", "Is the platform elastic and resilient, with capacity managed automatically?"],desc:["A Yes means what you build can handle real load, not just a demo.", "A Yes means at least one thing runs reliably in production.", "A Yes means it scales to several production workloads, with monitoring.", "A Yes means capacity is elastic and resilient, managed automatically."],dep:[null, null, 1, null]},
-  {k:'security',name:'Security & separation',levels:[
+  {k:'security',name:'Security & separation',sc:[2,2,4,4],levels:[
     "No separation of test and live, and no security review.",
     "Informal separation; security is an afterthought.",
     "Basic separation of environments and access controls.",
     "Enforced separation, access control and security review.",
     "Security is built in and continuously tested."],diag:["Are test and live environments kept separate?", "Are there access controls on who can do what?", "Is separation enforced, with security reviewed before things go live?", "Is security built in and continuously tested, not a one-off check?"],desc:["A Yes means test and live environments are kept properly separate.", "A Yes means there are real controls on who can access and do what.", "A Yes means separation is enforced and security is reviewed before go-live.", "A Yes means security is built in and continuously tested, not a one-off check."],dep:[null, null, 0, null]}],
  talent:[
-  {k:'capability',name:'In-house capability',levels:[
+  {k:'capability',name:'In-house capability',sc:[2,2,4,4],levels:[
     "No in-house capability at all.",
     "One or two individuals with partial skills.",
     "A small team that can build in one area.",
     "Capable teams that can build and maintain across areas.",
     "Deep capability, including at the leading edge."],diag:["Is there anyone in-house who can build, not only outside help?", "Is there a team that can build and run in at least one area?", "Can teams build and maintain across more than one area?", "Does capability reach the leading edge of the field?"],desc:["A Yes means someone in-house can build, not only external help.", "A Yes means a team can build and run in at least one area.", "A Yes means teams can build and maintain across more than one area.", "A Yes means capability reaches the leading edge, not just the basics."],dep:[null, 0, 1, 2]},
-  {k:'reliance',name:'Dependency & concentration risk',levels:[
+  {k:'reliance',name:'Dependency & concentration risk',sc:[2,2,2,2],levels:[
     "Fully dependent on outside help for everything.",
     "Outside help is needed for each new build.",
     "Can run what exists, but builds with outside help.",
     "Largely self-sufficient; outside help is a choice, not a need.",
     "Self-sufficient, and sets the standard others follow."],diag:["Are you free from depending on a single external vendor or partner for AI?", "Would the work continue if a key supplier or contractor withdrew?", "Do you retain ownership of the models, data and know-how, rather than the vendor?", "Is outside help a deliberate choice for specific work, not a blanket dependency?"],desc:["A Yes means you are not dependent on a single external vendor or partner for AI.", "A Yes means the work would continue if a key supplier or contractor withdrew.", "A Yes means you own the models, data and know-how, not the vendor holding them.", "A Yes means outside help is a deliberate choice for specific work, not a blanket dependency."],dep:[null, null, null, null]},
-  {k:'breadth',name:'Breadth across the business',levels:[
+  {k:'breadth',name:'Breadth across the business',sc:[2,4,4,4],levels:[
     "Skills sit in one person, or nowhere.",
     "Concentrated in a single team or function.",
     "Present in the priority areas.",
     "Spread across most functions that need it.",
     "AI literacy is broad, including non-technical staff."],diag:["Do AI skills sit in more than one person?", "Are skills present in the priority areas that need them?", "Are skills spread across most functions that need them?", "Is AI literacy broad, including non-technical staff?"],desc:["A Yes means AI skills sit in more than one person, not a single individual.", "A Yes means the skills are present in the priority areas that need them.", "A Yes means skills are spread across most functions that need them.", "A Yes means AI literacy is broad, reaching non-technical staff too."],dep:[null, 0, 1, 2]},
-  {k:'develop',name:'Learning & development',levels:[
+  {k:'develop',name:'Learning & development',sc:[2,2,2,4],levels:[
     "No training; people learn on their own, if at all.",
     "Occasional, ad hoc training.",
     "A basic training path for key roles.",
     "A structured programme with clear progression.",
     "Continuous development, tied to how the field evolves."],diag:["Is there any training for AI skills, beyond people self-teaching?", "Is there a defined training path for the key roles?", "Is there a structured programme with clear progression?", "Is development continuous, tied to how the field evolves?"],desc:["A Yes means there is real training for AI skills, beyond people self-teaching.", "A Yes means there is a defined training path for the key roles.", "A Yes means a structured programme with clear progression exists.", "A Yes means development is continuous, tracking how the field evolves."],dep:[null, 0, 1, 2]},
-  {k:'resilience',name:'Retention & resilience',levels:[
+  {k:'resilience',name:'Retention & resilience',sc:[2,2,2,2],levels:[
     "Capability would vanish if one person left.",
     "Fragile; it depends on a few individuals.",
     "Some redundancy in the key skills.",
     "Roles are covered, with succession in mind.",
-    "Capability renews itself and is not person-dependent."],diag:["Would capability survive if one key person left?", "Is there redundancy in the key skills?", "Are the roles covered, with succession in mind?", "Does capability renew itself, independent of individuals?"],desc:["A Yes means capability would survive one key person leaving.", "A Yes means there is redundancy in the key skills, not a single point of failure.", "A Yes means roles are covered with succession in mind.", "A Yes means capability renews itself, independent of specific individuals."],dep:[null, null, null, null]}],
+    "Capability renews itself and is not person-dependent."],diag:["Would capability survive if one key person left?", "Is there redundancy in the key skills?", "Are the roles covered, with succession in mind?", "Does capability renew itself, independent of individuals?"],desc:["A Yes means capability would survive one key person leaving.", "A Yes means there is redundancy in the key skills, not a single point of failure.", "A Yes means roles are covered with succession in mind.", "A Yes means capability renews itself, independent of specific individuals."],dep:[null, null, null, null]},{k:'fluency',name:'Workforce AI fluency',sc:[2,2,4,4],levels:["Only a central team can build anything with AI.","A few people outside the core team can build simple AI-assisted steps.","Staff in some teams build and integrate AI into their own processes.","Across most in-scope teams, people build and integrate AI themselves.","AI-assisted work is the norm; staff routinely build and improve it."],diag:["Can anyone outside a central AI team build a working AI-assisted workflow without engineering help?","Can staff integrate AI tools into the specific processes they own?","Across the teams in scope, how widely can people build and integrate AI into their own work?","How much routine work already runs through AI-assisted steps that staff themselves built or configured?"],desc:["A Yes means someone outside a central AI team can build a working AI-assisted workflow without engineering help.","A Yes means staff can wire AI tools into the specific processes they own, not just use a chatbot.","None, Some, Most or All of the in-scope teams can build and integrate AI into their own work; record the honest coverage.","None, Some, Most or All of routine work already runs through AI-assisted steps that staff built or configured."],dep:[null,0,null,2]}],
  governance:[
-  {k:'policy',name:'Policy & standards',levels:[
+  {k:'policy',name:'Policy & standards',sc:[2,2,4,4],levels:[
     "No policy on how AI may be used.",
     "Informal rules, understood by only a few.",
     "A written policy exists for the main uses.",
     "Enforced standards across all AI use.",
     "Policy is kept current as tools and rules change."],diag:["Is there a shared understanding of how AI, and the data it uses, may be used?", "Is that written down as a policy for the main uses?", "Are those standards enforced across all AI use, not just documented?", "Is the policy kept current as tools, data and rules change?"],desc:["A Yes means people share an understanding of how AI, and its data, may be used.", "A Yes means that is written down as a policy covering the main uses.", "A Yes means the standards are enforced across all AI use, not just documented.", "A Yes means the policy is updated as tools, data and rules change."],dep:[null, null, 1, 1]},
-  {k:'risk',name:'Risk assessment',levels:[
+  {k:'risk',name:'Risk assessment',sc:[2,2,4,4],levels:[
     "No way to judge the risk of an AI use.",
     "Risk is considered informally, case by case.",
     "A basic way to assess and classify risk.",
     "Every use is risk-assessed before it goes live.",
     "Risk is monitored continuously, not just at the start."],diag:["Is the risk of an AI use considered before it goes ahead?", "Is there a basic, consistent way to assess and classify that risk?", "Is every use risk-assessed before it goes live?", "Is risk monitored continuously, not only at the start?"],desc:["A Yes means the risk of an AI use is considered before it goes ahead.", "A Yes means there is a consistent way to assess and classify that risk.", "A Yes means every use is risk-assessed before it goes live.", "A Yes means risk is monitored continuously, not judged only at the start."],dep:[null, null, 1, 1]},
-  {k:'oversight',name:'Risk oversight & accountability',levels:[
+  {k:'oversight',name:'Risk oversight & accountability',sc:[2,2,2,2],levels:[
     "No one is accountable for AI risk.",
     "Accountability is unclear or loosely shared.",
     "A named owner and a register of AI in use.",
     "Clear owners, a live register, and regular review.",
     "Independent oversight, with clear escalation routes."],diag:["Is someone accountable for AI risk?", "Is there a register of the AI in use, with a named owner?", "Are there clear owners, a live register and regular review?", "Is there independent oversight, with clear escalation routes?"],desc:["A Yes means someone is clearly accountable for AI risk.", "A Yes means there is a register of the AI in use, with named owners.", "A Yes means clear owners, a live register and regular review are in place.", "A Yes means there is independent oversight with clear escalation routes."],dep:[null, null, 1, 0]},
-  {k:'legal',name:'Legal & regulatory compliance',levels:[
+  {k:'legal',name:'Legal & regulatory compliance',sc:[2,2,4,2],levels:[
     "No check against relevant laws or rules.",
     "Assumed to comply, but never verified.",
     "Key uses are checked against the main obligations.",
     "Compliance is verified and documented for all uses.",
     "Compliance is designed in and tracked as rules evolve."],diag:["Are relevant laws and rules identified for AI use?", "Are the key uses checked against the main legal obligations?", "Is compliance verified and documented for all uses?", "Is compliance designed in and tracked as rules evolve?"],desc:["A Yes means the relevant laws and rules for AI use are identified.", "A Yes means the key uses are checked against the main legal obligations.", "A Yes means compliance is verified and documented for all uses.", "A Yes means compliance is designed in and tracked as rules evolve."],dep:[null, 0, 1, null]},
-  {k:'fairness',name:'Fairness, transparency & ethics',levels:[
+  {k:'fairness',name:'Fairness, transparency & ethics',sc:[2,2,4,4],levels:[
     "No consideration of bias, fairness or explainability.",
     "Raised occasionally, but not acted on.",
     "Checked for the higher-risk uses.",
     "Fairness and transparency are assessed as standard.",
-    "Ethical review is routine, with the ability to explain decisions."],diag:["Are bias, fairness and explainability ever considered?", "Are they checked for the higher-risk uses?", "Are fairness and transparency assessed as standard?", "Is ethical review routine, with the ability to explain decisions?"],desc:["A Yes means bias, fairness and explainability are actually considered.", "A Yes means they are checked for the higher-risk uses.", "A Yes means fairness and transparency are assessed as standard practice.", "A Yes means ethical review is routine and decisions can be explained."],dep:[null, 0, 1, 2]}],
+    "Ethical review is routine, with the ability to explain decisions."],diag:["Are bias, fairness and explainability ever considered?", "Are they checked for the higher-risk uses?", "Are fairness and transparency assessed as standard?", "Is ethical review routine, with the ability to explain decisions?"],desc:["A Yes means bias, fairness and explainability are actually considered.", "A Yes means they are checked for the higher-risk uses.", "A Yes means fairness and transparency are assessed as standard practice.", "A Yes means ethical review is routine and decisions can be explained."],dep:[null, 0, 1, 2]},{k:'accountability',name:'Accountability & incentives',sc:[2,2,4,2],levels:["No leader is measured on AI outcomes.","AI appears in a leader's goals but without a measurable target.","At least one senior leader carries a measurable AI-linked objective.","Most in-scope leaders carry AI objectives, reviewed against delivery.","AI outcomes are embedded across leadership objectives and actively governed."],diag:["Are AI or automation outcomes written into the objectives of at least one named senior leader?","Do those objectives carry a measurable target, not just 'explore AI'?","Across the leaders whose areas are in scope, how many carry an AI-linked objective?","Are those objectives reviewed against actual delivery on a regular cadence?"],desc:["A Yes means at least one named senior leader has AI or automation outcomes in their objectives, not just an interest.","A Yes means those objectives carry a concrete, measurable target, not a vague ambition to explore AI.","None, Some, Most or All of the in-scope leaders carry an AI-linked objective; record the honest coverage.","A Yes means the objectives are checked against actual delivery on a set cadence, not set and forgotten."],dep:[null,0,null,0]}],
  adoption:[
-  {k:'usage',name:'Actual usage',levels:[
+  {k:'usage',name:'Actual usage',sc:[2,2,4,4],levels:[
     "Built but unused; it sits idle.",
     "Used by a few enthusiasts only.",
     "Used for the main tasks it was built for.",
     "Used widely across the intended users.",
     "Use is routine and expected; not using it is the exception."],diag:["Is what has been built actually used, not sitting idle?", "Is it used for the main tasks it was built for?", "Is it used widely across the intended users?", "Is use routine and expected, so not using it is the exception?"],desc:["A Yes means what was built is actually used, not sitting idle.", "A Yes means it is used for the main tasks it was built for.", "A Yes means it is used widely across the intended users.", "A Yes means use is routine and expected; not using it is the exception."],dep:[null, 0, 1, 2]},
-  {k:'trust',name:'Trust & confidence',levels:[
+  {k:'trust',name:'Trust & confidence',sc:[2,2,4,4],levels:[
     "Staff distrust or actively avoid it.",
     "Scepticism outweighs use.",
     "Cautious acceptance for straightforward tasks.",
     "Broadly trusted for its intended purpose.",
     "Trusted enough to rely on for important work."],diag:["Do staff use it rather than avoid it?", "Is it accepted for straightforward tasks?", "Is it broadly trusted for its intended purpose?", "Is it trusted enough to rely on for important work?"],desc:["A Yes means staff use it rather than work around or avoid it.", "A Yes means it is accepted for straightforward tasks at least.", "A Yes means it is broadly trusted for its intended purpose.", "A Yes means it is trusted enough to rely on for important work."],dep:[null, 0, 1, 2]},
-  {k:'change',name:'Change management',levels:[
+  {k:'change',name:'Change management',sc:[2,2,4,2],levels:[
     "Tools are dropped on people with no support.",
     "Minimal communication; people work it out alone.",
     "Basic training and communication at launch.",
     "Change is actively managed, with support over time.",
     "Adoption is designed in from the start of each build."],diag:["Is any support or communication provided when tools are introduced?", "Is there training and communication at launch?", "Is change actively managed, with support over time?", "Is adoption designed in from the start of each build?"],desc:["A Yes means people get support or communication when tools are introduced.", "A Yes means there is training and communication at launch.", "A Yes means change is actively managed, with support over time.", "A Yes means adoption is planned from the start of each build."],dep:[null, 0, 1, 2]},
-  {k:'workflow',name:'Workflow integration',levels:[
+  {k:'workflow',name:'Workflow integration',sc:[2,4,4,4],levels:[
     "Bolted on; the old way of working continues alongside.",
     "Used in parallel, not really integrated.",
     "Some workflows have changed to use it.",
     "Work is genuinely redesigned around it.",
     "The new way is the only way; the old process is retired."],diag:["Is the tool used as part of the work, not just alongside it?", "Have some workflows actually changed to use it?", "Is work genuinely redesigned around it?", "Has the old way been retired, so the new way is the only way?"],desc:["A Yes means the tool is used within the work, not bolted on alongside it.", "A Yes means some workflows have actually changed to use it.", "A Yes means work is genuinely redesigned around it.", "A Yes means the old way has been retired; the new way is the only way."],dep:[null, 0, 1, 2]},
-  {k:'feedback',name:'Feedback & improvement',levels:[
+  {k:'feedback',name:'Feedback & improvement',sc:[2,2,2,4],levels:[
     "No feedback is gathered; problems go unheard.",
     "Feedback is occasional and not acted on.",
     "Feedback is collected for the main tools.",
     "A regular loop turns feedback into improvements.",
     "Continuous improvement, with users shaping the roadmap."],diag:["Is user feedback gathered at all?", "Is feedback collected for the main tools?", "Is there a regular loop that turns feedback into improvements?", "Do users shape the roadmap, with continuous improvement?"],desc:["A Yes means user feedback is gathered at all.", "A Yes means feedback is collected for the main tools.", "A Yes means a regular loop turns feedback into improvements.", "A Yes means users shape the roadmap, with continuous improvement."],dep:[null, 0, 1, 2]}],
  delivery:[
-  {k:'route',name:'Route to production',levels:[
+  {k:'route',name:'Route to production',sc:[2,2,4,4],levels:[
     "No route to production; pilots never go live.",
     "A route exists in theory, but is untested.",
     "A workable route, proven once or twice.",
     "A defined, repeatable route from idea to live.",
     "Getting to production is routine and fast."],diag:["Is there a defined route to get an AI idea into production, not just pilots?", "Has that route actually delivered something to production at least once?", "Is the route repeatable, with a few things now running in production?", "Is reaching production routine, a steady flow rather than rare one-offs?"],desc:["A Yes means there is a defined route to production, not just pilots that stall.", "A Yes means that route has actually put something into production at least once.", "A Yes means the route is repeatable, with a few things now running live.", "A Yes means reaching production is routine, a steady flow rather than rare events."],dep:[null, 0, 1, 2]},
-  {k:'lifecycle',name:'Keeping models current',levels:["Once live, a model is left untouched; no one checks if it still works.", "Problems are noticed only when users complain.", "Model performance is checked periodically, by hand.", "Drift is monitored and models are retrained on a schedule or trigger.", "Models are continuously monitored and refreshed, with retraining automated."],diag:["Can you tell when a live model drifts or degrades, rather than assume it holds?", "Are models retrained or updated on a defined trigger or schedule?", "Does someone own models after go-live, not only at launch?", "Is model performance in production tracked over time?"],desc:["A Yes means you can detect when a live model drifts or degrades, not just assume it still works.", "A Yes means models are retrained or refreshed on a defined trigger or schedule.", "A Yes means someone owns each model after go-live, not only at launch.", "A Yes means production performance is tracked over time, not assumed stable."],dep:[null, null, null, null]},
-  {k:'repeat',name:'Repeatability & standards',levels:[
+  {k:'lifecycle',name:'Keeping models current',sc:[2,2,2,4],levels:["Once live, a model is left untouched; no one checks if it still works.", "Problems are noticed only when users complain.", "Model performance is checked periodically, by hand.", "Drift is monitored and models are retrained on a schedule or trigger.", "Models are continuously monitored and refreshed, with retraining automated."],diag:["Can you tell when a live model drifts or degrades, rather than assume it holds?", "Are models retrained or updated on a defined trigger or schedule?", "Does someone own models after go-live, not only at launch?", "Is model performance in production tracked over time?"],desc:["A Yes means you can detect when a live model drifts or degrades, not just assume it still works.", "A Yes means models are retrained or refreshed on a defined trigger or schedule.", "A Yes means someone owns each model after go-live, not only at launch.", "A Yes means production performance is tracked over time, not assumed stable."],dep:[null, null, null, null]},
+  {k:'repeat',name:'Repeatability & standards',sc:[2,2,4,4],levels:[
     "Every delivery is a one-off, built from scratch.",
     "Some lessons are reused, but there is no standard way.",
     "A basic standard process, followed loosely.",
     "A consistent, documented delivery standard.",
     "Delivery is templated and largely automated."],diag:["Are lessons from one delivery reused in the next?", "Is there a standard process, even if followed loosely?", "Is the delivery standard consistent and documented?", "Is delivery templated and largely automated?"],desc:["A Yes means lessons from one delivery are reused in the next.", "A Yes means there is a standard process, even if followed loosely.", "A Yes means the delivery standard is consistent and documented.", "A Yes means delivery is templated and largely automated."],dep:[null, null, 1, 2]},
-  {k:'operate',name:'Operating & monitoring',levels:[
+  {k:'operate',name:'Operating & monitoring',sc:[2,2,2,4],levels:[
     "Once live, nothing is watched or maintained.",
     "Watched informally; problems are found by users.",
     "Basic monitoring for the main systems.",
     "Production is monitored, with alerts and support.",
     "Full observability, with issues caught before they bite."],diag:["Is anything watched or maintained once it is live?", "Is there basic monitoring of the main systems?", "Is production monitored, with alerts and support?", "Is there full observability, catching issues before they bite?"],desc:["A Yes means live systems are watched and maintained, not left alone.", "A Yes means there is basic monitoring of the main systems.", "A Yes means production is monitored with alerts and support.", "A Yes means full observability catches issues before they bite."],dep:[null, 0, 1, 2]},
-  {k:'deliveryown',name:'Ownership & funding of delivery',levels:[
+  {k:'deliveryown',name:'Ownership & funding of delivery',sc:[2,2,2,2],levels:[
     "No one owns getting things live, and there is no funding for it.",
     "Delivery is squeezed in around other work.",
     "A named owner, but funding is ad hoc.",
@@ -962,10 +1025,15 @@ const RUBRICS={
 function facetKeys(d){return RUBRICS[d].map(f=>f.k);}
 function facetDef(d,fk){return RUBRICS[d].find(f=>f.k===fk);}
 function rubricFor(d,t){const keys=facetKeys(d);if(t<=0)return Object.fromEntries(keys.map(k=>[k,0]));const b=Math.min(5,t+1);const o=Object.fromEntries(keys.map(k=>[k,b]));o[keys[Math.min(2,keys.length-1)]]=t;return o;}
-function diagForLevel(L){return (L<=0)?[null,null,null,null]:[0,1,2,3].map(i=>i<(L-1));}
-function diagLevel(arr){if(!arr)return 0;if(!arr.every(v=>v===true||v===false))return 0;return 1+arr.filter(v=>v===true).length;}
+const CORE_IDX=[1,2];
+function activeIdx(fac){const n=fac?fac.diag.length:4;const base=state.mode==='abridged'?CORE_IDX:[0,1,2,3];return base.filter(i=>i<n);}
+function bandMax(s){return s===4?3:1;}
+function qFrac(v,s){return (v==null)?null:(v/bandMax(s));}
+function diagForLevel(L,sc){if(L<=0)return [null,null,null,null];let rem=L-1;const out=[0,0,0,0];for(let i=0;i<4;i++){const s=(sc&&sc[i])||2;const mx=bandMax(s);const step=1/mx;let b=Math.min(mx,Math.round(rem/step));if(b*step>rem+1e-9)b=Math.floor(rem/step+1e-9);out[i]=b;rem-=b*step;}return out;}
+function scaleLevelFor(dk,fk,idxs){const fac=facetDef(dk,fk);const arr=(state.diag&&state.diag[dk]&&state.diag[dk][fk])||[];const sc=fac.sc||[2,2,2,2];const fr=idxs.filter(i=>i<fac.diag.length).map(i=>qFrac(arr[i],sc[i]));if(!fr.length||fr.some(x=>x==null))return 0;const mean=fr.reduce((a,b)=>a+b,0)/fr.length;return Math.max(1,Math.min(5,Math.round(1+4*mean)));}
+function diagLevel(dk,fk){const fac=facetDef(dk,fk);return scaleLevelFor(dk,fk,activeIdx(fac));}
 function facetLevel(dk,fk){const fac=facetDef(dk,fk);
-  if(fac.diag){return diagLevel(state.diag&&state.diag[dk]&&state.diag[dk][fk]);}
+  if(fac.diag){return diagLevel(dk,fk);}
   return (state.rubric[dk]&&state.rubric[dk][fk])||0;}
 function syncRubric(){
   if(!state.rubric)return;
@@ -979,13 +1047,13 @@ function syncRubric(){
 
 const CLIENTS={
   blank:{label:'New assessment',readiness:{strategy:0,data:0,tech:0,talent:0,governance:0,adoption:0,delivery:0},evTicks:{strategy:0,data:0,tech:0,talent:0,governance:0,adoption:0,delivery:0},candidates:CANDIDATES},
-  bluetokai:{label:'Blue Tokai Coffee',readiness:{strategy:2,data:3,tech:2,talent:1,governance:1,adoption:3,delivery:1},facets:{strategy:{direction:3,ownership:2,funding:2,link:3,prioritise:2},data:{quality:3,access:3,gov:3,coverage:4,fresh:3},tech:{environment:3,tooling:2,integration:2,scale:3,security:2},talent:{capability:2,reliance:1,breadth:1,develop:2,resilience:1},governance:{policy:1,risk:1,oversight:2,legal:2,fairness:1},adoption:{usage:3,trust:3,change:3,workflow:4,feedback:3},delivery:{route:1,repeat:2,operate:1,lifecycle:1,deliveryown:2}},evTicks:{strategy:1,data:1,tech:1,talent:0,governance:0,adoption:2,delivery:0},candidates:BT_CANDIDATES},
-  meridian:{label:'Meridian Group',readiness:{strategy:4,data:4,tech:3,talent:3,governance:2,adoption:2,delivery:2},facets:{strategy:{direction:4,ownership:5,funding:4,link:4,prioritise:5},data:{quality:5,access:4,gov:4,coverage:5,fresh:4},tech:{environment:4,tooling:3,integration:3,scale:4,security:3},talent:{capability:4,reliance:3,breadth:3,develop:4,resilience:3},governance:{policy:3,risk:2,oversight:3,legal:2,fairness:2},adoption:{usage:2,trust:2,change:3,workflow:2,feedback:3},delivery:{route:3,repeat:2,operate:3,lifecycle:2,deliveryown:2}},evTicks:{strategy:3,data:3,tech:2,talent:2,governance:1,adoption:1,delivery:1},candidates:CANDIDATES},
+  bluetokai:{label:'Blue Tokai Coffee',readiness:{strategy:2,data:3,tech:2,talent:1,governance:1,adoption:3,delivery:1},facets:{strategy:{direction:3,ownership:2,funding:2,link:3,prioritise:2},data:{quality:3,access:3,gov:3,coverage:4,fresh:3},tech:{environment:3,tooling:2,integration:2,scale:3,security:2},talent:{capability:2,reliance:1,breadth:1,develop:2,resilience:1,fluency:1},governance:{policy:1,risk:1,oversight:2,legal:2,fairness:1,accountability:1},adoption:{usage:3,trust:3,change:3,workflow:4,feedback:3},delivery:{route:1,repeat:2,operate:1,lifecycle:1,deliveryown:2}},evTicks:{strategy:1,data:1,tech:1,talent:0,governance:0,adoption:2,delivery:0},candidates:BT_CANDIDATES},
+  meridian:{label:'Meridian Group',readiness:{strategy:4,data:4,tech:3,talent:3,governance:2,adoption:2,delivery:2},facets:{strategy:{direction:4,ownership:5,funding:4,link:4,prioritise:5},data:{quality:5,access:4,gov:4,coverage:5,fresh:4},tech:{environment:4,tooling:3,integration:3,scale:4,security:3},talent:{capability:4,reliance:3,breadth:3,develop:4,resilience:3,fluency:3},governance:{policy:3,risk:2,oversight:3,legal:2,fairness:2,accountability:2},adoption:{usage:2,trust:2,change:3,workflow:2,feedback:3},delivery:{route:3,repeat:2,operate:3,lifecycle:2,deliveryown:2}},evTicks:{strategy:3,data:3,tech:2,talent:2,governance:1,adoption:1,delivery:1},candidates:CANDIDATES},
 };
 function evidenceFromTicks(t){const e={};DIMS.forEach(d=>{const n=t[d.k]||0;const a=[false,false,false,false];for(let i=0;i<n;i++)a[i]=true;e[d.k]=a;});return e;}
-function loadClient(key){const cl=CLIENTS[key];state.client=key;state.clientName=(key==='blank')?'':cl.label.replace(' (reference case)','');state.readiness={...cl.readiness};state.candidates=cl.candidates.map(c=>({...c}));state.evidence=evidenceFromTicks(cl.evTicks);state.rubric={};state.artifact={};DIMS.forEach(d=>{state.rubric[d.k]=(cl.facets&&cl.facets[d.k])?{...cl.facets[d.k]}:rubricFor(d.k,cl.readiness[d.k]||0);state.artifact[d.k]={};});state.diag={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.diag)){state.diag[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.diag){const L=(state.rubric[d.k]&&state.rubric[d.k][f.k])||0;state.diag[d.k][f.k]=diagForLevel(L);}});}});state.qnote={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.diag)){state.qnote[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.diag)state.qnote[d.k][f.k]=[null,null,null,null];});}});state.scope=Object.fromEntries(DOMAINS.map(d=>[d.k,true]));state.openDim='strategy';state.hardFilter=true;}
+function loadClient(key){const cl=CLIENTS[key];state.client=key;state.clientName=(key==='blank')?'':cl.label.replace(' (reference case)','');state.readiness={...cl.readiness};state.candidates=cl.candidates.map(c=>({...c}));state.evidence=evidenceFromTicks(cl.evTicks);state.rubric={};state.artifact={};DIMS.forEach(d=>{state.rubric[d.k]=(cl.facets&&cl.facets[d.k])?{...cl.facets[d.k]}:rubricFor(d.k,cl.readiness[d.k]||0);state.artifact[d.k]={};});state.diag={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.diag)){state.diag[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.diag){const L=(state.rubric[d.k]&&state.rubric[d.k][f.k])||0;state.diag[d.k][f.k]=diagForLevel(L,f.sc);}});}});state.qnote={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.diag)){state.qnote[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.diag)state.qnote[d.k][f.k]=[null,null,null,null];});}});state.scope=Object.fromEntries(DOMAINS.map(d=>[d.k,true]));state.context={priorWhat:'',priorResult:'',priorGap:'',deploy:''};state.openDim='strategy';state.hardFilter=true;}
 
-const state={stage:0,view:'step',quadFilter:null,openOpp:null,openFix:null,facilitator:false};
+const state={stage:0,view:'step',quadFilter:null,openOpp:null,openFix:null,facilitator:false,mode:'abridged'};
 loadClient('blank');
 let renderedStage=-1, renderedView='';
 
@@ -1148,6 +1216,17 @@ function stageScope(){
     <div class="section-label lbl-help" data-help="The parts of your organisation where AI could add value, your business functions. Pick the ones in play. This is the 'where the value sits' axis, and it is deliberately separate from the seven foundations, which are capabilities that cut across all of these areas.">Parts of the business in scope<svg class="lbl-i" viewBox="0 0 20 20" aria-hidden="true" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/><circle cx="10" cy="6.4" r="1.2"/><rect x="9" y="8.7" width="2" height="5.6" rx="1"/></svg><span class="scope-actions"><button class="scope-act" data-scope="all">Select all</button><button class="scope-act" data-scope="none">Clear all</button></span></div>
     <div class="tiles" id="tiles">${tiles}</div>
     <p class="hint">Pick the parts of the business this assessment should cover. Everything after this looks only at the areas you choose, so leave out what is not relevant.</p>
+    <div class="capture">
+      <div class="section-label">Context, optional and never scored</div>
+      <p class="cap-note">Captured once, for the plan and for cross-client comparison later. It does not affect the readiness number.</p>
+      <div class="cap-grid">
+        <label class="cap-f"><span>What AI has been tried so far</span><textarea data-cx="priorWhat" rows="2" placeholder="Use cases attempted, however small">${esc((state.context||{}).priorWhat)}</textarea></label>
+        <label class="cap-f"><span>How it performed against plan</span><textarea data-cx="priorResult" rows="2" placeholder="Savings or gains delivered versus expected">${esc((state.context||{}).priorResult)}</textarea></label>
+        ${state.mode==='abridged'?'<div class="cap-trim">Full mode also captures what was missing and the deployment approach.</div>':`
+        <label class="cap-f"><span>What was missing, and why it fell short</span><textarea data-cx="priorGap" rows="2" placeholder="The binding reason, in your words">${esc((state.context||{}).priorGap)}</textarea></label>
+        <label class="cap-f"><span>Deployment approach so far</span><select data-cx="deploy">${['','Internal centre of excellence','Use-case specific partners','SaaS or off-the-shelf','Mixed','None yet'].map(o=>`<option${((state.context||{}).deploy||'')===o?' selected':''}>${o||'Not set'}</option>`).join('')}</select></label>`}
+      </div>
+    </div>
     <div class="guide">
       <h4>What this assessment does</h4>
       <p>Five steps take you from a blank page to a sequenced plan. It separates two questions that are easy to confuse: <b>where</b> AI could help, and whether you are <b>ready</b> to capture it.</p>
@@ -1177,22 +1256,35 @@ function rungLadder(dk,fac){
 function diagBody(dk,fac){
   const arr=(state.diag[dk]&&state.diag[dk][fac.k])||[null,null,null,null];
   const notes=(state.qnote[dk]&&state.qnote[dk][fac.k])||[null,null,null,null];
-  const answered=arr.every(v=>v===true||v===false);
-  const yes=arr.filter(v=>v===true).length;
-  const lvl=answered?1+yes:0;
-  const backed=arr.filter((v,i)=>v===true&&notes[i]&&(''+notes[i]).trim()).length;
-  const rows=fac.diag.map((q,i)=>{const v=arr[i];const dsc=(fac.desc&&fac.desc[i])?` data-help="${fac.desc[i].replace(/"/g,'&quot;')}"`:'';
-    const dep=(fac.dep&&fac.dep[i]!==null&&fac.dep[i]!==undefined)?fac.dep[i]:null;
-    const conflict=(v===true&&dep!==null&&arr[dep]===false);
-    const flag=conflict?`<div class="diag-flag">Unusual: answering Yes here normally needs question ${dep+1} to be Yes as well. Left as you set it, worth a recheck.</div>`:'';
+  const sc=fac.sc||[2,2,2,2];
+  const idxs=activeIdx(fac);
+  const BANDS4=['None','Some','Most','All'], BANDS2=['No','Yes'];
+  const answered=idxs.every(i=>arr[i]!=null);
+  const lvl=answered?scaleLevelFor(dk,fac.k,idxs):0;
+  const topBackable=idxs.filter(i=>arr[i]===bandMax(sc[i])).length;
+  const backed=idxs.filter(i=>arr[i]===bandMax(sc[i])&&notes[i]&&(''+notes[i]).trim()).length;
+  const rows=idxs.map(i=>{const q=fac.diag[i];const v=arr[i];const s=sc[i];const top=bandMax(s);
+    const dsc=(fac.desc&&fac.desc[i])?` data-help="${fac.desc[i].replace(/"/g,'&quot;')}"`:'';
+    const labels=s===4?BANDS4:BANDS2;
+    const btns=labels.map((lab,b)=>`<button class="diag-btn b${s}${v===b?' sel':''}${b===top&&v===b?' full':''}" data-diag="${dk}" data-df="${fac.k}" data-di="${i}" data-dv="${b}">${lab}</button>`).join('');
     const note=notes[i]||'';
-    const noteField=(v===true||v===false)?`<input class="qnote${note&&(''+note).trim()?' has':''}" type="text" data-qnote="${dk}" data-qf="${fac.k}" data-qi="${i}" placeholder="${v===true?'What shows this? A document, system, owner or metric (optional)':'Why not, and what would change it? (optional)'}" value="${(''+note).replace(/"/g,'&quot;')}">`:'';
-    return `<div class="diag-item"><div class="diag-row${conflict?' flagged':''}"><span class="diag-q"${dsc}>${q}</span><span class="diag-yn"><button class="diag-btn${v===true?' sel':''}" data-diag="${dk}" data-df="${fac.k}" data-di="${i}" data-dv="yes">Yes</button><button class="diag-btn${v===false?' sel':''}" data-diag="${dk}" data-df="${fac.k}" data-di="${i}" data-dv="no">No</button></span></div>${flag}${noteField}</div>`;}).join('');
+    const depI=(fac.dep&&fac.dep[i]!=null)?fac.dep[i]:null;
+    const depActive=depI!=null&&idxs.indexOf(depI)>=0;
+    const conflict=depActive&&v!=null&&v>=1&&arr[depI]===0;
+    const flag=conflict?`<div class="diag-flag">Unusual: this is marked present while the question it builds on is still answered No or None. Left as you set it, worth a recheck.</div>`:'';
+    const isFull=v===top, isPartial=(v!=null&&v<top);
+    const ph=isFull?'What shows this? A document, system, owner or metric (optional)':isPartial?'What is missing to reach full? (optional, becomes an action)':'';
+    const noteField=(v!=null)?`<input class="qnote${note&&(''+note).trim()?' has':''}${isPartial?' gap':''}" type="text" data-qnote="${dk}" data-qf="${fac.k}" data-qi="${i}" placeholder="${ph}" value="${(''+note).replace(/"/g,'&quot;')}">`:'';
+    const scaleTag=`<span class="diag-scale">${s===4?'coverage':'yes / no'}</span>`;
+    return `<div class="diag-item"><div class="diag-row${conflict?' flagged':''}"><span class="diag-q"${dsc}>${q}${scaleTag}</span><span class="diag-yn s${s}">${btns}</span></div>${flag}${noteField}</div>`;}).join('');
+  const nq=idxs.length;
+  const modeTag=state.mode==='abridged'?` <span class="diag-abr">abridged: ${nq} of 4</span>`:'';
   const readout=answered
-    ? `<div class="diag-out">Worked out: <b>Level ${lvl}</b>, one plus the <b>${yes} of 4</b> markers in place.${yes>0?` <b>${backed} of ${yes}</b> Yes answers backed by evidence.`:''}${lvl<5?' Each further Yes raises it by one.':''}</div>`
-    : `<div class="diag-out todo">Answer all four questions. The level is computed as one plus the number of Yes answers, so it is worked out from facts, not chosen.</div>`;
+    ? `<div class="diag-out">Computed: <b>Level ${lvl}</b> of 5, from your ${nq} answer${nq>1?'s':''} on this facet.${topBackable>0?` <b>${backed} of ${topBackable}</b> full answers backed by evidence.`:''}${modeTag}</div>`
+    : `<div class="diag-out todo">Answer ${nq===1?'the question':'all '+nq+' questions'} to compute this facet. Existence questions are Yes or No; coverage questions run None, Some, Most, All. The level is worked out from your answers, not chosen.${modeTag}</div>`;
   return `<div class="diag-list">${rows}</div>${readout}`;
 }
+
 function rubricBody(dk){
   const facetsDef=RUBRICS[dk], f=state.rubric[dk], keys=facetKeys(dk);
   const vals=keys.map(k=>f[k]||0);
@@ -1212,9 +1304,9 @@ function rubricBody(dk){
     : `held there by <b>${binderFacets.map(x=>x.name).join(', ')}</b>, which are tied at this level`;
   const out=complete
     ? `<div class="rubric-out done">${fname} comes out at <b>${derived} of 5</b>, ${binderTxt}. The weakest facet caps the foundation, exactly as the weakest foundation caps your overall readiness.</div>`
-    : `<div class="rubric-out">Work through all five facets and the ${fname} level is derived automatically. <b>${vals.filter(v=>v>0).length} of 5</b> done.</div>`;
+    : `<div class="rubric-out">Work through all ${facetsDef.length} facets and the ${fname} level is derived automatically. <b>${vals.filter(v=>v>0).length} of ${facetsDef.length}</b> done.</div>`;
   const intro=hasDiag
-    ? `For each facet, answer four concrete questions Yes or No. The facet level is <b>computed</b> as one plus the number of Yes answers, so it is worked out from facts rather than chosen. ${fname} is only as strong as its weakest facet. <span class="rubric-hovercue">Hover any question to see what a Yes means.</span>`
+    ? `For each facet, answer its questions. Existence questions are Yes or No; coverage questions run None, Some, Most, All. The facet level is <b>computed</b> from your answers, not chosen, and ${fname} is only as strong as its weakest facet.${state.mode==='abridged'?' Abridged mode asks the two most telling questions per facet.':''} <span class="rubric-hovercue">Hover any question to see what it means.</span>`
     : `For each facet, select the highest milestone that is genuinely true. Everything below it is taken as already met, so you record one level, not several. The ${fname} level is that milestone, and ${fname} is only as strong as its weakest facet.`;
   return `<div class="rubric"><div class="rubric-intro">${intro} Nothing is self-rated.</div>${facets}${out}</div>`;
 }
@@ -1241,7 +1333,7 @@ function stageReadiness(c){
     <div class="guide">
       <h4>How to complete this step</h4>
       <ul class="guide-list">
-        <li><span class="gi">1</span><span>Open a foundation and answer each of its five facets by picking the descriptor that matches reality.</span></li>
+        <li><span class="gi">1</span><span>Open a foundation and answer each of its facets by picking the descriptor that matches reality.</span></li>
         <li><span class="gi">2</span><span>The foundation's level is <b>derived</b> automatically as its weakest facet. The descriptors you pick <b>are</b> the evidence; optionally note the document or system behind each.</span></li>
         <li><span class="gi">3</span><span>Nothing is self-rated, so nothing can be inflated. The score is whatever your own answers imply.</span></li>
       </ul>
@@ -1577,7 +1669,7 @@ function hwWeakestLink(){
     return c;
   };
   return `<svg viewBox="0 0 640 168" role="img" aria-label="The weakest link at two levels">
-    ${row(28,5,2,214,'A foundation, from its five facets','Data','2')}
+    ${row(28,5,2,214,'A foundation, from its facets','Data','2')}
     ${row(94,7,4,214,'Readiness, from its seven foundations','Readiness','2')}
     <text x="10" y="150" font-size="10.5" fill="var(--soft)">The same rule at both levels: the weakest link sets the ceiling, and it is what you fix.</text>
   </svg>`;
@@ -1585,8 +1677,9 @@ function hwWeakestLink(){
 
 function howItWorks(){
   return `
-    <div class="hw-head"><div class="eyebrow">How it works</div><h1>What this tool does, in plain terms</h1>
-      <p>Read top to bottom, this is the whole assessment: why it exists, what you get, how the number is worked out, how it runs, and who it is for.</p></div>
+    <div class="hw-head"><div class="hw-head-row"><div><div class="eyebrow">How it works</div><h1>What this tool does, in plain terms</h1></div>
+      <div class="mode-toggle" role="group" aria-label="Assessment length"><span class="mode-lbl">Length</span><button class="mode-btn${state.mode==='abridged'?' on':''}" data-mode="abridged">Abridged &middot; 74</button><button class="mode-btn${state.mode==='full'?' on':''}" data-mode="full">Full &middot; 148</button></div></div>
+      <p>Read top to bottom, this is the whole assessment: why it exists, what you get, how the number is worked out, how it runs, and who it is for. The length toggle, top right, switches between the abridged run of 74 questions and the full 148; it opens on abridged and keeps every answer when you switch.</p></div>
     <div class="hw-narrative">
 
       <section class="hw-beat"><div class="hw-beat-n">1</div><div class="hw-beat-b">
@@ -1606,7 +1699,7 @@ function howItWorks(){
 
       <section class="hw-beat"><div class="hw-beat-n">4</div><div class="hw-beat-b">
         <h3>How the score is worked out</h3>
-        <p>Your score is built from facts, not opinions. Each foundation breaks into five parts, each part into four Yes or No questions, and more Yes answers mean a higher score. A foundation scores as low as its weakest part; your readiness scores as low as your weakest foundation. The picture below shows it, from parts to foundation to readiness.</p>
+        <p>Your score is built from facts, not opinions. Each foundation breaks into parts, and each part into concrete questions. Existence questions are answered Yes or No; coverage questions run None, Some, Most, All, so being most of the way counts instead of being lost as a No. Higher answers lift the part, a part scores as low as its weakest signal, and your readiness scores as low as your weakest foundation. The picture below shows it, from parts to foundation to readiness.</p>
         <div class="hw-vcard hw-inline">${hwScoringChain()}</div>
       </div></section>
 
@@ -1633,6 +1726,7 @@ function howItWorks(){
 /* ===== exports: dependency-free xlsx, JSON save/load ===== */
 function crc32(buf){let c,t=crc32.t;if(!t){t=crc32.t=[];for(let n=0;n<256;n++){c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}}c=0xFFFFFFFF;for(let i=0;i<buf.length;i++)c=t[(c^buf[i])&0xFF]^(c>>>8);return(c^0xFFFFFFFF)>>>0;}
 function strBytes(s){return new TextEncoder().encode(s);}
+function esc(s){return (s==null?'':(''+s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function xesc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function colName(n){let s='';n++;while(n>0){let m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=(n-m-1)/26;}return s;}
 function sheetXml(rows){
@@ -1669,7 +1763,7 @@ function buildAssessmentXlsx(c){
     ['Set by',c.floorDims.map(dimName).join(', ')||'-'],
     ['Opportunities ready',c.survivors.length],['Opportunities blocked',c.blocked.length],
     ['The one thing to fix first',fix?dimName(fix.gate):'-'],['Unlocked by fixing it',fix?fix.count:0],[],
-    ['Areas in scope',inScopeAreas]];
+    ['Areas in scope',inScopeAreas],[],['Context (not scored)'],['What AI has been tried',(state.context&&state.context.priorWhat)||'-'],['Performance vs plan',(state.context&&state.context.priorResult)||'-'],['What was missing',(state.context&&state.context.priorGap)||'-'],['Deployment approach',(state.context&&state.context.deploy)||'-'],['Assessment length',state.mode==='abridged'?'Abridged (74)':'Full (148)']];
   const readiness=[['Foundation','Derived level','Facet','Facet level','Descriptor','Evidence note']];
   DIMS.forEach(d=>{const facs=RUBRICS[d.k];const derived=state.readiness[d.k]||0;
     facs.forEach(fac=>{const lvl=state.rubric[d.k][fac.k]||0;const desc=lvl?fac.levels[lvl-1]:'';
@@ -1687,28 +1781,87 @@ function buildAssessmentXlsx(c){
   return buildXlsx([{name:'Summary',rows:summary},{name:'Readiness',rows:readiness},{name:'Opportunities',rows:opps},{name:'Plan',rows:plan}]);
 }
 function exportExcel(){try{const c=compute();downloadBytes(buildAssessmentXlsx(c),fileStem()+'.xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');}catch(e){alert('Excel export failed: '+e.message);}}
-function exportSave(){const data={v:4,clientName:state.clientName,scope:state.scope,rubric:state.rubric,artifact:state.artifact,diag:state.diag,qnote:state.qnote,candidates:state.candidates.map(x=>({name:x.name,dom:x.dom,arch:x.arch,gate:x.gate,amen:x.amen,value:x.value,effort:x.effort}))};downloadBytes(strBytes(JSON.stringify(data,null,2)),fileStem()+'.json','application/json');}
+function exportSave(){const data={v:5,clientName:state.clientName,mode:state.mode,context:state.context,scope:state.scope,rubric:state.rubric,artifact:state.artifact,diag:state.diag,qnote:state.qnote,candidates:state.candidates.map(x=>({name:x.name,dom:x.dom,arch:x.arch,gate:x.gate,amen:x.amen,value:x.value,effort:x.effort}))};downloadBytes(strBytes(JSON.stringify(data,null,2)),fileStem()+'.json','application/json');}
 function importSave(file){const rd=new FileReader();rd.onload=()=>{try{const d=JSON.parse(rd.result);
-  state.client='blank';state.clientName=d.clientName||'';state.scope=d.scope||state.scope;state.rubric=d.rubric||state.rubric;state.artifact=d.artifact||{};DIMS.forEach(x=>{if(!state.artifact[x.k])state.artifact[x.k]={};});
+  state.client='blank';state.clientName=d.clientName||'';state.context=d.context||{priorWhat:'',priorResult:'',priorGap:'',deploy:''};state.scope=d.scope||state.scope;state.rubric=d.rubric||state.rubric;state.artifact=d.artifact||{};DIMS.forEach(x=>{if(!state.artifact[x.k])state.artifact[x.k]={};});
   if(d.candidates)state.candidates=d.candidates.map(x=>({...x}));
   state.diag=d.diag||{};state.qnote=d.qnote||{};
   DIMS.forEach(dd=>{if(RUBRICS[dd.k].some(f=>f.diag)){state.qnote[dd.k]=state.qnote[dd.k]||{};RUBRICS[dd.k].forEach(f=>{if(f.diag&&!state.qnote[dd.k][f.k])state.qnote[dd.k][f.k]=[null,null,null,null];});}});
-  DIMS.forEach(dd=>{if(RUBRICS[dd.k].some(f=>f.diag)){state.diag[dd.k]=state.diag[dd.k]||{};RUBRICS[dd.k].forEach(f=>{if(f.diag&&!state.diag[dd.k][f.k]){const L=(state.rubric[dd.k]&&state.rubric[dd.k][f.k])||0;state.diag[dd.k][f.k]=diagForLevel(L);}});}});
+  DIMS.forEach(dd=>{if(RUBRICS[dd.k].some(f=>f.diag)){state.diag[dd.k]=state.diag[dd.k]||{};RUBRICS[dd.k].forEach(f=>{if(f.diag&&!state.diag[dd.k][f.k]){const L=(state.rubric[dd.k]&&state.rubric[dd.k][f.k])||0;state.diag[dd.k][f.k]=diagForLevel(L,f.sc);}});}});
   state.readiness={};state.evidence={};state.view='step';state.stage=0;state.openDim='strategy';state.hardFilter=true;state.quadFilter=null;state.openOpp=null;renderedStage=-1;renderedView='';renderAll();
 }catch(e){alert('Could not load this file: '+e.message);}};rd.readAsText(file);}
 function printReport(){const c=compute();if(!(state.clientName||'').trim()){alert('Enter a name for this assessment (top left) before exporting, so the report is not addressed to "Your organisation".');return;}if(c.scoredCount<7){alert('Complete all seven foundations in step 2 before exporting the report.');return;}renderReport(c);window.print();}
 function interpretationText(c){
-  const f=c.floor;
-  const s = f<=1
-    ? {l:'Very early',b:`Your readiness sits at ${f} of 5, which means the foundations AI relies on are largely not yet in place. The priority now is not a use case; it is building the basics, starting with the weakest foundation. Ambitious AI attempted from here would most likely stall.`}
-    : f===2
-    ? {l:'Early',b:`Your readiness sits at 2 of 5. You have footholds, but at least one foundation is weak enough to hold back most of the value. The right move is to bank the few ready quick wins and fix the single binding foundation before scaling.`}
+  const f=c.floor, name=state.clientName||'Your organisation';
+  const bands={1:'Very early',2:'Early',3:'Developing',4:'Advanced',5:'Leading'};
+  const band=bands[f]||'Early';
+  const floorNames=c.floorDims.map(dimName).join(' and ');
+  const fix=(c.bestFix&&c.blockedHi.length)?c.bestFix:null;
+  const ready=c.survivors.length, blocked=c.blocked.length, scope=c.inScope.length;
+  const lead = f<=2
+    ? `${name} is at the ${band.toLowerCase()} stage of AI readiness, ${f} of 5. The number is set by ${floorNames}, the weakest of the seven foundations. Under the weakest-link rule that single foundation caps what AI can deliver today, however capable the others are, so effort spent elsewhere returns little until it is raised. The right first move is therefore not another use case but removing the one constraint that holds the rest back, then banking the quick wins that are already unblocked.`
     : f===3
-    ? {l:'Developing',b:`Your readiness sits at 3 of 5. You can run targeted AI use cases today. The work now is to standardise what is working and lift the weakest foundations, so you move from isolated wins to broader use.`}
-    : f===4
-    ? {l:'Advanced',b:`Your readiness sits at 4 of 5. Most foundations are solid. The focus shifts from readiness to scale and control: extend proven use cases and tighten governance so growth stays safe.`}
-    : {l:'Leading',b:`Your readiness sits at 5 of 5. Foundations are strong across the board. The agenda is to operate at the frontier and hold the edge, not to build basics.`};
-  return `<div class="rep-sec rep-interpret"><div class="ps-lbl">What this means</div><p><b>${s.l}.</b> ${s.b}</p><p class="rep-note">How to use this report: the summary gives the headline and the one thing to fix first; the recommended moves set out what to do and how; the next steps put them in order. Read it as a plan, not a scorecard.</p></div>`;
+    ? `${name} sits at a developing stage, ${f} of 5, set by ${floorNames}. Targeted AI is viable now. The task is to standardise what already works and lift the weakest foundation, so that isolated wins become a repeatable capability rather than one-off successes that do not compound.`
+    : `${name} is at an advanced stage, ${f} of 5, set by ${floorNames}. Most foundations are in place, so the agenda shifts from readiness to scale and control: extend the proven use cases and tighten governance so growth stays safe as volume rises.`;
+  const context = fix
+    ? `The highest-leverage first move is to close the ${dimName(fix.gate)} gap, which alone unblocks ${fix.count} ${fix.count>1?'opportunities':'opportunity'} that are otherwise stranded. This is leverage, not a new initiative: the value is already identified and waiting on one enabling foundation.`
+    : `No high-value opportunity is currently blocked by a missing foundation, so value can be captured immediately through the ready moves rather than waiting on enabling work.`;
+  const bullets=[
+    `Readiness is ${f} of 5, the level of the weakest foundation, ${floorNames}. The average across the seven is deliberately not used, because the weakest link is what limits delivery.`,
+    fix?`Closing the ${dimName(fix.gate)} gap is the single first move: it unlocks ${fix.count} blocked ${fix.count>1?'opportunities':'opportunity'} at once, more than any individual use case would return.`:`With nothing high-value blocked, sequencing is about impact and effort, not about clearing a constraint.`,
+    `${ready} of ${scope} ${ready===1?'opportunity is':'opportunities are'} ready to start now; ${blocked} ${blocked===1?'is':'are'} blocked until the binding foundation is raised.`,
+    `The plan sequences these into now, next and later, each carrying an owner, a first pilot and a measure, so it can be executed rather than admired.`
+  ];
+  const close=`Read this as a plan, not a scorecard. The sections that follow set out where you stand, where AI can help, the one constraint to remove first, and the ordered moves to make. Every figure is derived from the evidence gathered in the session, so nothing here is self-rated.`;
+  return `<div class="rep-sec rep-exec"><div class="ps-lbl">Executive summary</div>`+
+    `<p class="exec-lead"><b>${band}.</b> ${lead}</p>`+
+    `<p class="exec-mid">${context}</p>`+
+    `<ul class="exec-bul">${bullets.map(b=>`<li>${b}</li>`).join('')}</ul>`+
+    `<p class="exec-close">${close}</p></div>`;
+}
+
+function fiveWCard(o){
+  const b=oppBrief(o), st=oppStatus(o);
+  const when=st==='ready'?'Start now. The foundation it needs is already in place.':st==='blocked'?`After the ${dimName(o.gate)} gap is closed; blocked until then.`:'Once its enabling foundation is assessed.';
+  const cells=[['What',b.what],['Why',b.why],['How',b.how],['Where',domName(o.dom)+'. It draws on that function\u2019s data and processes.'],['When',when],['Who',b.who]];
+  const grid=cells.map(x=>`<div class="w-cell"><span class="w-k">${x[0]}</span><span class="w-v">${x[1]}</span></div>`).join('');
+  return `<div class="w5h"><div class="w5h-grid">${grid}</div>`+
+    `<div class="w5h-sup"><div><span>Measure</span>${b.metric}</div>`+
+    `<div><span>Prerequisite</span>${dimName(o.gate)}${st==='ready'?', already in place':', not yet in place'}. First pilot: ${b.pilot}</div></div></div>`;
+}
+
+function fixCard(c,fix){
+  const gate=fix.gate, lvl=state.readiness[gate];
+  const facs=RUBRICS[gate];
+  const weak=facs.filter(f=>state.rubric[gate][f.k]===lvl);
+  const cells=[
+    ['What',`Raise ${dimName(gate)} from level ${lvl} to a workable level 3, the point at which the opportunities it gates can proceed.`],
+    ['Why',`${dimName(gate)} is the weakest foundation, so it caps readiness and blocks ${fix.count} otherwise-ready ${fix.count>1?'opportunities':'opportunity'}. It is the highest-leverage single move.`],
+    ['How',`Turn the specific answers still short of full, listed in the diagnostic, into owned actions with dates. Each is a concrete task, not a theme.`],
+    ['Where',`${dimName(gate)}, most acutely in ${weak.map(f=>f.name).join(', ')||'its weakest facets'}.`],
+    ['When',`Next. This runs in parallel with the quick wins and precedes the opportunities it unlocks.`],
+    ['Who',`The ${dimName(gate).toLowerCase()} owner, accountable for closing the named gaps.`]
+  ];
+  const grid=cells.map(x=>`<div class="w-cell"><span class="w-k">${x[0]}</span><span class="w-v">${x[1]}</span></div>`).join('');
+  return `<div class="w5h w5h-fix"><div class="w5h-grid">${grid}</div>`+
+    `<div class="w5h-sup"><div><span>Measure</span>${dimName(gate)} reaches level 3 of 5 and the ${fix.count} blocked ${fix.count>1?'items':'item'} move to ready.</div>`+
+    `<div><span>Unlocks</span>${fix.list.map(o=>o.name).join(', ')}</div></div></div>`;
+}
+
+function contextSection(){
+  const cx=state.context||{};
+  const has=(cx.priorWhat||cx.priorResult||cx.priorGap||cx.deploy);
+  if(!has) return '';
+  const trimmed = state.mode==='abridged';
+  const rows=[];
+  if(cx.priorWhat) rows.push(['What has been tried',cx.priorWhat]);
+  if(cx.priorResult) rows.push(['How it performed against plan',cx.priorResult]);
+  if(!trimmed && cx.priorGap) rows.push(['What was missing, and why',cx.priorGap]);
+  if(!trimmed && cx.deploy) rows.push(['Deployment approach',cx.deploy]);
+  if(!rows.length) return '';
+  const body=rows.map(r=>`<div class="cx-row"><span>${r[0]}</span><p>${(''+r[1]).replace(/</g,'&lt;')}</p></div>`).join('');
+  return `<div class="rep-sec rep-break"><div class="ps-lbl">What prior AI attempts reveal</div>`+
+    `<p class="rep-note">Read as the truest signal of real, as opposed to claimed, maturity. Past underdelivery shows where capability actually sits.</p>${body}</div>`;
 }
 
 function renderHeaderName(){
@@ -1720,66 +1873,65 @@ function renderReport(c){
   if(!ps) return;
   const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   const name=state.clientName||'Your organisation';
-  const head=`<div class="ps-head"><div><div class="ps-eyebrow">AI Readiness Assessment</div><h1>${name}</h1></div><div class="ps-date">${date}</div></div>`;
+  const modeBadge=`<span class="ps-mode">${state.mode==='abridged'?'Abridged assessment':'Full assessment'}</span>`;
+  const head=`<div class="ps-head"><div><div class="ps-eyebrow">AI Readiness Assessment</div><h1>${name}</h1></div><div class="ps-headr"><div class="ps-date">${date}</div>${modeBadge}</div></div>`;
   if(c.scoredCount<7){
     ps.innerHTML=head+`<div class="ps-note">This assessment is incomplete: <b>${c.scoredCount} of 7</b> foundations scored. Complete step 2 before exporting a client report. This page exists so an accidental print never produces a misleading result.</div>`;
     return;
   }
-  const floorTxt=`${c.floor} of 5, set by ${c.floorDims.map(dimName).join(', ')}`;
+  const floorNames=c.floorDims.map(dimName).join(' and ');
   const fix=(c.bestFix&&c.blockedHi.length)?c.bestFix:null;
   const now=[...c.survivors].sort((a,b)=>(b.value-b.effort)-(a.value-a.effort)).slice(0,6);
   const unlocks=fix?fix.list.filter(x=>x.value>=4):[];
   const later=[...c.survivors].filter(x=>x.effort>=4||(x.value>=4&&x.effort>=3));
-  // recommended moves = quick wins + those unlocked by the fix, de-duplicated
   const seen={}; const recs=[]; [...now,...unlocks].forEach(o=>{if(!seen[o.name]){seen[o.name]=1;recs.push(o);}});
-  // readiness detail
-  const rdRows=DIMS.map(d=>{const lvl=state.readiness[d.k];const facs=RUBRICS[d.k];const bf=facs.filter(f=>state.rubric[d.k][f.k]===lvl);const binder=bf.length===facs.length?'all facets at this level':bf.length===1?bf[0].name:bf.map(f=>f.name).join(', ')+' (tied)';
-    return `<tr><td>${d.name}</td><td class="rd-lvl">${lvl} / 5</td><td>${binder||'&ndash;'}</td></tr>`;}).join('');
-  // recommended move briefs
-  const moveHtml=recs.map(o=>{const b=oppBrief(o),st=oppStatus(o);
-    const when=st==='ready'?'Ready to start now.':st==='blocked'?`After the ${dimName(o.gate)} gap is closed.`:'';
-    return `<div class="rep-move">
-      <div class="rep-move-h"><h3>${o.name}</h3><span class="rep-tag ${st}">${st==='ready'?'Ready now':'Unblocked by the fix'}</span></div>
-      <div class="rep-meta">${domName(o.dom)} &middot; ${ARCH[o.arch]||o.arch} &middot; impact ${o.value}, effort ${o.effort}</div>
-      <div class="rep-qs">
-        <div><span>What it is</span><p>${b.what}</p></div>
-        <div><span>Why it matters</span><p>${b.why}</p></div>
-        <div><span>How it works</span><p>${b.how}</p></div>
-        <div><span>Where it sits</span><p>${domName(o.dom)}. It draws on the data and processes of that function.</p></div>
-        <div><span>What it needs</span><p>${dimName(o.gate)}. ${when}</p></div>
-        <div><span>Who owns it</span><p>${b.who}</p></div>
-        <div><span>How to measure it</span><p>${b.metric}</p></div>
-        <div><span>A first pilot</span><p>${b.pilot}</p></div>
-      </div>
-    </div>`;}).join('');
+  const rdRows=DIMS.map(d=>{const lvl=state.readiness[d.k];const facs=RUBRICS[d.k];const bf=facs.filter(f=>state.rubric[d.k][f.k]===lvl);const binder=bf.length===facs.length?'all facets at this level':bf.length===1?bf[0].name:bf.map(f=>f.name).join(', ')+' (tied)';const isFloor=c.floorDims.indexOf(d.k)>=0;
+    return `<tr class="${isFloor?'rd-floor':''}"><td>${d.name}${isFloor?' <span class="rd-cap">caps readiness</span>':''}</td><td class="rd-lvl">${lvl} / 5</td><td>${binder}</td></tr>`;}).join('');
+  // diagnostic detail for the binding foundation(s): the specific shortfalls
+  const gapDetail=c.floorDims.map(dk=>{const lvl=state.readiness[dk];const facs=RUBRICS[dk];const weak=facs.filter(f=>state.rubric[dk][f.k]===lvl);
+    const items=weak.map(f=>{const arr=(state.diag[dk]&&state.diag[dk][f.k])||[];const qn=(state.qnote[dk]&&state.qnote[dk][f.k])||[];const sc=f.sc||[2,2,2,2];
+      const short=f.diag.map((q,i)=>({q,i})).filter(x=>arr[x.i]!=null&&arr[x.i]<bandMax(sc[x.i]));
+      const list=short.length?short.map(x=>{const r=(qn[x.i]||'').trim();return `<li>${x.q}${r?` <span class="gd-why">${r.replace(/</g,'&lt;')}</span>`:''}</li>`;}).join(''):'<li class="gd-none">All answered questions are already at full.</li>';
+      return `<div class="gd-facet"><div class="gd-h">${f.name} <span>level ${state.rubric[dk][f.k]}</span></div><ul>${list}</ul></div>`;}).join('');
+    return `<div class="gd-dim"><h4>${dimName(dk)}, the binding constraint</h4>${items}</div>`;}).join('');
+  const moveHtml=recs.map(o=>{const st=oppStatus(o);
+    return `<div class="rep-move"><div class="rep-move-h"><h3>${o.name}</h3><span class="rep-tag ${st}">${st==='ready'?'Ready now':'Unblocked by the fix'}</span></div>`+
+      `<div class="rep-meta">${domName(o.dom)} &middot; ${ARCH[o.arch]||o.arch} &middot; impact ${o.value}, effort ${o.effort}</div>${fiveWCard(o)}</div>`;}).join('');
   ps.innerHTML=head+interpretationText(c)+`
     <div class="rep-sec">
       <div class="ps-grid">
         <div class="ps-block ps-floor"><div class="ps-lbl">Readiness</div><div class="ps-big">${c.floor}<span> / 5</span></div>
-          <p>Weakest foundation ${floorTxt}. Readiness is read off the weakest foundation, which caps everything above it. ${c.survivors.length} of ${c.inScope.length} opportunities are ready to start; ${c.blocked.length} are blocked.</p></div>
+          <p>Set by ${floorNames}, the weakest of the seven foundations. Readiness is read off the weakest foundation because it caps everything above it. ${c.survivors.length} of ${c.inScope.length} opportunities are ready; ${c.blocked.length} are blocked.</p></div>
         <div class="ps-block"><div class="ps-lbl">The one thing to fix first</div>
-          ${fix?`<div class="ps-fix">${dimName(fix.gate)}</div><p>Closing this single gap unlocks ${fix.count} high-value ${fix.count>1?'opportunities':'opportunity'}. It is the highest-leverage first move: not a new use case, but removing the constraint that holds several back.</p>`:`<p>No high-value opportunity is currently blocked. Proceed straight to the quick wins.</p>`}</div>
+          ${fix?`<div class="ps-fix">${dimName(fix.gate)}</div><p>Closing this single gap unlocks ${fix.count} high-value ${fix.count>1?'opportunities':'opportunity'}. Highest-leverage first move: not a new use case, but removing the constraint that holds several back.</p>`:`<p>No high-value opportunity is currently blocked. Proceed straight to the ready moves.</p>`}</div>
       </div>
     </div>
     <div class="rep-sec">
-      <div class="ps-lbl">Readiness in detail</div>
+      <div class="ps-lbl">The diagnostic picture</div>
       <table class="rep-table"><thead><tr><th>Foundation</th><th>Level</th><th>Held there by</th></tr></thead><tbody>${rdRows}</tbody></table>
-      <p class="rep-note">Each foundation is scored across five observable facets; its level is the weakest facet. The facet named above is the one holding it back.</p>
+      <p class="rep-note">Each foundation scores as low as its weakest facet; each facet is computed from concrete questions, not chosen. The rows marked cap your readiness.</p>
+      ${gapDetail}
     </div>
     <div class="rep-sec rep-break">
-      <div class="ps-lbl">Recommended moves, in detail</div>
-      <p class="rep-note">The opportunities to act on now, and those the fix unlocks. Each answers what it is, why it matters, how it works, where it sits, what it needs, who owns it, how to measure it, and a first pilot.</p>
+      <div class="ps-lbl">Where AI can help</div>
+      <p class="rep-note">The moves to act on now and those the fix unlocks. Each carries a full What, Why, How, Where, When and Who, with its measure and prerequisite.</p>
       ${moveHtml||'<p class="rep-note">No recommended moves are ready yet.</p>'}
     </div>
+    ${fix?`<div class="rep-sec rep-break"><div class="ps-lbl">The critical path</div><p class="rep-note">The single constraint to remove first, and what it frees.</p>${fixCard(c,fix)}</div>`:''}
     <div class="rep-sec rep-break">
-      <div class="ps-lbl">Next steps</div>
+      <div class="ps-lbl">The sequenced plan</div>
       <div class="ps-lanes">
-        <div><h4>Start now</h4><ul>${now.map(o=>`<li>${o.name}</li>`).join('')||'<li class="none">None yet</li>'}</ul></div>
+        <div><h4>Start now</h4><ul>${now.map(o=>`<li>${o.name}<span>${domName(o.dom)}</span></li>`).join('')||'<li class="none">None yet</li>'}</ul></div>
         <div><h4>Fix next</h4><ul>${fix?`<li>Close the ${dimName(fix.gate)} gap <span>unlocks ${fix.count}</span></li>`+unlocks.map(o=>`<li>&#8627; ${o.name}</li>`).join(''):'<li class="none">Nothing to unblock</li>'}</ul></div>
-        <div><h4>Later</h4><ul>${later.map(o=>`<li>${o.name}</li>`).join('')||'<li class="none">None yet</li>'}</ul></div>
+        <div><h4>Later</h4><ul>${later.map(o=>`<li>${o.name}<span>impact ${o.value} / effort ${o.effort}</span></li>`).join('')||'<li class="none">None yet</li>'}</ul></div>
       </div>
     </div>
-    <div class="ps-foot">Every figure is derived from the evidence gathered in your session. Readiness levels come from the rubric; impact and effort are calibrated against your own numbers.</div>`;
+    ${contextSection()}
+    <div class="rep-sec rep-method">
+      <div class="ps-lbl">Method and basis</div>
+      <p class="rep-note">Readiness is the level of the weakest of seven foundations; each foundation is the level of its weakest facet; each facet is computed from your answers, existence questions as yes or no and coverage questions as none, some, most or all. Opportunities are ready only when the one foundation they depend on reaches level 3. Impact and effort are calibrated against your own numbers. This was ${state.mode==='abridged'?'an abridged run of 74 questions, the two most telling per facet':'a full run of 148 questions'}; nothing is self-rated.</p>
+    </div>
+    <div class="ps-foot">Every figure is derived from the evidence gathered in your session.</div>`;
 }
 function renderPrintSheet(c){return renderReport(c);}
 function fixBrief(c){
@@ -1871,7 +2023,7 @@ function bind(){
   document.querySelectorAll('input[data-ev]').forEach(cb=>{cb.onchange=()=>{state.evidence[cb.dataset.ev][+cb.dataset.i]=cb.checked;renderAll();};});
   document.querySelectorAll('.lvlrow[data-lvl]').forEach(row=>{const set=()=>{state.readiness[row.dataset.lvl]=+row.dataset.l;renderAll();};row.onclick=set;row.onkeydown=(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();set();}};});
   document.querySelectorAll('[data-rung]').forEach(b=>{b.onclick=()=>{state.rubric[b.dataset.rung][b.dataset.rf]=+b.dataset.rl;renderAll();};});
-  document.querySelectorAll('[data-diag]').forEach(b=>{b.onclick=()=>{const dk=b.dataset.diag,fk=b.dataset.df,i=+b.dataset.di,val=b.dataset.dv==='yes';const arr=state.diag[dk][fk];arr[i]=(arr[i]===val)?null:val;renderAll();};});
+  document.querySelectorAll('[data-diag]').forEach(b=>{b.onclick=()=>{const dk=b.dataset.diag,fk=b.dataset.df,i=+b.dataset.di,val=+b.dataset.dv;const arr=state.diag[dk][fk];arr[i]=(arr[i]===val)?null:val;renderAll();};});
   document.querySelectorAll('[data-qnote]').forEach(inp=>{inp.oninput=()=>{const dk=inp.dataset.qnote,fk=inp.dataset.qf,i=+inp.dataset.qi;state.qnote[dk]=state.qnote[dk]||{};state.qnote[dk][fk]=state.qnote[dk][fk]||[null,null,null,null];state.qnote[dk][fk][i]=inp.value;};});
   document.querySelectorAll('.facet-note[data-note]').forEach(inp=>{inp.oninput=()=>{state.artifact[inp.dataset.notedim][inp.dataset.note]=inp.value;};});
   document.querySelectorAll('button[data-cal]').forEach(b=>{b.onclick=()=>{const cand=state.candidates.find(x=>x.name===b.dataset.cal);const f=b.dataset.f;cand[f]=Math.max(1,Math.min(5,cand[f]+(+b.dataset.d)));renderAll();};});
@@ -1884,6 +2036,8 @@ function bind(){
   const bx=document.getElementById('btnXlsx');if(bx)bx.onclick=exportExcel;
   const br=document.getElementById('btnReport');if(br)br.onclick=printReport;
   const ft=document.getElementById('facToggle');if(ft)ft.onchange=()=>{state.facilitator=ft.checked;renderAll();};
+  document.querySelectorAll('[data-mode]').forEach(b=>{b.onclick=()=>{state.mode=b.dataset.mode;renderAll();};});
+  document.querySelectorAll('[data-cx]').forEach(el=>{const h=()=>{state.context=state.context||{};state.context[el.dataset.cx]=el.value;};el.oninput=h;el.onchange=h;});
   const rb=document.getElementById('resetbtn');if(rb)rb.onclick=()=>{loadClient(state.client);renderAll();};
   document.querySelectorAll('.backcue-btn').forEach(b=>{b.onclick=()=>{state.view='step';state.stage=1;renderAll();};});
   document.querySelectorAll('.side-item[data-step]').forEach(b=>{b.onclick=()=>{state.view='step';state.stage=+b.dataset.step;renderAll();};});

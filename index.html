@@ -1281,6 +1281,7 @@ function diagBody(dk,fac){
     const note=notes[i]||'';
     let flag='';
     if(!abr){const depI=(fac.dep&&fac.dep[i]!=null)?fac.dep[i]:null;const depActive=depI!=null&&idxs.indexOf(depI)>=0;const conflict=depActive&&v!=null&&v>=1&&arr[depI]===0;flag=conflict?`<div class="diag-flag">Unusual: this is marked present while the question it builds on is still answered No or None. Left as you set it, worth a recheck.</div>`:'';}
+    else{const conflict=(i===1)&&arr[1]!=null&&arr[1]>=1&&arr[0]===0;flag=conflict?`<div class="diag-flag">Unusual: this is marked present while the first question above, which it builds on, is still answered None. Left as you set it, worth a recheck.</div>`:'';}
     const conflictCls=flag?' flagged':'';
     const isFull=v===top, isPartial=(v!=null&&v<top);
     const ph=isFull?'What shows this? A document, system, owner or metric (optional)':isPartial?'What is missing to reach full? (optional, becomes an action)':'';

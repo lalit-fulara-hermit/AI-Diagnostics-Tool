@@ -1256,7 +1256,7 @@ function renderLive(c){
     <div class="lstat"><span class="lbl-help" data-help="Opportunities you can start now, because the one foundation each depends on is already in place.">Ideas ready<svg class="lbl-i" viewBox="0 0 20 20" aria-hidden="true" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/><circle cx="10" cy="6.4" r="1.2"/><rect x="9" y="8.7" width="2" height="5.6" rx="1"/></svg></span><span>${c.survivors.length}</span></div>
     <div class="lstat"><span class="lbl-help help-r" data-help="Opportunities blocked for now, because the foundation each depends on is not yet strong enough. Blocked is not lost; it is the reason to fix that foundation.">Held back<svg class="lbl-i" viewBox="0 0 20 20" aria-hidden="true" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/><circle cx="10" cy="6.4" r="1.2"/><rect x="9" y="8.7" width="2" height="5.6" rx="1"/></svg></span><span>${c.blocked.length}</span></div>
     ${fix}</div>${c.scoredCount===0?'<div class="live-note">These fill in as you assess the seven foundations in step 2.</div>':''}`;
-  return `<div class="live-eyebrow">Live view, builds as you work</div>${hero}${stats}<div class="live-help"><b>On this step</b>${SUMHELP[st]}</div>`;
+  return `<div class="live-eyebrow">Live view, builds as you work</div>${hero}${stats}<div class="live-help"><b>On this step</b>${state.mode==='email'&&st===2?'The full impact and effort map is worked out in the session, with your team.':SUMHELP[st]}</div>`;
 }
 
 /* Step 1 */

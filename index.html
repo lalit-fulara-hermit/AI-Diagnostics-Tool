@@ -357,7 +357,7 @@
   .export-locked{font-size:11.5px;color:var(--muted);line-height:1.55;background:var(--ink-06);border-radius:9px;padding:11px 12px}
   .export-locked b{color:var(--ink);display:block;margin-bottom:3px}
   /* scope tile state */
-  .tile-state{font-size:11.5px;color:var(--soft);font-family:var(--sans)}
+  .tile-state{font-size:11.5px;color:var(--soft);font-family:var(--sans);margin-top:auto}
   .tile.on .tile-state{color:var(--cleared);font-weight:600}
   /* priority matrix (opportunity live view) */
   .pm-toplbl{display:flex;justify-content:space-between;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);margin-bottom:8px;padding:0 2px}
@@ -423,6 +423,16 @@
   .diag-btn{border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:11.5px;font-weight:600;color:var(--muted);padding:5px 13px;border-radius:6px;transition:background .12s,color .12s}
   .diag-btn:hover{color:var(--ink)}
   .diag-btn.sel{background:var(--ink);color:#fff}
+  .email-q{display:flex;flex-direction:column;gap:10px}
+  .email-stem{font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.5}
+  .email-opts{display:flex;flex-direction:column;gap:7px}
+  .email-opt{display:flex;align-items:center;gap:12px;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 13px;cursor:pointer;font-family:var(--sans);transition:border-color .12s,background .12s}
+  .email-opt:hover{border-color:var(--ink);background:var(--ink-06)}
+  .email-opt .eo-n{width:22px;height:22px;flex-shrink:0;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--soft)}
+  .email-opt .eo-l{font-size:13.5px;font-weight:600;color:var(--text)}
+  .email-opt.sel{border-color:var(--ink);background:var(--ink)}
+  .email-opt.sel .eo-l{color:#fff}
+  .email-opt.sel .eo-n{background:#fff;color:var(--ink);border-color:#fff}
   .diag-out{font-size:12.5px;color:var(--muted);line-height:1.55;padding:11px 13px;border-radius:9px;background:var(--paper);border:1px solid var(--line);margin-top:9px}
   .diag-out b{color:var(--ink)}
   .diag-out.todo{color:var(--soft);font-style:italic}
@@ -516,7 +526,7 @@
   }
   @media (max-width:980px){
     .workspace{flex-direction:column;gap:28px}
-    .work-right{position:static;width:100%;order:-1}
+    .work-right{position:static;width:100%}
     .lede{max-width:none}
     .hw-grid{grid-template-columns:1fr}
     .hw-method-cols{grid-template-columns:1fr;gap:18px}
@@ -605,7 +615,36 @@
   .fx-unlocks{list-style:none;margin:8px 0 0;padding:0}
   .fx-unlocks li{display:flex;justify-content:space-between;padding:8px 11px;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;font-size:13px}
   .fx-unlocks .li-v{font-family:var(--mono);color:var(--muted);font-size:12px}
-
+  .fx-now{font-size:12.5px;color:var(--text);line-height:1.5;margin-bottom:8px}
+  .fx-now .fx-why{font-size:11px;color:var(--muted);font-style:italic;font-weight:600;margin-right:4px}
+  .fx-featured{border-color:rgba(224,4,78,.22)}
+  .fx-also{margin-top:14px}
+  .fx-also-h{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);font-weight:700;margin-bottom:5px}
+  .fx-also-list{margin:0 0 6px;font-size:13px;color:var(--text);line-height:1.5}
+  .fx-also-note{margin:0;font-size:12.5px;color:var(--muted);font-style:italic;line-height:1.5}
+  .tq{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:6px 0 24px;background:var(--ink-06)}
+  .tq-head{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .tq-tag{font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--soft);border:1px solid var(--line);border-radius:20px;padding:3px 9px;background:var(--surface)}
+  .tq-body{display:flex;gap:12px;align-items:stretch}
+  .tq-axis-y{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;color:var(--soft);text-align:center;padding:4px 0}
+  .tq-grid{position:relative;flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;min-height:184px}
+  .tq-cell{border:1px dashed var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12.5px;color:var(--soft);background:var(--surface)}
+  .tq-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+  .tq-overlay span{background:var(--ink);color:#fff;font-size:12px;font-weight:600;padding:7px 15px;border-radius:20px}
+  .tq-axis-x{text-align:center;font-size:11px;color:var(--soft);margin-top:9px}
+  .tq-foot{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:15px;border-top:1px solid var(--hair);padding-top:13px}
+  .teaser-area{margin-bottom:13px}
+  .teaser-area-h{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--soft);font-weight:700;margin-bottom:4px}
+  .teaser-area p{margin:0;font-size:13.5px;color:var(--text);line-height:1.55}
+  .teaser-note{margin-top:20px;font-size:13px;color:var(--muted);font-style:italic;line-height:1.6;border-left:2px solid var(--line);padding-left:13px}
+  .capture summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+  .capture summary::-webkit-details-marker{display:none}
+  .capture summary .section-label{margin:0}
+  .capture summary::after{content:"\25B8";color:var(--soft);font-size:11px;transition:transform .18s;margin-left:6px}
+  .capture[open] summary::after{transform:rotate(90deg)}
+  .lock-ic{width:12px;height:12px;display:inline-block;vertical-align:-1px;margin-right:5px;color:var(--soft)}
+  .fx-first{font-size:12.5px;color:var(--text);line-height:1.5;background:rgba(224,4,78,.05);border:1px solid rgba(224,4,78,.18);border-radius:7px;padding:8px 10px;margin-top:2px}
+  .fx-first span{display:block;color:var(--signal);text-transform:uppercase;letter-spacing:.05em;font-size:10px;font-weight:700;margin-bottom:3px}
   @media print{
     header.top,.app-body{display:none!important}
     #printsheet{display:block!important;padding:6mm 4mm;color:var(--text)}
@@ -727,7 +766,7 @@ const DIMS=[
 const DOMAINS=[
   {k:'ops',name:'Operations & delivery'},{k:'proc',name:'Supply chain & procurement'},{k:'sales',name:'Sales & marketing'},
   {k:'cust',name:'Customer service'},{k:'corp',name:'Product, R&D & insight'},{k:'fin',name:'Finance & accounting'},
-  {k:'hr',name:'People & HR'},{k:'legal',name:'Legal, risk & compliance',abr:[{q:"How well are legal obligations identified and checked?",d:"Whether relevant laws are known and uses are checked. None: relevant laws not identified. Some: identified, but uses not checked. Most: the key uses are checked against the main legal obligations. All: obligations are well understood and applied."},{q:"How thoroughly is compliance verified and sustained?",d:"Whether compliance is documented and tracked as rules change. None: compliance not verified. Some: verified for some uses. Most: compliance verified and documented for all uses. All: compliance is designed in and tracked as rules evolve."}]},{k:'it',name:'Technology & IT'},
+  {k:'hr',name:'People & HR'},{k:'legal',name:'Legal, risk & compliance'},{k:'it',name:'Technology & IT'},
 ];
 const ARCH={Predict:'Forecasting',Optimise:'Optimisation',Extract:'Reading documents',Classify:'Sorting',Generate:'Drafting',Automate:'Automation'};
 
@@ -790,7 +829,7 @@ const LEVELS={
 // the descriptors chosen ARE the evidence. Nothing is self-rated.
 const RUBRICS={
  strategy:[
-  {k:'direction',name:'Direction & ambition',sc:[2,2,2,2],levels:[
+  {k:'direction',name:'Direction & ambition',estem:"Where is your organisation on having a clear aim for AI?",elab:["No aim","General interest","Written aim, some areas","Company-wide direction","In strategy, revisited"],sc:[2,2,2,2],levels:[
     "No stated aim for AI; it comes up in conversation only.",
     "A general interest in AI, but no articulated direction.",
     "A clear aim for one or two areas, written down.",
@@ -801,7 +840,7 @@ const RUBRICS={
     "Does that aim name specific business areas or outcomes, not just 'use AI'?",
     "Is the direction shared and understood beyond the person who set it, including leadership?",
     "Is the AI direction reviewed and updated on a regular cadence?"],desc:["A Yes means a written statement exists, even a short one; a verbal or implied direction does not count.", "A Yes means the aim points at named functions or outcomes, not a general wish to use AI.", "A Yes means leadership and the relevant teams share the direction, not just its author.", "A Yes means the direction is revisited on a set schedule, not written once and forgotten."],dep:[null, null, null, null],abr:[{q:"How clearly is the AI aim defined?",d:"How well defined your written AI aim is. None: nothing written, AI comes up in conversation only. Some: a general written aim, but no specific areas or outcomes named. Most: a written aim that names specific business areas or outcomes. All: a specific written aim, agreed as the priority."},{q:"How widely is the aim owned and kept live?",d:"How far the aim reaches and whether it is maintained. None: it sits with the one person who set it. Some: shared with a few, but leadership is not really behind it. Most: understood and backed by leadership. All: owned by leadership and reviewed on a set cadence."}]},
-  {k:'ownership',name:'Programme ownership & mandate',sc:[2,2,2,2],levels:[
+  {k:'ownership',name:'Programme ownership & mandate',estem:"Who owns AI, and what authority do they have?",elab:["No owner","Informal ownership","Named, limited authority","Senior owner, clear mandate","Board-level, in operating model"],sc:[2,2,2,2],levels:[
     "No one owns AI; it is nobody's job.",
     "Ownership is informal and shifts between people.",
     "A named owner for AI, but with limited authority.",
@@ -812,7 +851,7 @@ const RUBRICS={
     "Does that owner have a clear mandate and decision rights, not just a title?",
     "Does the owner control budget or resources they can actually direct?",
     "Is AI ownership held at a senior or board level, not only mid-management?"],desc:["A Yes means one identifiable person is accountable for the AI programme, not a committee by default.", "A Yes means the owner can make and enforce decisions, not just hold the title.", "A Yes means the owner directs real budget or people, not merely requests them.", "A Yes means ownership sits at a senior or board level, with the authority that brings."],dep:[null, 0, 0, 0],abr:[{q:"How real is the AI owner's authority?",d:"Whether one person owns AI and can actually decide. None: no one is clearly accountable for AI. Some: someone holds the title, but without real decision rights. Most: a named owner with a clear mandate and decision rights. All: that mandate is unambiguous and respected across the business."},{q:"How much weight and seniority does that ownership carry?",d:"Whether the owner controls resources and sits high enough. None: no budget or resources to direct. Some: some resources, but held at mid-management. Most: controls real budget and sits at a senior level. All: AI ownership is held at board level, resourced to match."}]},
-  {k:'funding',name:'Funding & resources',sc:[2,2,2,2],levels:[
+  {k:'funding',name:'Funding & resources',estem:"How is AI work funded?",elab:["No budget","Ad hoc funding","Small ring-fenced budget","Recurring, planned budget","Scales with return"],sc:[2,2,2,2],levels:[
     "No budget; work happens on goodwill.",
     "Ad hoc funding, found project by project.",
     "A small ring-fenced budget for initial work.",
@@ -823,7 +862,7 @@ const RUBRICS={
     "Is that budget recurring or planned, rather than one-off?",
     "Is funding tied to a roadmap or plan, rather than ad hoc requests?",
     "Can funding scale on proven return, with a route to increase it?"],desc:["A Yes means money is set aside for AI specifically, not taken ad hoc from other lines.", "A Yes means the budget recurs or is planned ahead, not found project by project.", "A Yes means funding follows a plan or roadmap, not one-off requests as they arise.", "A Yes means there is a route to increase funding when results justify it."],dep:[null, 0, 0, 0],abr:[{q:"How secure is the AI budget?",d:"Whether AI has its own money and for how long. None: no dedicated budget, borrowed from other lines. Some: some money, but one-off. Most: a recurring or planned budget for AI. All: a stable, protected budget line."},{q:"How well is funding tied to plan and return?",d:"Whether spend follows a plan and can grow on results. None: funding is ad hoc, request by request. Some: loosely linked to a plan. Most: tied to a roadmap and released against it. All: scales on proven return, with a clear route to increase."}]},
-  {k:'link',name:'Link to goals & value measurement',sc:[2,2,2,2],levels:[
+  {k:'link',name:'Link to goals & value measurement',estem:"How closely is AI tied to business goals and measured results?",elab:["Disconnected from goals","Loosely justified","Linked for priority uses","Tied and tracked","A named growth lever"],sc:[2,2,2,2],levels:[
     "AI is pursued for its own sake, disconnected from goals.",
     "Loosely justified, but not tied to measured outcomes.",
     "Linked to business goals for the priority use cases.",
@@ -834,7 +873,7 @@ const RUBRICS={
     "Are the priority use cases linked to measurable outcomes?",
     "Is the outcome of each initiative tracked after it goes live?",
     "Is AI named as a lever in how the business plans to grow or save?"],desc:["A Yes means each effort is tied to a business goal, not pursued because AI is interesting.", "A Yes means the priority use cases have defined, measurable outcomes attached.", "A Yes means results are measured after go-live, not assumed; value is actually checked.", "A Yes means AI appears in the business plan as a lever to grow or save, with numbers."],dep:[null, null, 1, null],abr:[{q:"How well is AI tied to business value?",d:"Whether each effort is justified and measurable. None: AI is pursued for its own sake. Some: justified against a goal, but not measurable. Most: priority use cases linked to measurable outcomes. All: value is defined up front for every effort."},{q:"How well is that value tracked and planned for?",d:"Whether outcomes are followed up and built into planning. None: outcomes are never checked after go-live. Some: tracked occasionally. Most: each initiative's outcome is tracked live. All: AI is named as a lever in how the business plans to grow or save."}]},
-  {k:'prioritise',name:'Prioritisation & decisions',sc:[2,2,2,2],levels:[
+  {k:'prioritise',name:'Prioritisation & decisions',estem:"How do you decide which AI ideas to pursue?",elab:["No way to decide","Case by case","Basic value/effort ranking","Regular, evidence-based","Live portfolio"],sc:[2,2,2,2],levels:[
     "No way to decide what to do; the loudest voice wins.",
     "Decisions are made case by case, without criteria.",
     "A basic way to rank ideas by value and effort.",
@@ -846,181 +885,181 @@ const RUBRICS={
     "Is prioritisation done on a regular basis, not just once?",
     "Is the set of initiatives revisited and reprioritised as results come in?"],desc:["A Yes means there is an agreed method for choosing ideas, not whoever pushes hardest.", "A Yes means ideas are scored on concrete criteria like value and effort, not opinion.", "A Yes means prioritisation happens on a rhythm, not once at the start.", "A Yes means the list is revisited and reordered as results and needs change."],dep:[null, null, 0, 0],abr:[{q:"How disciplined is the way AI ideas are chosen?",d:"Whether selection is structured or driven by who pushes hardest. None: whoever pushes hardest wins. Some: a shared way to decide, but informal. Most: ideas ranked by something concrete such as value and effort. All: a clear, agreed prioritisation method."},{q:"How regularly is the portfolio reprioritised?",d:"Whether priorities are revisited as results come in. None: prioritisation happened once, if at all. Some: revisited occasionally. Most: reprioritised on a regular basis. All: the initiative set is continuously revisited as results come in."}]}],
  data:[
-  {k:'quality',name:'Quality & reliability',sc:[4,2,4,4],levels:[
+  {k:'quality',name:'Quality & reliability',estem:"How reliable is the data you would use for AI?",elab:["Often wrong, distrusted","Cleaned by hand","Mostly clean, some checks","Automated checks","Trusted by default"],sc:[4,2,4,4],levels:[
     "Data is often wrong, duplicated or missing, and no one trusts it.",
     "Known quality problems, cleaned by hand each time the data is used.",
     "Key datasets are reasonably clean, with some checks in place.",
     "Automated quality checks on the main datasets; issues are rare and caught.",
     "Quality is measured and monitored; data is trusted for decisions by default."],diag:["Is the data behind key decisions broadly trusted, rather than people keeping their own copies?", "Are there checks in place that catch obvious errors before the data is used?", "Are quality checks automated on the main datasets, rather than done by hand?", "Is data quality measured and monitored as an ongoing metric?"],desc:["A Yes means people rely on the shared data, rather than private spreadsheets they trust more.", "A Yes means checks catch obvious errors before the data is used.", "A Yes means quality checks run automatically on the main datasets, not only by hand.", "A Yes means data quality is tracked as a metric over time, not just felt."],dep:[null, null, 1, null],abr:[{q:"How much is your key data trusted and checked?",d:"Whether people rely on shared data and errors get caught. None: people keep their own copies, no checks. Some: broadly trusted, but checks are ad hoc. Most: trusted, with checks that catch obvious errors before use. All: trusted across the board, with checks built into the flow."},{q:"How systematically is data quality maintained?",d:"Whether quality is automated and measured over time. None: quality is not measured. Some: some manual checks. Most: automated checks on the main datasets. All: quality is measured and monitored as an ongoing metric."}]},
-  {k:'access',name:'Access & availability',sc:[4,4,4,2],levels:[
+  {k:'access',name:'Access & availability',estem:"How easily can you get and combine the data you need?",elab:["Locked in, manual export","Slow, manual joining","Some integrations","Mostly reachable","Flows freely"],sc:[4,4,4,2],levels:[
     "Data is locked in separate systems; getting it out is a manual export.",
     "Some data can be pulled, but joining sources is slow and manual.",
     "Key systems can be queried and a few integrations exist.",
     "Most important data is reachable through shared connections or a warehouse.",
     "Data flows freely across systems through managed, reusable connections."],diag:["Can the data you need be obtained without a manual export each time?", "Can the people and tools that need the data actually get it when required?", "Is most key data reachable from a shared store or warehouse, not scattered in silos?", "Does access run on clear permissions rather than ad hoc requests?"],desc:["A Yes means the data can be reached without asking someone to run an export each time.", "A Yes means the people and tools that need the data can actually get it when required.", "A Yes means most key data lives in a shared store or warehouse, not scattered in silos.", "A Yes means access runs on clear permissions, not ad hoc requests and exceptions."],dep:[null, null, null, null],abr:[{q:"How easily can the right people and tools get data?",d:"Whether data comes without manual effort each time. None: every use needs a manual export. Some: obtainable, but slow or partial. Most: people and tools can get the data they need when required. All: data is available on demand wherever it is needed."},{q:"How well is data consolidated and access governed?",d:"Whether data is in one place and access is controlled. None: scattered in silos, access ad hoc. Some: some in a shared store, access by request. Most: most key data reachable from a shared store, with clear permissions. All: a single governed store with permissions by default."}]},
-  {k:'gov',name:'Data ownership & control',sc:[4,4,4,4],levels:[
+  {k:'gov',name:'Data ownership & control',estem:"How is data owned and controlled?",elab:["No ownership","On paper only","Named owners, basic policies","Enforced across key data","Run as a data product"],sc:[4,4,4,4],levels:[
     "No ownership; data sits wherever it lands and the rules are unclear.",
     "Informal ownership; policies exist on paper but are not followed.",
     "Named owners for key datasets, with basic access and retention policies.",
     "Clear ownership and enforced policies across the important data.",
     "Data is run as a managed product, with lineage, access control and stewardship."],diag:["Do key datasets have a named owner accountable for them?", "Is who may access each dataset defined and controlled?", "Is the origin and lineage of key data known and tracked?", "Is data maintained as a managed asset over time, not left to decay?"],desc:["A Yes means each key dataset has a named owner accountable for it, not shared by default.", "A Yes means who may access each dataset is defined and actually controlled.", "A Yes means the origin and lineage of key data is known, not a mystery.", "A Yes means data is maintained as a managed asset over time, not left to decay."],dep:[null, null, null, 0],abr:[{q:"Across your key datasets, how many have an accountable owner and controlled access?",d:"Coverage of ownership and access control across key datasets. None: data sits wherever it lands, no owners, access unclear. Some: a few have owners, access mostly uncontrolled. Most: most key datasets have named owners and controlled access. All: every key dataset has an accountable owner with enforced access."},{q:"Across your key datasets, how well is origin known and upkeep maintained?",d:"Coverage of lineage and active maintenance across key datasets. None: lineage is a mystery and data is left to decay. Some: origin known for a few, little active maintenance. Most: lineage tracked for most, and maintained over time. All: full lineage and stewardship, data run as a managed asset."}]},
-  {k:'coverage',name:'Coverage of what matters',sc:[4,4,4,2],levels:[
+  {k:'coverage',name:'Coverage of what matters',estem:"How much of what you need to decide is actually captured as data?",elab:["Largely not captured","Big gaps","Main processes covered","Most decisions covered","Comprehensive"],sc:[4,4,4,2],levels:[
     "The data needed for decisions is largely not captured.",
     "Some of it is captured, with big gaps in the areas that matter.",
     "The main processes are covered; some important signals are still missing.",
     "Most decisions are backed by data that is actually captured.",
     "Comprehensive coverage; new data needs are added quickly and deliberately."],diag:["Is the data behind your main processes actually captured somewhere usable?", "Are the important decisions mostly backed by data you hold?", "Are the known blind spots small rather than significant?", "When a new data need appears, is it added deliberately rather than left?"],desc:["A Yes means the data behind your main processes is actually recorded somewhere usable.", "A Yes means most important decisions can be traced to data you hold.", "A Yes means the gaps are minor, not significant holes in areas that drive decisions.", "A Yes means new data needs are captured on purpose, not left until someone notices."],dep:[null, null, null, null],abr:[{q:"How much of what matters is actually captured in data?",d:"Whether key processes and decisions are backed by data you hold. None: key processes leave no usable data. Some: some captured, but big gaps. Most: main processes captured and most decisions backed by data you hold. All: the data behind what matters is captured and usable."},{q:"How small are the blind spots, and how are new needs handled?",d:"Whether gaps are minor and new data needs get added. None: significant blind spots, new needs ignored. Some: known gaps, filled reactively. Most: blind spots are small and new needs are added deliberately. All: coverage is actively managed as needs change."}]},
-  {k:'fresh',name:'Freshness & pipelines',sc:[2,4,4,4],levels:[
+  {k:'fresh',name:'Freshness & pipelines',estem:"How current is your data, and how is it refreshed?",elab:["Stale, on request","Slow manual refresh","Regular, mostly manual","Automated pipelines","Near real-time"],sc:[2,4,4,4],levels:[
     "Data is stale, or gathered by hand only when someone asks.",
     "Refreshed manually on a slow, irregular cycle.",
     "Regular refresh for key datasets, but mostly manual.",
     "Automated pipelines keep the main data current on a schedule.",
     "Near real-time where it matters, with monitored, resilient pipelines."],diag:["Is data refreshed on a regular schedule, not only when someone asks?", "Is the main data kept current by automated pipelines rather than by hand?", "Is data current enough for the decisions that rely on it?", "Where it matters, is data near real-time, on monitored pipelines?"],desc:["A Yes means data refreshes on a schedule, not only when someone asks for it.", "A Yes means pipelines keep the main data current automatically, not by hand.", "A Yes means the data is fresh enough for the decisions that depend on it.", "A Yes means, where it matters, data is near real-time on monitored pipelines."],dep:[null, null, null, null],abr:[{q:"How current is your data kept, and how?",d:"Whether data is refreshed on schedule and by automation. None: refreshed only when someone asks. Some: refreshed on a schedule, but by hand. Most: kept current by automated pipelines. All: automated pipelines keep data continuously current."},{q:"How well does freshness match what decisions need?",d:"Whether data is current enough, and real-time where it matters. None: data is often stale for the decisions using it. Some: current enough for some. Most: current enough for the decisions that rely on it. All: near real-time where it matters, on monitored pipelines."}]}],
  tech:[
-  {k:'environment',name:'Environment & infrastructure',sc:[2,2,4,4],levels:[
+  {k:'environment',name:'Environment & infrastructure',estem:"What working environment do you have for building with AI?",elab:["On personal laptops","Basic cloud, no standard","Defined for one team","Shared platform","On-demand, as a service"],sc:[2,2,4,4],levels:[
     "No proper environment; work happens on individual laptops.",
     "Basic cloud access, but no standard setup.",
     "A defined working environment for one team or area.",
     "A shared, maintained platform used across teams.",
-    "Infrastructure provisioned on demand, as a standard service."],diag:["Is there a defined place to build and run, beyond individual machines?", "Is that environment shared and maintained, rather than one person's setup?", "Is it used across teams, not just one area?", "Can infrastructure be provisioned on demand, as a standard service?"],desc:["A Yes means there is a proper place to build and run, beyond individual laptops.", "A Yes means the environment is shared and maintained, not one person's personal setup.", "A Yes means more than one team uses it, not a single isolated area.", "A Yes means infrastructure can be provisioned on demand, as a standard service."],dep:[null, 0, 0, null],abr:[{q:"How established is your build-and-run environment?",d:"Whether there is a shared, maintained place to build and run. None: work happens on individual machines. Some: a defined environment, but one person's setup. Most: a shared, maintained environment. All: a robust standard environment owned by the business."},{q:"How broadly and easily is it available?",d:"Whether it is used across teams and provisioned on demand. None: not really shared. Some: used by one area. Most: used across teams. All: infrastructure provisioned on demand as a standard service."}]},
-  {k:'tooling',name:'Tools & tooling',sc:[2,4,4,4],levels:[
+    "Infrastructure provisioned on demand, as a standard service."],diag:["Is there a defined place to build and run, beyond individual machines?", "Is that environment shared and maintained, rather than one person's setup?", "Is it used across teams, not just one area?", "Can infrastructure be provisioned on demand, as a standard service?"],desc:["A Yes means there is a proper place to build and run, beyond individual laptops.", "A Yes means the environment is shared and maintained, not one person's personal setup.", "A Yes means more than one team uses it, not a single isolated area.", "A Yes means infrastructure can be provisioned on demand, as a standard service."],dep:[null, 0, 0, null],abr:[{q:"How established is your build-and-run environment?",d:"Whether there is a shared, maintained place to build and run. None: work happens on individual machines. Some: a defined environment, but one person's setup. Most: a shared, maintained environment. All: a solid, standard environment owned by the business."},{q:"How broadly and easily is it available?",d:"Whether it is used across teams and provisioned on demand. None: not really shared. Some: used by one area. Most: used across teams. All: infrastructure provisioned on demand as a standard service."}]},
+  {k:'tooling',name:'Tools & tooling',estem:"What tools do teams use to build?",elab:["Whatever's to hand","Free tools, inconsistent","Standard in one area","Common, supported toolset","Curated, kept current"],sc:[2,4,4,4],levels:[
     "No dedicated tools; whatever is to hand.",
     "A few free or trial tools, used inconsistently.",
     "A standard toolset for building in the main area.",
     "A supported, common toolset across the business.",
     "Tooling is curated and kept current as the field moves."],diag:["Is there a standard toolset for building, rather than whatever is to hand?", "Is that toolset supported and common across the teams that use it?", "Is it consistent across the business, not per-team improvisation?", "Is tooling curated and kept current as the field moves?"],desc:["A Yes means there is a standard set of tools for building, not whatever is to hand.", "A Yes means the toolset is supported and shared across the teams that use it.", "A Yes means tooling is consistent across the business, not improvised per team.", "A Yes means tools are reviewed and kept current as the field moves."],dep:[null, 0, 0, 0],abr:[{q:"How standard and supported is the build toolset?",d:"Whether there is a common, supported toolset. None: whatever is to hand. Some: a standard toolset, but not well supported. Most: a supported toolset common across the teams that use it. All: a well-supported standard toolset."},{q:"How consistent and current is tooling across the business?",d:"Whether tooling is uniform and kept up to date. None: per-team improvisation. Some: consistent in places. Most: consistent across the business. All: tooling is curated and kept current as the field moves."}]},
-  {k:'integration',name:'Integration & connectivity',sc:[2,4,4,4],levels:[
+  {k:'integration',name:'Integration & connectivity',estem:"How well do your systems connect to each other?",elab:["Nothing connected","One-off connections","Key systems connected","Mostly connected","Connected by default"],sc:[2,4,4,4],levels:[
     "Nothing is connected; everything is manual.",
     "One-off connections built by hand when needed.",
     "Key systems can be reached through defined interfaces.",
     "Most systems connect through managed, reusable interfaces.",
     "Systems interconnect by default, through a shared service layer."],diag:["Are connections between systems built to last, not one-off each time?", "Can key systems be reached through defined interfaces or APIs?", "Do most systems connect through managed, reusable interfaces?", "Do systems interconnect by default, through a shared service layer?"],desc:["A Yes means system connections are built to last, not rebuilt one-off each time.", "A Yes means key systems are reachable through defined interfaces or APIs.", "A Yes means most systems connect through managed, reusable interfaces.", "A Yes means systems interconnect by default, through a shared service layer."],dep:[null, null, 1, null],abr:[{q:"How durable and accessible are system connections?",d:"Whether systems connect through lasting, defined interfaces. None: one-off connections each time. Some: built to last, but few interfaces. Most: key systems reachable through defined interfaces or APIs. All: clean, documented interfaces are the norm."},{q:"How managed and reusable is connectivity?",d:"Whether connections are reusable and centrally managed. None: no reuse, point to point. Some: some reusable interfaces. Most: most systems connect through managed, reusable interfaces. All: systems interconnect by default through a shared service layer."}]},
-  {k:'scale',name:'Scalability & reliability',sc:[2,2,4,4],levels:[
+  {k:'scale',name:'Scalability & reliability',estem:"How well does what you build hold up under real use?",elab:["Cannot handle load","Demo only","Reliable for one use","Scales, monitored","Elastic and resilient"],sc:[2,2,4,4],levels:[
     "Anything built cannot handle real load.",
     "Works for a demo, but falls over in real use.",
     "Runs reliably for one production use case.",
     "Scales to several production workloads, and is monitored.",
     "Elastic and resilient, with capacity managed automatically."],diag:["Can what you build handle real usage, not just a demo?", "Does at least one thing run reliably in production?", "Does it scale to several production workloads, with monitoring?", "Is the platform elastic and resilient, with capacity managed automatically?"],desc:["A Yes means what you build can handle real load, not just a demo.", "A Yes means at least one thing runs reliably in production.", "A Yes means it scales to several production workloads, with monitoring.", "A Yes means capacity is elastic and resilient, managed automatically."],dep:[null, null, 1, null],abr:[{q:"How production-ready is what you build?",d:"Whether builds handle real usage and run in production. None: demos only. Some: can handle real usage. Most: at least one thing runs reliably in production. All: multiple things run dependably in production."},{q:"How well does it scale and stay reliable?",d:"Whether it scales across workloads and stays resilient. None: no real scaling or monitoring. Some: some monitoring. Most: scales to several production workloads, with monitoring. All: elastic and resilient, with capacity managed automatically."}]},
-  {k:'security',name:'Security & separation',sc:[2,2,4,4],levels:[
+  {k:'security',name:'Security & separation',estem:"How are security and the split between test and live handled?",elab:["No separation or review","Informal, afterthought","Basic controls","Enforced, reviewed","Built in, tested"],sc:[2,2,4,4],levels:[
     "No separation of test and live, and no security review.",
     "Informal separation; security is an afterthought.",
     "Basic separation of environments and access controls.",
     "Enforced separation, access control and security review.",
     "Security is built in and continuously tested."],diag:["Are test and live environments kept separate?", "Are there access controls on who can do what?", "Is separation enforced, with security reviewed before things go live?", "Is security built in and continuously tested, not a one-off check?"],desc:["A Yes means test and live environments are kept properly separate.", "A Yes means there are real controls on who can access and do what.", "A Yes means separation is enforced and security is reviewed before go-live.", "A Yes means security is built in and continuously tested, not a one-off check."],dep:[null, null, 0, null],abr:[{q:"How much basic security is in place?",d:"Whether environments are separated and access is controlled. None: test and live mixed, no access control. Some: environments separated. Most: environments separated, with access controls on who can do what. All: strong access control as standard."},{q:"How rigorously is security enforced and tested?",d:"Whether security is reviewed before go-live and tested continuously. None: security is not reviewed. Some: checked occasionally. Most: separation enforced and security reviewed before go-live. All: security is built in and continuously tested."}]}],
  talent:[
-  {k:'capability',name:'In-house capability',sc:[2,2,4,4],levels:[
+  {k:'capability',name:'In-house capability',estem:"How much can you build with AI using your own people?",elab:["None","One or two, partial","Small team, one area","Capable across areas","Deep, leading edge"],sc:[2,2,4,4],levels:[
     "No in-house capability at all.",
     "One or two individuals with partial skills.",
     "A small team that can build in one area.",
     "Capable teams that can build and maintain across areas.",
     "Deep capability, including at the leading edge."],diag:["Is there anyone in-house who can build, not only outside help?", "Is there a team that can build and run in at least one area?", "Can teams build and maintain across more than one area?", "Does capability reach the leading edge of the field?"],desc:["A Yes means someone in-house can build, not only external help.", "A Yes means a team can build and run in at least one area.", "A Yes means teams can build and maintain across more than one area.", "A Yes means capability reaches the leading edge, not just the basics."],dep:[null, 0, 1, 2],abr:[{q:"How much can you build in-house?",d:"Whether there is internal build capability, not only outside help. None: reliant on outside help. Some: someone in-house can build. Most: a team can build and run in at least one area. All: strong in-house build capability."},{q:"How broad and advanced is that capability?",d:"Whether capability spans areas and reaches the leading edge. None: confined to one person or area. Some: one area covered. Most: teams build and maintain across more than one area. All: capability reaches the leading edge of the field."}]},
-  {k:'reliance',name:'Dependency & concentration risk',sc:[2,2,2,2],levels:[
+  {k:'reliance',name:'Dependency & concentration risk',estem:"How dependent are you on outside help?",elab:["Fully dependent","Help for each build","Run alone, build with help","Largely self-sufficient","Self-sufficient"],sc:[2,2,2,2],levels:[
     "Fully dependent on outside help for everything.",
     "Outside help is needed for each new build.",
     "Can run what exists, but builds with outside help.",
     "Largely self-sufficient; outside help is a choice, not a need.",
     "Self-sufficient, and sets the standard others follow."],diag:["Are you free from depending on a single external vendor or partner for AI?", "Would the work continue if a key supplier or contractor withdrew?", "Do you retain ownership of the models, data and know-how, rather than the vendor?", "Is outside help a deliberate choice for specific work, not a blanket dependency?"],desc:["A Yes means you are not dependent on a single external vendor or partner for AI.", "A Yes means the work would continue if a key supplier or contractor withdrew.", "A Yes means you own the models, data and know-how, not the vendor holding them.", "A Yes means outside help is a deliberate choice for specific work, not a blanket dependency."],dep:[null, null, null, null],abr:[{q:"How free are you from depending on one outside party?",d:"Whether the work can survive losing a key supplier. None: reliant on a single external vendor or partner. Some: dependent, but some fallback. Most: the work would continue if a key supplier withdrew. All: no single point of external dependence."},{q:"How much do you retain ownership and control?",d:"Whether you own the models, data and know-how. None: the vendor holds the models, data and know-how. Some: partial ownership. Most: you retain the models, data and know-how. All: outside help is a deliberate choice for specific work, not a blanket dependency."}]},
-  {k:'breadth',name:'Breadth across the business',sc:[2,4,4,4],levels:[
+  {k:'breadth',name:'Breadth across the business',estem:"How widely are AI skills spread across the business?",elab:["One person, or none","Single team","In priority areas","Across most functions","Broad, incl non-technical"],sc:[2,4,4,4],levels:[
     "Skills sit in one person, or nowhere.",
     "Concentrated in a single team or function.",
     "Present in the priority areas.",
     "Spread across most functions that need it.",
     "AI literacy is broad, including non-technical staff."],diag:["Do AI skills sit in more than one person?", "Are skills present in the priority areas that need them?", "Are skills spread across most functions that need them?", "Is AI literacy broad, including non-technical staff?"],desc:["A Yes means AI skills sit in more than one person, not a single individual.", "A Yes means the skills are present in the priority areas that need them.", "A Yes means skills are spread across most functions that need them.", "A Yes means AI literacy is broad, reaching non-technical staff too."],dep:[null, 0, 1, 2],abr:[{q:"How far do AI skills reach beyond a single person?",d:"Whether skills exist in more than one person and in priority areas. None: skills sit in one person. Some: more than one, but gaps in priority areas. Most: skills present in the priority areas that need them. All: skills solidly cover the areas that matter."},{q:"How broadly spread is AI literacy?",d:"Whether skills span functions, including non-technical staff. None: confined to a corner. Some: a few functions. Most: spread across most functions that need it. All: AI literacy is broad, including non-technical staff."}]},
-  {k:'develop',name:'Learning & development',sc:[2,2,2,4],levels:[
+  {k:'develop',name:'Learning & development',estem:"How do people build AI skills?",elab:["No training","Ad hoc training","Basic path, key roles","Structured programme","Continuous development"],sc:[2,2,2,4],levels:[
     "No training; people learn on their own, if at all.",
     "Occasional, ad hoc training.",
     "A basic training path for key roles.",
     "A structured programme with clear progression.",
     "Continuous development, tied to how the field evolves."],diag:["Is there any training for AI skills, beyond people self-teaching?", "Is there a defined training path for the key roles?", "Is there a structured programme with clear progression?", "Is development continuous, tied to how the field evolves?"],desc:["A Yes means there is real training for AI skills, beyond people self-teaching.", "A Yes means there is a defined training path for the key roles.", "A Yes means a structured programme with clear progression exists.", "A Yes means development is continuous, tracking how the field evolves."],dep:[null, 0, 1, 2],abr:[{q:"How established is AI training?",d:"Whether there is defined training beyond self-teaching. None: people self-teach. Some: some training available. Most: a defined training path for the key roles. All: training is a normal expectation for those roles."},{q:"How advanced and continuous is development?",d:"Whether there is structured progression that keeps pace. None: nothing structured. Some: a basic programme. Most: a structured programme with clear progression. All: development is continuous, tied to how the field evolves."}]},
-  {k:'resilience',name:'Retention & resilience',sc:[2,2,2,2],levels:[
+  {k:'resilience',name:'Retention & resilience',estem:"How resilient is your capability if key people leave?",elab:["Rests on one person","Fragile, few people","Some redundancy","Covered, with succession","Renews itself"],sc:[2,2,2,2],levels:[
     "Capability would vanish if one person left.",
     "Fragile; it depends on a few individuals.",
     "Some redundancy in the key skills.",
     "Roles are covered, with succession in mind.",
-    "Capability renews itself and is not person-dependent."],diag:["Would capability survive if one key person left?", "Is there redundancy in the key skills?", "Are the roles covered, with succession in mind?", "Does capability renew itself, independent of individuals?"],desc:["A Yes means capability would survive one key person leaving.", "A Yes means there is redundancy in the key skills, not a single point of failure.", "A Yes means roles are covered with succession in mind.", "A Yes means capability renews itself, independent of specific individuals."],dep:[null, null, null, null],abr:[{q:"How well would capability survive losing a key person?",d:"Whether skills are held by more than one person. None: it would not, one person holds it. Some: some resilience, but fragile. Most: there is redundancy in the key skills. All: no single person is a point of failure."},{q:"How well is capability sustained over time?",d:"Whether roles are covered and capability renews. None: no succession thinking. Some: partial cover. Most: roles are covered, with succession in mind. All: capability renews itself, independent of individuals."}]},{k:'fluency',name:'Workforce AI fluency',sc:[2,2,4,4],levels:["Only a central team can build anything with AI.","A few people outside the core team can build simple AI-assisted steps.","Staff in some teams build and integrate AI into their own processes.","Across most in-scope teams, people build and integrate AI themselves.","AI-assisted work is the norm; staff routinely build and improve it."],diag:["Can anyone outside a central AI team build a working AI-assisted workflow without engineering help?","Can staff integrate AI tools into the specific processes they own?","Across the teams in scope, how widely can people build and integrate AI into their own work?","How much routine work already runs through AI-assisted steps that staff themselves built or configured?"],desc:["A Yes means someone outside a central AI team can build a working AI-assisted workflow without engineering help.","A Yes means staff can wire AI tools into the specific processes they own, not just use a chatbot.","None, Some, Most or All of the in-scope teams can build and integrate AI into their own work; record the honest coverage.","None, Some, Most or All of routine work already runs through AI-assisted steps that staff built or configured."],dep:[null,0,null,2],abr:[{q:"How far can staff build AI themselves, without engineering help?",d:"Whether people outside a central team can build and integrate AI. None: only a central team can build. Some: a few outside it can build simple steps. Most: staff can integrate AI into the specific processes they own. All: building with AI is a normal skill across the workforce."},{q:"How much routine work already runs on staff-built AI?",d:"How widely staff-built AI is embedded in everyday work. None: none, central team only. Some: a little, in a few teams. Most: staff across many teams build and integrate AI into their work. All: routine work commonly runs through AI steps that staff built themselves."}]}],
+    "Capability renews itself and is not person-dependent."],diag:["Would capability survive if one key person left?", "Is there redundancy in the key skills?", "Are the roles covered, with succession in mind?", "Does capability renew itself, independent of individuals?"],desc:["A Yes means capability would survive one key person leaving.", "A Yes means there is redundancy in the key skills, not a single point of failure.", "A Yes means roles are covered with succession in mind.", "A Yes means capability renews itself, independent of specific individuals."],dep:[null, null, null, null],abr:[{q:"How well would capability survive losing a key person?",d:"Whether skills are held by more than one person. None: it would not, one person holds it. Some: some resilience, but fragile. Most: there is redundancy in the key skills. All: no single person is a point of failure."},{q:"How well is capability sustained over time?",d:"Whether roles are covered and capability renews. None: no succession thinking. Some: partial cover. Most: roles are covered, with succession in mind. All: capability renews itself, independent of individuals."}]},{k:'fluency',name:'Workforce AI fluency',estem:"How widely do staff build and use AI in their own work?",elab:["Central team only","A few build simple steps","Some teams build their own","Most teams build","The norm"],sc:[2,2,4,4],levels:["Only a central team can build anything with AI.","A few people outside the core team can build simple AI-assisted steps.","Staff in some teams build and integrate AI into their own processes.","Across most in-scope teams, people build and integrate AI themselves.","AI-assisted work is the norm; staff routinely build and improve it."],diag:["Can anyone outside a central AI team build a working AI-assisted workflow without engineering help?","Can staff integrate AI tools into the specific processes they own?","Across the teams in scope, how widely can people build and integrate AI into their own work?","How much routine work already runs through AI-assisted steps that staff themselves built or configured?"],desc:["A Yes means someone outside a central AI team can build a working AI-assisted workflow without engineering help.","A Yes means staff can wire AI tools into the specific processes they own, not just use a chatbot.","None, Some, Most or All of the in-scope teams can build and integrate AI into their own work; record the honest coverage.","None, Some, Most or All of routine work already runs through AI-assisted steps that staff built or configured."],dep:[null,0,null,2],abr:[{q:"How far can staff build AI themselves, without engineering help?",d:"Whether people outside a central team can build and integrate AI. None: only a central team can build. Some: a few outside it can build simple steps. Most: staff can integrate AI into the specific processes they own. All: building with AI is a normal skill across the workforce."},{q:"How much routine work already runs on staff-built AI?",d:"How widely staff-built AI is embedded in everyday work. None: none, central team only. Some: a little, in a few teams. Most: staff across many teams build and integrate AI into their work. All: routine work commonly runs through AI steps that staff built themselves."}]}],
  governance:[
-  {k:'policy',name:'Policy & standards',sc:[2,2,4,4],levels:[
+  {k:'policy',name:'Policy & standards',estem:"What policy governs how AI may be used?",elab:["No policy","Informal rules","Written for main uses","Enforced across all use","Kept current"],sc:[2,2,4,4],levels:[
     "No policy on how AI may be used.",
     "Informal rules, understood by only a few.",
     "A written policy exists for the main uses.",
     "Enforced standards across all AI use.",
     "Policy is kept current as tools and rules change."],diag:["Is there a shared understanding of how AI, and the data it uses, may be used?", "Is that written down as a policy for the main uses?", "Are those standards enforced across all AI use, not just documented?", "Is the policy kept current as tools, data and rules change?"],desc:["A Yes means people share an understanding of how AI, and its data, may be used.", "A Yes means that is written down as a policy covering the main uses.", "A Yes means the standards are enforced across all AI use, not just documented.", "A Yes means the policy is updated as tools, data and rules change."],dep:[null, null, 1, 1],abr:[{q:"How well established is the AI usage policy?",d:"Whether there is a shared, written policy for AI and its data. None: no shared understanding of how AI and its data may be used. Some: an informal understanding, nothing written. Most: a written policy covering the main uses. All: a clear, well understood policy."},{q:"How well is the policy enforced and kept current?",d:"Whether the policy is applied and maintained. None: not enforced. Some: applied unevenly. Most: standards enforced across AI use, not just documented. All: the policy is enforced and kept current as tools, data and rules change."}]},
-  {k:'risk',name:'Risk assessment',sc:[2,2,4,4],levels:[
+  {k:'risk',name:'Risk assessment',estem:"How do you assess the risk of an AI use?",elab:["No way to judge risk","Informal, case by case","Basic risk classing","Every use assessed","Monitored continuously"],sc:[2,2,4,4],levels:[
     "No way to judge the risk of an AI use.",
     "Risk is considered informally, case by case.",
     "A basic way to assess and classify risk.",
     "Every use is risk-assessed before it goes live.",
     "Risk is monitored continuously, not just at the start."],diag:["Is the risk of an AI use considered before it goes ahead?", "Is there a basic, consistent way to assess and classify that risk?", "Is every use risk-assessed before it goes live?", "Is risk monitored continuously, not only at the start?"],desc:["A Yes means the risk of an AI use is considered before it goes ahead.", "A Yes means there is a consistent way to assess and classify that risk.", "A Yes means every use is risk-assessed before it goes live.", "A Yes means risk is monitored continuously, not judged only at the start."],dep:[null, null, 1, 1],abr:[{q:"How consistently is AI risk assessed up front?",d:"Whether risk is considered before use, in a consistent way. None: risk is not considered before use. Some: considered, but inconsistently. Most: a basic, consistent way to assess and classify risk. All: risk assessment is a standard first step."},{q:"How completely and continuously is risk covered?",d:"Whether every use is assessed and risk is monitored. None: little coverage. Some: some uses assessed. Most: every use is risk assessed before it goes live. All: risk is monitored continuously, not only at the start."}]},
-  {k:'oversight',name:'Risk oversight & accountability',sc:[2,2,2,2],levels:[
+  {k:'oversight',name:'Risk oversight & accountability',estem:"Who oversees AI risk, and how?",elab:["No one accountable","Unclear accountability","Named owner, register","Owners, register, review","Independent oversight"],sc:[2,2,2,2],levels:[
     "No one is accountable for AI risk.",
     "Accountability is unclear or loosely shared.",
     "A named owner and a register of AI in use.",
     "Clear owners, a live register, and regular review.",
     "Independent oversight, with clear escalation routes."],diag:["Is someone accountable for AI risk?", "Is there a register of the AI in use, with a named owner?", "Are there clear owners, a live register and regular review?", "Is there independent oversight, with clear escalation routes?"],desc:["A Yes means someone is clearly accountable for AI risk.", "A Yes means there is a register of the AI in use, with named owners.", "A Yes means clear owners, a live register and regular review are in place.", "A Yes means there is independent oversight with clear escalation routes."],dep:[null, null, 1, 0],abr:[{q:"How clear is accountability for AI risk?",d:"Whether someone owns AI risk and what is in use is known. None: no one is accountable. Some: someone is, informally. Most: a named owner and a register of the AI in use. All: accountability is unambiguous and documented."},{q:"How mature is oversight?",d:"Whether review is regular and oversight is independent. None: no real oversight. Some: occasional review. Most: clear owners, a live register and regular review. All: independent oversight, with clear escalation routes."}]},
-  {k:'legal',name:'Legal & regulatory compliance',sc:[2,2,4,2],levels:[
+  {k:'legal',name:'Legal & regulatory compliance',estem:"How is legal and regulatory compliance checked?",elab:["No check","Assumed, not verified","Key uses checked","Verified for all uses","Designed in, tracked"],sc:[2,2,4,2],levels:[
     "No check against relevant laws or rules.",
     "Assumed to comply, but never verified.",
     "Key uses are checked against the main obligations.",
     "Compliance is verified and documented for all uses.",
-    "Compliance is designed in and tracked as rules evolve."],diag:["Are relevant laws and rules identified for AI use?", "Are the key uses checked against the main legal obligations?", "Is compliance verified and documented for all uses?", "Is compliance designed in and tracked as rules evolve?"],desc:["A Yes means the relevant laws and rules for AI use are identified.", "A Yes means the key uses are checked against the main legal obligations.", "A Yes means compliance is verified and documented for all uses.", "A Yes means compliance is designed in and tracked as rules evolve."],dep:[null, 0, 1, null]},
-  {k:'fairness',name:'Fairness, transparency & ethics',sc:[2,2,4,4],levels:[
+    "Compliance is designed in and tracked as rules evolve."],diag:["Are relevant laws and rules identified for AI use?", "Are the key uses checked against the main legal obligations?", "Is compliance verified and documented for all uses?", "Is compliance designed in and tracked as rules evolve?"],desc:["A Yes means the relevant laws and rules for AI use are identified.", "A Yes means the key uses are checked against the main legal obligations.", "A Yes means compliance is verified and documented for all uses.", "A Yes means compliance is designed in and tracked as rules evolve."],dep:[null, 0, 1, null],abr:[{q:"How well are legal obligations identified and checked?",d:"Whether relevant laws are known and uses are checked. None: relevant laws not identified. Some: identified, but uses not checked. Most: the key uses are checked against the main legal obligations. All: obligations are well understood and applied."},{q:"How thoroughly is compliance verified and sustained?",d:"Whether compliance is documented and tracked as rules change. None: compliance not verified. Some: verified for some uses. Most: compliance verified and documented for all uses. All: compliance is designed in and tracked as rules evolve."}]},
+  {k:'fairness',name:'Fairness, transparency & ethics',estem:"How are fairness, bias and explainability handled?",elab:["Not considered","Raised, not acted on","Checked, higher-risk uses","Assessed as standard","Routine ethical review"],sc:[2,2,4,4],levels:[
     "No consideration of bias, fairness or explainability.",
     "Raised occasionally, but not acted on.",
     "Checked for the higher-risk uses.",
     "Fairness and transparency are assessed as standard.",
-    "Ethical review is routine, with the ability to explain decisions."],diag:["Are bias, fairness and explainability ever considered?", "Are they checked for the higher-risk uses?", "Are fairness and transparency assessed as standard?", "Is ethical review routine, with the ability to explain decisions?"],desc:["A Yes means bias, fairness and explainability are actually considered.", "A Yes means they are checked for the higher-risk uses.", "A Yes means fairness and transparency are assessed as standard practice.", "A Yes means ethical review is routine and decisions can be explained."],dep:[null, 0, 1, 2],abr:[{q:"How far are fairness and explainability considered?",d:"Whether bias, fairness and explainability are looked at. None: never considered. Some: considered occasionally. Most: checked for the higher-risk uses. All: considered wherever it matters."},{q:"How embedded is ethical review?",d:"Whether fairness and transparency are standard and routine. None: not part of the process. Some: ad hoc. Most: fairness and transparency assessed as standard. All: ethical review is routine, with the ability to explain decisions."}]},{k:'accountability',name:'Accountability & incentives',sc:[2,2,4,2],levels:["No leader is measured on AI outcomes.","AI appears in a leader's goals but without a measurable target.","At least one senior leader carries a measurable AI-linked objective.","Most in-scope leaders carry AI objectives, reviewed against delivery.","AI outcomes are embedded across leadership objectives and actively governed."],diag:["Are AI or automation outcomes written into the objectives of at least one named senior leader?","Do those objectives carry a measurable target, not just 'explore AI'?","Across the leaders whose areas are in scope, how many carry an AI-linked objective?","Are those objectives reviewed against actual delivery on a regular cadence?"],desc:["A Yes means at least one named senior leader has AI or automation outcomes in their objectives, not just an interest.","A Yes means those objectives carry a concrete, measurable target, not a vague ambition to explore AI.","None, Some, Most or All of the in-scope leaders carry an AI-linked objective; record the honest coverage.","A Yes means the objectives are checked against actual delivery on a set cadence, not set and forgotten."],dep:[null,0,null,0],abr:[{q:"Where AI is in a leader's objectives, how real is it?",d:"How firmly AI accountability sits in leaders' objectives. None: not in any leader's objectives. Some: in a leader's goals, but no measurable target. Most: a measurable AI-linked target is set. All: measurable and reviewed against actual delivery."},{q:"Across the leaders whose areas are in scope, how many carry an AI-linked objective?",d:"Coverage of AI-linked objectives across in-scope leaders. None: none of them. Some: a few. Most: many of the in-scope leaders. All: all of the in-scope leaders."}]}],
+    "Ethical review is routine, with the ability to explain decisions."],diag:["Are bias, fairness and explainability ever considered?", "Are they checked for the higher-risk uses?", "Are fairness and transparency assessed as standard?", "Is ethical review routine, with the ability to explain decisions?"],desc:["A Yes means bias, fairness and explainability are actually considered.", "A Yes means they are checked for the higher-risk uses.", "A Yes means fairness and transparency are assessed as standard practice.", "A Yes means ethical review is routine and decisions can be explained."],dep:[null, 0, 1, 2],abr:[{q:"How far are fairness and explainability considered?",d:"Whether bias, fairness and explainability are looked at. None: never considered. Some: considered occasionally. Most: checked for the higher-risk uses. All: considered wherever it matters."},{q:"How embedded is ethical review?",d:"Whether fairness and transparency are standard and routine. None: not part of the process. Some: ad hoc. Most: fairness and transparency assessed as standard. All: ethical review is routine, with the ability to explain decisions."}]},{k:'accountability',name:'Accountability & incentives',estem:"How are leaders held accountable for AI outcomes?",elab:["No leader measured","In goals, no target","One leader accountable","Most leaders accountable","Embedded, governed"],sc:[2,2,4,2],levels:["No leader is measured on AI outcomes.","AI appears in a leader's goals but without a measurable target.","At least one senior leader carries a measurable AI-linked objective.","Most in-scope leaders carry AI objectives, reviewed against delivery.","AI outcomes are embedded across leadership objectives and actively governed."],diag:["Are AI or automation outcomes written into the objectives of at least one named senior leader?","Do those objectives carry a measurable target, not just 'explore AI'?","Across the leaders whose areas are in scope, how many carry an AI-linked objective?","Are those objectives reviewed against actual delivery on a regular cadence?"],desc:["A Yes means at least one named senior leader has AI or automation outcomes in their objectives, not just an interest.","A Yes means those objectives carry a concrete, measurable target, not a vague ambition to explore AI.","None, Some, Most or All of the in-scope leaders carry an AI-linked objective; record the honest coverage.","A Yes means the objectives are checked against actual delivery on a set cadence, not set and forgotten."],dep:[null,0,null,0],abr:[{q:"Where AI is in a leader's objectives, how real is it?",d:"How firmly AI accountability sits in leaders' objectives. None: not in any leader's objectives. Some: in a leader's goals, but no measurable target. Most: a measurable AI-linked target is set. All: measurable and reviewed against actual delivery."},{q:"Across the leaders whose areas are in scope, how many carry an AI-linked objective?",d:"Coverage of AI-linked objectives across in-scope leaders. None: none of them. Some: a few. Most: many of the in-scope leaders. All: all of the in-scope leaders."}]}],
  adoption:[
-  {k:'usage',name:'Actual usage',sc:[2,2,4,4],levels:[
+  {k:'usage',name:'Actual usage',estem:"How much is what you have built actually used?",elab:["Built but idle","A few enthusiasts","Used for main tasks","Used widely","Routine and expected"],sc:[2,2,4,4],levels:[
     "Built but unused; it sits idle.",
     "Used by a few enthusiasts only.",
     "Used for the main tasks it was built for.",
     "Used widely across the intended users.",
     "Use is routine and expected; not using it is the exception."],diag:["Is what has been built actually used, not sitting idle?", "Is it used for the main tasks it was built for?", "Is it used widely across the intended users?", "Is use routine and expected, so not using it is the exception?"],desc:["A Yes means what was built is actually used, not sitting idle.", "A Yes means it is used for the main tasks it was built for.", "A Yes means it is used widely across the intended users.", "A Yes means use is routine and expected; not using it is the exception."],dep:[null, 0, 1, 2],abr:[{q:"How genuinely is what you built being used?",d:"Whether it is used for real, for its main tasks. None: it sits idle. Some: used a little. Most: used for the main tasks it was built for. All: firmly part of how those tasks get done."},{q:"How widely and habitually is it used?",d:"Whether use is broad and has become the norm. None: barely, by a few. Some: some of the intended users. Most: used widely across the intended users. All: use is routine and expected, not using it is the exception."}]},
-  {k:'trust',name:'Trust & confidence',sc:[2,2,4,4],levels:[
+  {k:'trust',name:'Trust & confidence',estem:"How much do staff trust the AI tools they have?",elab:["Distrusted, avoided","Scepticism outweighs use","Cautious acceptance","Broadly trusted","Relied on"],sc:[2,2,4,4],levels:[
     "Staff distrust or actively avoid it.",
     "Scepticism outweighs use.",
     "Cautious acceptance for straightforward tasks.",
     "Broadly trusted for its intended purpose.",
     "Trusted enough to rely on for important work."],diag:["Do staff use it rather than avoid it?", "Is it accepted for straightforward tasks?", "Is it broadly trusted for its intended purpose?", "Is it trusted enough to rely on for important work?"],desc:["A Yes means staff use it rather than work around or avoid it.", "A Yes means it is accepted for straightforward tasks at least.", "A Yes means it is broadly trusted for its intended purpose.", "A Yes means it is trusted enough to rely on for important work."],dep:[null, 0, 1, 2],abr:[{q:"How much do staff trust it for everyday tasks?",d:"Whether staff use it willingly for straightforward work. None: they avoid it. Some: used reluctantly. Most: accepted for straightforward tasks. All: the default choice for everyday work."},{q:"How far does trust extend to important work?",d:"Whether it is trusted for higher-stakes work. None: not trusted. Some: trusted for low-stakes only. Most: broadly trusted for its intended purpose. All: trusted enough to rely on for important work."}]},
-  {k:'change',name:'Change management',sc:[2,2,4,2],levels:[
+  {k:'change',name:'Change management',estem:"How well is the rollout of AI tools supported?",elab:["No support","Minimal comms","Basic at launch","Actively managed","Designed in"],sc:[2,2,4,2],levels:[
     "Tools are dropped on people with no support.",
     "Minimal communication; people work it out alone.",
     "Basic training and communication at launch.",
     "Change is actively managed, with support over time.",
     "Adoption is designed in from the start of each build."],diag:["Is any support or communication provided when tools are introduced?", "Is there training and communication at launch?", "Is change actively managed, with support over time?", "Is adoption designed in from the start of each build?"],desc:["A Yes means people get support or communication when tools are introduced.", "A Yes means there is training and communication at launch.", "A Yes means change is actively managed, with support over time.", "A Yes means adoption is planned from the start of each build."],dep:[null, 0, 1, 2],abr:[{q:"How well is change supported when tools land?",d:"Whether launches come with support and communication. None: tools appear with no support. Some: some communication. Most: training and communication at launch. All: launches are well supported."},{q:"How deliberately is adoption managed and designed in?",d:"Whether adoption is actively managed and built in. None: adoption is left to chance. Some: some follow-up. Most: change is actively managed, with support over time. All: adoption is designed in from the start of each build."}]},
-  {k:'workflow',name:'Workflow integration',sc:[2,4,4,4],levels:[
+  {k:'workflow',name:'Workflow integration',estem:"How far is AI built into how work actually gets done?",elab:["Bolted on","Used in parallel","Some workflows changed","Work redesigned","Old way retired"],sc:[2,4,4,4],levels:[
     "Bolted on; the old way of working continues alongside.",
     "Used in parallel, not really integrated.",
     "Some workflows have changed to use it.",
     "Work is genuinely redesigned around it.",
     "The new way is the only way; the old process is retired."],diag:["Is the tool used as part of the work, not just alongside it?", "Have some workflows actually changed to use it?", "Is work genuinely redesigned around it?", "Has the old way been retired, so the new way is the only way?"],desc:["A Yes means the tool is used within the work, not bolted on alongside it.", "A Yes means some workflows have actually changed to use it.", "A Yes means work is genuinely redesigned around it.", "A Yes means the old way has been retired; the new way is the only way."],dep:[null, 0, 1, 2],abr:[{q:"How far is it built into the actual workflow?",d:"Whether it is used within the work, not alongside it. None: used alongside the work, not within it. Some: used as part of the work. Most: some workflows have actually changed to use it. All: the workflow assumes it."},{q:"How fully has work been redesigned around it?",d:"Whether the old way has given way to the new. None: no redesign. Some: minor changes. Most: work is genuinely redesigned around it. All: the old way has been retired, so the new way is the only way."}]},
-  {k:'feedback',name:'Feedback & improvement',sc:[2,2,2,4],levels:[
+  {k:'feedback',name:'Feedback & improvement',estem:"How is user feedback collected and acted on?",elab:["None gathered","Occasional, ignored","Collected, main tools","Regular feedback loop","Users shape the roadmap"],sc:[2,2,2,4],levels:[
     "No feedback is gathered; problems go unheard.",
     "Feedback is occasional and not acted on.",
     "Feedback is collected for the main tools.",
     "A regular loop turns feedback into improvements.",
     "Continuous improvement, with users shaping the roadmap."],diag:["Is user feedback gathered at all?", "Is feedback collected for the main tools?", "Is there a regular loop that turns feedback into improvements?", "Do users shape the roadmap, with continuous improvement?"],desc:["A Yes means user feedback is gathered at all.", "A Yes means feedback is collected for the main tools.", "A Yes means a regular loop turns feedback into improvements.", "A Yes means users shape the roadmap, with continuous improvement."],dep:[null, 0, 1, 2],abr:[{q:"How systematically is user feedback gathered?",d:"Whether feedback is collected, and for the main tools. None: not gathered. Some: gathered occasionally. Most: collected for the main tools. All: gathered as a matter of course."},{q:"How well does feedback drive improvement?",d:"Whether feedback loops into real improvements. None: feedback goes nowhere. Some: acted on ad hoc. Most: a regular loop turns feedback into improvements. All: users shape the roadmap, with continuous improvement."}]}],
  delivery:[
-  {k:'route',name:'Route to production',sc:[2,2,4,4],levels:[
+  {k:'route',name:'Route to production',estem:"How reliably do AI pilots make it into live use?",elab:["Pilots never go live","Untested route","Proven once or twice","Defined, repeatable","Routine and fast"],sc:[2,2,4,4],levels:[
     "No route to production; pilots never go live.",
     "A route exists in theory, but is untested.",
     "A workable route, proven once or twice.",
     "A defined, repeatable route from idea to live.",
     "Getting to production is routine and fast."],diag:["Is there a defined route to get an AI idea into production, not just pilots?", "Has that route actually delivered something to production at least once?", "Is the route repeatable, with a few things now running in production?", "Is reaching production routine, a steady flow rather than rare one-offs?"],desc:["A Yes means there is a defined route to production, not just pilots that stall.", "A Yes means that route has actually put something into production at least once.", "A Yes means the route is repeatable, with a few things now running live.", "A Yes means reaching production is routine, a steady flow rather than rare events."],dep:[null, 0, 1, 2],abr:[{q:"How real is your route from idea to production?",d:"Whether there is a path to production that has delivered. None: pilots only, no route to production. Some: a defined route on paper. Most: the route has delivered to production at least once. All: a proven path from idea to production."},{q:"How repeatable is getting to production?",d:"Whether reaching production is repeatable and steady. None: one-offs at best. Some: occasionally repeated. Most: repeatable, with a few things now running in production. All: reaching production is routine, a steady flow."}]},
-  {k:'lifecycle',name:'Keeping models current',sc:[2,2,2,4],levels:["Once live, a model is left untouched; no one checks if it still works.", "Problems are noticed only when users complain.", "Model performance is checked periodically, by hand.", "Drift is monitored and models are retrained on a schedule or trigger.", "Models are continuously monitored and refreshed, with retraining automated."],diag:["Can you tell when a live model drifts or degrades, rather than assume it holds?", "Are models retrained or updated on a defined trigger or schedule?", "Does someone own models after go-live, not only at launch?", "Is model performance in production tracked over time?"],desc:["A Yes means you can detect when a live model drifts or degrades, not just assume it still works.", "A Yes means models are retrained or refreshed on a defined trigger or schedule.", "A Yes means someone owns each model after go-live, not only at launch.", "A Yes means production performance is tracked over time, not assumed stable."],dep:[null, null, null, null],abr:[{q:"How well are live models kept from silently degrading?",d:"Whether drift is detected and models are refreshed. None: you assume they hold. Some: drift is noticed late. Most: you can tell when a model drifts, and retrain on a trigger or schedule. All: model health is actively managed."},{q:"How well are models owned and tracked after launch?",d:"Whether models have an owner and are tracked in production. None: no owner after go-live. Some: informal ownership. Most: someone owns models after launch. All: model performance in production is tracked over time."}]},
-  {k:'repeat',name:'Repeatability & standards',sc:[2,2,4,4],levels:[
+  {k:'lifecycle',name:'Keeping models current',estem:"Once live, how are models kept working over time?",elab:["Left untouched","Noticed on complaints","Periodic manual checks","Monitored, retrained","Continuous, automated"],sc:[2,2,2,4],levels:["Once live, a model is left untouched; no one checks if it still works.", "Problems are noticed only when users complain.", "Model performance is checked periodically, by hand.", "Drift is monitored and models are retrained on a schedule or trigger.", "Models are continuously monitored and refreshed, with retraining automated."],diag:["Can you tell when a live model drifts or degrades, rather than assume it holds?", "Are models retrained or updated on a defined trigger or schedule?", "Does someone own models after go-live, not only at launch?", "Is model performance in production tracked over time?"],desc:["A Yes means you can detect when a live model drifts or degrades, not just assume it still works.", "A Yes means models are retrained or refreshed on a defined trigger or schedule.", "A Yes means someone owns each model after go-live, not only at launch.", "A Yes means production performance is tracked over time, not assumed stable."],dep:[null, null, null, null],abr:[{q:"How well are live models kept from silently degrading?",d:"Whether drift is detected and models are refreshed. None: you assume they hold. Some: drift is noticed late. Most: you can tell when a model drifts, and retrain on a trigger or schedule. All: model health is actively managed."},{q:"How well are models owned and tracked after launch?",d:"Whether models have an owner and are tracked in production. None: no owner after go-live. Some: informal ownership. Most: someone owns models after launch. All: model performance in production is tracked over time."}]},
+  {k:'repeat',name:'Repeatability & standards',estem:"How standard and repeatable is your delivery?",elab:["Every build a one-off","Some reuse, no standard","Basic process, loose","Consistent, documented","Templated, automated"],sc:[2,2,4,4],levels:[
     "Every delivery is a one-off, built from scratch.",
     "Some lessons are reused, but there is no standard way.",
     "A basic standard process, followed loosely.",
     "A consistent, documented delivery standard.",
     "Delivery is templated and largely automated."],diag:["Are lessons from one delivery reused in the next?", "Is there a standard process, even if followed loosely?", "Is the delivery standard consistent and documented?", "Is delivery templated and largely automated?"],desc:["A Yes means lessons from one delivery are reused in the next.", "A Yes means there is a standard process, even if followed loosely.", "A Yes means the delivery standard is consistent and documented.", "A Yes means delivery is templated and largely automated."],dep:[null, null, 1, 2],abr:[{q:"How much does delivery learn and standardise?",d:"Whether lessons carry over and a standard process exists. None: every delivery starts from scratch. Some: lessons reused informally. Most: a standard process, even if followed loosely. All: a well established way of working."},{q:"How consistent and automated is delivery?",d:"Whether the standard is documented and largely automated. None: inconsistent, undocumented. Some: documented in places. Most: the delivery standard is consistent and documented. All: delivery is templated and largely automated."}]},
-  {k:'operate',name:'Operating & monitoring',sc:[2,2,2,4],levels:[
+  {k:'operate',name:'Operating & monitoring',estem:"How are live systems monitored and maintained?",elab:["Nothing watched","Informal, users find issues","Basic monitoring","Monitored, with alerts","Full observability"],sc:[2,2,2,4],levels:[
     "Once live, nothing is watched or maintained.",
     "Watched informally; problems are found by users.",
     "Basic monitoring for the main systems.",
     "Production is monitored, with alerts and support.",
     "Full observability, with issues caught before they bite."],diag:["Is anything watched or maintained once it is live?", "Is there basic monitoring of the main systems?", "Is production monitored, with alerts and support?", "Is there full observability, catching issues before they bite?"],desc:["A Yes means live systems are watched and maintained, not left alone.", "A Yes means there is basic monitoring of the main systems.", "A Yes means production is monitored with alerts and support.", "A Yes means full observability catches issues before they bite."],dep:[null, 0, 1, 2],abr:[{q:"How well is live work monitored?",d:"Whether anything is watched once it is live. None: nothing is watched once live. Some: something is watched informally. Most: basic monitoring of the main systems. All: monitoring is a normal part of running things."},{q:"How complete is production observability?",d:"Whether production has alerts and full visibility. None: little to no visibility. Some: alerts on a few things. Most: production is monitored, with alerts and support. All: full observability, catching issues before they bite."}]},
-  {k:'deliveryown',name:'Ownership & funding of delivery',sc:[2,2,2,2],levels:[
+  {k:'deliveryown',name:'Ownership & funding of delivery',estem:"Who owns and funds getting AI into production?",elab:["No owner or funding","Squeezed in","Owner, ad hoc funding","Team and funded pipeline","Managed, sustained"],sc:[2,2,2,2],levels:[
     "No one owns getting things live, and there is no funding for it.",
     "Delivery is squeezed in around other work.",
     "A named owner, but funding is ad hoc.",
@@ -1039,7 +1078,9 @@ function abrForLevel(L){if(L<=0)return[null,null];let rem=(L-1)/2;const out=[0,0
 function scaleLevelFor(dk,fk,idxs){const fac=facetDef(dk,fk);const arr=(state.diag&&state.diag[dk]&&state.diag[dk][fk])||[];const sc=fac.sc||[2,2,2,2];const fr=idxs.filter(i=>i<fac.diag.length).map(i=>qFrac(arr[i],sc[i]));if(!fr.length||fr.some(x=>x==null))return 0;const mean=fr.reduce((a,b)=>a+b,0)/fr.length;return Math.max(1,Math.min(5,Math.round(1+4*mean)));}
 function diagLevel(dk,fk){const fac=facetDef(dk,fk);return scaleLevelFor(dk,fk,activeIdx(fac));}
 function abrLevel(dk,fk){const arr=(state.abrDiag&&state.abrDiag[dk]&&state.abrDiag[dk][fk])||[];const fr=[0,1].map(i=>qFrac(arr[i],4));if(fr.some(x=>x==null))return 0;const mean=(fr[0]+fr[1])/2;return Math.max(1,Math.min(5,Math.round(1+4*mean)));}
+function emailLevel(dk,fk){const v=(state.emailDiag&&state.emailDiag[dk]&&state.emailDiag[dk][fk]);return (v>=1&&v<=5)?v:0;}
 function facetLevel(dk,fk){const fac=facetDef(dk,fk);
+  if(state.mode==='email'&&fac.elab){return emailLevel(dk,fk);}
   if(state.mode==='abridged'&&fac.abr){return abrLevel(dk,fk);}
   if(fac.diag){return diagLevel(dk,fk);}
   return (state.rubric[dk]&&state.rubric[dk][fk])||0;}
@@ -1059,9 +1100,9 @@ const CLIENTS={
   meridian:{label:'Meridian Group',readiness:{strategy:4,data:4,tech:3,talent:3,governance:2,adoption:2,delivery:2},facets:{strategy:{direction:4,ownership:5,funding:4,link:4,prioritise:5},data:{quality:5,access:4,gov:4,coverage:5,fresh:4},tech:{environment:4,tooling:3,integration:3,scale:4,security:3},talent:{capability:4,reliance:3,breadth:3,develop:4,resilience:3,fluency:3},governance:{policy:3,risk:2,oversight:3,legal:2,fairness:2,accountability:2},adoption:{usage:2,trust:2,change:3,workflow:2,feedback:3},delivery:{route:3,repeat:2,operate:3,lifecycle:2,deliveryown:2}},evTicks:{strategy:3,data:3,tech:2,talent:2,governance:1,adoption:1,delivery:1},candidates:CANDIDATES},
 };
 function evidenceFromTicks(t){const e={};DIMS.forEach(d=>{const n=t[d.k]||0;const a=[false,false,false,false];for(let i=0;i<n;i++)a[i]=true;e[d.k]=a;});return e;}
-function loadClient(key){const cl=CLIENTS[key];state.client=key;state.clientName=(key==='blank')?'':cl.label.replace(' (reference case)','');state.readiness={...cl.readiness};state.candidates=cl.candidates.map(c=>({...c}));state.evidence=evidenceFromTicks(cl.evTicks);state.rubric={};state.artifact={};DIMS.forEach(d=>{state.rubric[d.k]=(cl.facets&&cl.facets[d.k])?{...cl.facets[d.k]}:rubricFor(d.k,cl.readiness[d.k]||0);state.artifact[d.k]={};});state.diag={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.diag)){state.diag[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.diag){const L=(state.rubric[d.k]&&state.rubric[d.k][f.k])||0;state.diag[d.k][f.k]=diagForLevel(L,f.sc);}});}});state.qnote={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.diag)){state.qnote[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.diag)state.qnote[d.k][f.k]=[null,null,null,null];});}});state.abrDiag={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.abr)){state.abrDiag[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.abr){const L=(state.rubric[d.k]&&state.rubric[d.k][f.k])||0;state.abrDiag[d.k][f.k]=abrForLevel(L);}});}});state.abrNote={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.abr)){state.abrNote[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.abr)state.abrNote[d.k][f.k]=[null,null];});}});state.scope=Object.fromEntries(DOMAINS.map(d=>[d.k,true]));state.context={priorWhat:'',priorResult:'',priorGap:'',deploy:''};state.openDim='strategy';state.hardFilter=true;}
+function loadClient(key){const cl=CLIENTS[key];state.client=key;state.clientName=(key==='blank')?'':cl.label.replace(' (reference case)','');state.readiness={...cl.readiness};state.candidates=cl.candidates.map(c=>({...c}));state.evidence=evidenceFromTicks(cl.evTicks);state.rubric={};state.artifact={};DIMS.forEach(d=>{state.rubric[d.k]=(cl.facets&&cl.facets[d.k])?{...cl.facets[d.k]}:rubricFor(d.k,cl.readiness[d.k]||0);state.artifact[d.k]={};});state.diag={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.diag)){state.diag[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.diag){const L=(state.rubric[d.k]&&state.rubric[d.k][f.k])||0;state.diag[d.k][f.k]=diagForLevel(L,f.sc);}});}});state.qnote={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.diag)){state.qnote[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.diag)state.qnote[d.k][f.k]=[null,null,null,null];});}});state.abrDiag={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.abr)){state.abrDiag[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.abr){const L=(state.rubric[d.k]&&state.rubric[d.k][f.k])||0;state.abrDiag[d.k][f.k]=abrForLevel(L);}});}});state.abrNote={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.abr)){state.abrNote[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.abr)state.abrNote[d.k][f.k]=[null,null];});}});state.emailDiag={};DIMS.forEach(d=>{if(RUBRICS[d.k].some(f=>f.elab)){state.emailDiag[d.k]={};RUBRICS[d.k].forEach(f=>{if(f.elab){const L=(state.rubric[d.k]&&state.rubric[d.k][f.k])||0;state.emailDiag[d.k][f.k]=L>0?L:null;}});}});state.scope=Object.fromEntries(DOMAINS.map(d=>[d.k,true]));state.context={priorWhat:'',priorResult:'',priorGap:'',deploy:''};state.openDim='strategy';state.hardFilter=true;}
 
-const state={stage:0,view:'step',quadFilter:null,openOpp:null,openFix:null,facilitator:false,mode:'abridged'};
+const state={stage:0,view:'step',quadFilter:null,openOpp:null,openFix:null,facilitator:false,mode:'email'};
 loadClient('blank');
 let renderedStage=-1, renderedView='';
 
@@ -1119,7 +1160,7 @@ const DETAILS={
 "Competitor & market tracking":{what:"Continuously gather and summarise moves by competitors, regulators and the wider market.",why:"Earlier awareness of change, far less manual scanning, and sharper board briefings.",how:"Sources are collected, de-duplicated and summarised; an analyst curates what matters before it goes further.",who:"Owned by the strategy or research lead. Value depends on analysts trusting and actually using it, which is why it hinges on adoption.",metric:"Time saved, and signals surfaced before they reach the mainstream news.",pilot:"One sector or theme for six weeks."},
 "Accounting anomaly detection":{what:"Scan transactions for errors, duplicates and unusual patterns that a person would miss at volume.",why:"Catches leakage and possible fraud early, and makes the period close cleaner.",how:"A model learns what normal looks like and flags the outliers for a human to review.",who:"Owned by finance and controls. It needs a dependable route to run in production, which is why it hinges on delivery.",metric:"Value of errors caught, against the false-positive rate.",pilot:"One ledger area for eight weeks."},
 "Early IT fault detection":{what:"Watch system signals to predict and flag faults before they turn into outages.",why:"Less downtime, and problems fixed before customers ever notice them.",how:"A model on logs and metrics flags anomalies; the operations team investigates.",who:"Owned by IT operations. It needs the monitoring plumbing to run live, which is why it hinges on delivery.",metric:"Incidents prevented, and mean time to detect.",pilot:"One critical system for eight weeks."},
-"Dynamic pricing":{what:"Adjust prices in response to demand, cost and competition, always within rules you set.",why:"Protects margin and captures demand that flat, manual pricing leaves on the table.",how:"A model recommends prices inside firm guardrails; a person approves changes, and everything is monitored.",who:"Owned by the commercial lead. It needs a robust route to production and live monitoring, which is why it hinges on delivery.",metric:"Margin, revenue per unit, and rule breaches, which should be zero.",pilot:"One product line, closely monitored, for ten to twelve weeks."}
+"Dynamic pricing":{what:"Adjust prices in response to demand, cost and competition, always within rules you set.",why:"Protects margin and captures demand that flat, manual pricing leaves on the table.",how:"A model recommends prices inside firm guardrails; a person approves changes, and everything is monitored.",who:"Owned by the commercial lead. It needs a reliable route to production and live monitoring, which is why it hinges on delivery.",metric:"Margin, revenue per unit, and rule breaches, which should be zero.",pilot:"One product line, closely monitored, for ten to twelve weeks."}
 };
 function oppBrief(o){
   const d=DETAILS[o.name];
@@ -1136,7 +1177,7 @@ function oppBrief(o){
 function renderSidebar(c){
   const sb=document.getElementById('sidebar');
   const opts=Object.entries(CLIENTS).filter(([k])=>state.facilitator||k==='blank').map(([k,v])=>`<option value="${k}"${state.client===k?' selected':''}>${v.label}</option>`).join('');
-  const steps=STAGES.map((st,i)=>{
+  const steps=STAGES.map((st,i)=>({st,i})).map(({st,i})=>{
     const on=(state.view==='step'&&state.stage===i)?' on':'';
     const done=state.view==='step'&&i<state.stage;
     let tag='';
@@ -1147,7 +1188,7 @@ function renderSidebar(c){
   sb.innerHTML=`
     <div class="side-sel"><label>Assessment</label>
       <select id="clientsel">${opts}</select>
-      <input id="clientname" class="side-name" type="text" value="${(state.clientName||'').replace(/"/g,'&quot;')}" placeholder="Name this assessment, e.g. Acme Foods" autocomplete="off"></div>
+      <input id="clientname" class="side-name" type="text" value="${(state.clientName||'').replace(/"/g,'&quot;')}" placeholder="Name this assessment" autocomplete="off"></div>
     <nav class="side-nav">
       <button class="side-item lite${state.view==='how'?' on':''}" data-view="how"><span class="si-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span><span class="si-l"><b>How it works</b><span>What the tool does</span></span></button>
       <div class="side-grp">The five steps</div>
@@ -1161,7 +1202,7 @@ function renderSidebar(c){
         <button class="stool" id="btnXlsx" data-help="Export every answer and result to an Excel workbook: readiness, opportunities and the plan.">Excel</button>
       </div>
       <button class="side-export${c.scoredCount>=7?'':' locked'}" id="btnReport" data-help="Generate the full client report as a printable PDF. Unlocks once all seven foundations are scored."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12M8 11l4 4 4-4M4 20h16"/></svg>Export report (PDF)</button>
-      <div class="export-hint">${c.scoredCount>=7?'For a clean PDF, in the print dialog choose "Save as PDF", set paper to A4 and margins to Default, and switch off "Headers and footers" so your file path and the date do not print.':'The report unlocks once all seven foundations are scored ('+c.scoredCount+' of 7 done).'}</div>
+      <div class="export-hint">${c.scoredCount>=7?'For a clean PDF, in the print dialog choose "Save as PDF", set paper to A4 and margins to Default, and switch off "Headers and footers" so your file path and the date do not print.':'<svg class="lock-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>The report unlocks once all seven foundations are scored ('+c.scoredCount+' of 7 done).'}</div>
       <label class="fac-toggle" data-help="Shows or hides the two built-in example companies, Blue Tokai and Meridian, in the assessment dropdown at the top left. On for rehearsing or demoing a full worked example; off in a live client session. It only changes the dropdown, never your current answers."><input type="checkbox" id="facToggle" ${state.facilitator?'checked':''}> Facilitator mode: show reference cases</label>
       <input type="file" id="loadFile" accept="application/json,.json" style="display:none">
     </div>`;
@@ -1224,8 +1265,8 @@ function stageScope(){
     <div class="section-label lbl-help" data-help="The parts of your organisation where AI could add value, your business functions. Pick the ones in play. This is the 'where the value sits' axis, and it is deliberately separate from the seven foundations, which are capabilities that cut across all of these areas.">Parts of the business in scope<svg class="lbl-i" viewBox="0 0 20 20" aria-hidden="true" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/><circle cx="10" cy="6.4" r="1.2"/><rect x="9" y="8.7" width="2" height="5.6" rx="1"/></svg><span class="scope-actions"><button class="scope-act" data-scope="all">Select all</button><button class="scope-act" data-scope="none">Clear all</button></span></div>
     <div class="tiles" id="tiles">${tiles}</div>
     <p class="hint">Pick the parts of the business this assessment should cover. Everything after this looks only at the areas you choose, so leave out what is not relevant.</p>
-    <div class="capture">
-      <div class="section-label">Context, optional and never scored</div>
+    <details class="capture">
+      <summary class="cap-summary"><span class="section-label">Context, optional and never scored</span></summary>
       <p class="cap-note">Captured once, for the plan and for cross-client comparison later. It does not affect the readiness number.</p>
       <div class="cap-grid">
         <label class="cap-f"><span>What AI has been tried so far</span><textarea data-cx="priorWhat" rows="2" placeholder="Use cases attempted, however small">${esc((state.context||{}).priorWhat)}</textarea></label>
@@ -1234,7 +1275,7 @@ function stageScope(){
         <label class="cap-f"><span>What was missing, and why it fell short</span><textarea data-cx="priorGap" rows="2" placeholder="The binding reason, in your words">${esc((state.context||{}).priorGap)}</textarea></label>
         <label class="cap-f"><span>Deployment approach so far</span><select data-cx="deploy">${['','Internal centre of excellence','Use-case specific partners','SaaS or off-the-shelf','Mixed','None yet'].map(o=>`<option${((state.context||{}).deploy||'')===o?' selected':''}>${o||'Not set'}</option>`).join('')}</select></label>`}
       </div>
-    </div>
+    </details>
     <div class="guide">
       <h4>What this assessment does</h4>
       <p>Five steps take you from a blank page to a sequenced plan. It separates two questions that are easy to confuse: <b>where</b> AI could help, and whether you are <b>ready</b> to capture it.</p>
@@ -1260,6 +1301,14 @@ function rungLadder(dk,fac){
   }).join('');
   const ev=(state.artifact[dk]&&state.artifact[dk][fac.k])||'';
   return `<div class="rung-list">${rows}</div><input class="facet-note" type="text" data-notedim="${dk}" data-note="${fac.k}" placeholder="Evidence, optional: what shows you are at this level" value="${ev.replace(/"/g,'&quot;')}">`;
+}
+function emailBody(dk,fac){
+  const sel=(state.emailDiag[dk]&&state.emailDiag[dk][fac.k])||null;
+  const stem=fac.estem||fac.name;
+  const btns=fac.elab.map((lab,i)=>{const L=i+1;const full=(''+(fac.levels[i]||'')).replace(/"/g,'&quot;');
+    return `<button class="email-opt${sel===L?' sel':''}" data-elvl="${dk}" data-ef="${fac.k}" data-el="${L}" data-help="${full}"><span class="eo-n">${L}</span><span class="eo-l">${lab}</span></button>`;}).join('');
+  const readout=sel?`<div class="diag-out">Computed: <b>Level ${sel}</b> of 5. Hover a choice for the full description.</div>`:`<div class="diag-out todo">Pick the statement that best matches. Hover a choice for the full description.</div>`;
+  return `<div class="email-q"><div class="email-stem">${stem}</div><div class="email-opts">${btns}</div>${readout}</div>`;
 }
 function diagBody(dk,fac){
   const abr = state.mode==='abridged' && fac.abr;
@@ -1307,7 +1356,7 @@ function rubricBody(dk){
   const facets=facetsDef.map(fac=>{
     const sel=f[fac.k]||0, bind=complete&&sel===derived&&minCount===1;
     const header=`<div class="facet-h"><span class="facet-name">${fac.name}</span>${sel?`<span class="facet-lvl${bind?' bind':''}">Level ${sel}${bind?' &middot; holds '+fname:''}</span>`:'<span class="facet-todo">not assessed</span>'}</div>`;
-    return `<div class="facet">${header}${fac.diag?diagBody(dk,fac):rungLadder(dk,fac)}</div>`;
+    return `<div class="facet">${header}${state.mode==='email'&&fac.elab?emailBody(dk,fac):(fac.diag?diagBody(dk,fac):rungLadder(dk,fac))}</div>`;
   }).join('');
   const binderFacets=complete?facetsDef.filter(fac=>f[fac.k]===derived):[];
   const binderTxt = binderFacets.length===facetsDef.length ? `with all ${facetsDef.length} facets sitting at Level ${derived}`
@@ -1355,7 +1404,38 @@ function stageReadiness(c){
 }
 
 /* Step 3 */
+function stageOpportunityEmail(c){
+  const total=c.inScope.length;
+  const byArea={};
+  c.inScope.forEach(o=>{(byArea[o.dom]=byArea[o.dom]||[]).push(o.name);});
+  const areas=Object.keys(byArea).map(d=>`<div class="teaser-area"><div class="teaser-area-h">${domName(d)}</div><p>${byArea[d].join('. ')}.</p></div>`).join('');
+  const countLine=c.scoredCount>=7
+    ? `From your step 2 answers, and to be confirmed together: <b>${c.survivors.length}</b> ready to start, <b>${c.blocked.length}</b> blocked, <b>${c.pending.length}</b> not yet assessed, of <b>${total}</b>.`
+    : `<b>${total}</b> in total. Which are ready and which are blocked is decided by your readiness in step 2.`;
+  const quad=`<div class="tq">
+    <div class="tq-head"><span class="tq-tag">Workshop step</span>Where these land, by impact and effort</div>
+    <div class="tq-body">
+      <div class="tq-axis-y">More impact</div>
+      <div class="tq-grid">
+        <div class="tq-cell">Quick wins</div><div class="tq-cell">Strategic bets</div>
+        <div class="tq-cell">Fill-ins</div><div class="tq-cell">Low priority</div>
+        <div class="tq-overlay"><span>Mapped in the workshop</span></div>
+      </div>
+    </div>
+    <div class="tq-axis-x">More effort &#8594;</div>
+    <div class="tq-foot">In the session we place each opportunity here, confirm which are ready and which are blocked and why, and agree the order to start.</div>
+  </div>`;
+  return `<div class="stage">
+    <div class="lede"><div class="eyebrow">Step 3 of 5</div><h1>Where AI can help</h1>
+    <p>These are the opportunities in the areas you chose in step 1. This is the menu of what AI could do for you. ${countLine}</p></div>
+    ${quad}
+    <div class="section-label">The menu</div>
+    ${areas}
+    <div class="teaser-note">A blocked opportunity is not lost. It is the reason to fix the one foundation holding it back, which steps 4 and 5 work out.</div>
+  </div>`;
+}
 function stageOpportunity(c){
+  if(state.mode==='email') return stageOpportunityEmail(c);
   const withStatus=c.inScope.map(x=>{const gs=state.readiness[x.gate]>0;return {...x,gateScored:gs,cleared:gs&&state.readiness[x.gate]>=3,pending:!gs};});
   const qcount={quick:0,bets:0,fill:0,low:0};c.inScope.forEach(o=>qcount[quadOf(o)]++);
   const qf=state.quadFilter;
@@ -1444,7 +1524,7 @@ function stageGap(c){
   if(c.bestFix&&c.blockedHi.length){
     const names=c.bestFix.list.filter(x=>x.value>=4).map(x=>x.name);
     verdict=`<div class="verdict"><div class="eyebrow">The one thing to fix</div>
-      <p>The strongest blocked opportunities all depend on the same foundation: <span class="hl">${dimName(c.bestFix.gate)}</span>. So the highest-leverage first move is not a new use case. It is closing that one gap, which unlocks <b>${c.bestFix.count}</b> ${c.bestFix.count>1?'opportunities':'opportunity'} at once${names.length?`, including ${names.slice(0,2).join(' and ')}`:''}.</p></div>`;
+      <p>The strongest blocked opportunities all depend on the same foundation: <span class="hl">${dimName(c.bestFix.gate)}</span>. So the first move that frees the most value is not a new use case. It is closing that one gap, which unlocks <b>${c.bestFix.count}</b> ${c.bestFix.count>1?'opportunities':'opportunity'} at once${names.length?`, including ${names.slice(0,2).join(' and ')}`:''}.</p></div>`;
   } else {
     verdict=`<div class="verdict"><div class="eyebrow">The one thing to fix</div><p>Nothing significant is blocked. You can move straight to sequencing the ready opportunities.</p></div>`;
   }
@@ -1453,7 +1533,7 @@ function stageGap(c){
     <p>The best opportunities are often held back by the same missing foundation. That is the useful part: one focused fix can unlock several at once. The chart on the right shows the value waiting behind each gap.</p></div>
     <div class="guide">
       <h4>How to read this step</h4>
-      <p>Each bar totals the value of the opportunities waiting on one foundation. The longest bar, in red, is where a single fix frees the most value at once. That is your highest-leverage first move, and it is usually not a new use case but closing that one gap.</p>
+      <p>Each bar totals the value of the opportunities waiting on one foundation. The longest bar, in red, is where a single fix frees the most value at once. That is your first move, and it is usually not a new use case but closing that one gap.</p>
       <p>This is the difference between a wish list and a plan. A list ranks ideas; this ranks the <b>constraints</b> that decide which ideas you can actually reach.</p>
     </div>
     ${verdict}
@@ -1689,7 +1769,7 @@ function hwWeakestLink(){
 function howItWorks(){
   return `
     <div class="hw-head"><div class="hw-head-row"><div><div class="eyebrow">How it works</div><h1>What this tool does, in plain terms</h1></div>
-      <div class="mode-toggle" role="group" aria-label="Assessment length"><span class="mode-lbl">Length</span><button class="mode-btn${state.mode==='abridged'?' on':''}" data-mode="abridged">Abridged &middot; 74</button><button class="mode-btn${state.mode==='full'?' on':''}" data-mode="full">Full &middot; 148</button></div></div>
+      <div class="mode-toggle" role="group" aria-label="Assessment length"><span class="mode-lbl">Length</span><button class="mode-btn${state.mode==='email'?' on':''}" data-mode="email">Email &middot; 37</button><button class="mode-btn${state.mode==='abridged'?' on':''}" data-mode="abridged">Abridged &middot; 74</button><button class="mode-btn${state.mode==='full'?' on':''}" data-mode="full">Workshop &middot; 148</button></div></div>
       <p>Read top to bottom, this is the whole assessment: why it exists, what you get, how the number is worked out, how it runs, and who it is for. The length toggle, top right, switches between the abridged run of 74 questions and the full 148; it opens on abridged and keeps every answer when you switch.</p></div>
     <div class="hw-narrative">
 
@@ -1774,7 +1854,7 @@ function buildAssessmentXlsx(c){
     ['Set by',c.floorDims.map(dimName).join(', ')||'-'],
     ['Opportunities ready',c.survivors.length],['Opportunities blocked',c.blocked.length],
     ['The one thing to fix first',fix?dimName(fix.gate):'-'],['Unlocked by fixing it',fix?fix.count:0],[],
-    ['Areas in scope',inScopeAreas],[],['Context (not scored)'],['What AI has been tried',(state.context&&state.context.priorWhat)||'-'],['Performance vs plan',(state.context&&state.context.priorResult)||'-'],['What was missing',(state.context&&state.context.priorGap)||'-'],['Deployment approach',(state.context&&state.context.deploy)||'-'],['Assessment length',state.mode==='abridged'?'Abridged (74)':'Full (148)']];
+    ['Areas in scope',inScopeAreas],[],['Context (not scored)'],['What AI has been tried',(state.context&&state.context.priorWhat)||'-'],['Performance vs plan',(state.context&&state.context.priorResult)||'-'],['What was missing',(state.context&&state.context.priorGap)||'-'],['Deployment approach',(state.context&&state.context.deploy)||'-'],['Assessment length',state.mode==='email'?'Email (37)':state.mode==='abridged'?'Abridged (74)':'Full (148)']];
   const readiness=[['Foundation','Derived level','Facet','Facet level','Descriptor','Evidence note']];
   DIMS.forEach(d=>{const facs=RUBRICS[d.k];const derived=state.readiness[d.k]||0;
     facs.forEach(fac=>{const lvl=state.rubric[d.k][fac.k]||0;const desc=lvl?fac.levels[lvl-1]:'';
@@ -1792,13 +1872,14 @@ function buildAssessmentXlsx(c){
   return buildXlsx([{name:'Summary',rows:summary},{name:'Readiness',rows:readiness},{name:'Opportunities',rows:opps},{name:'Plan',rows:plan}]);
 }
 function exportExcel(){try{const c=compute();downloadBytes(buildAssessmentXlsx(c),fileStem()+'.xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');}catch(e){alert('Excel export failed: '+e.message);}}
-function exportSave(){const data={v:6,clientName:state.clientName,mode:state.mode,context:state.context,scope:state.scope,rubric:state.rubric,artifact:state.artifact,diag:state.diag,qnote:state.qnote,abrDiag:state.abrDiag,abrNote:state.abrNote,candidates:state.candidates.map(x=>({name:x.name,dom:x.dom,arch:x.arch,gate:x.gate,amen:x.amen,value:x.value,effort:x.effort}))};downloadBytes(strBytes(JSON.stringify(data,null,2)),fileStem()+'.json','application/json');}
+function exportSave(){const data={v:7,clientName:state.clientName,mode:state.mode,context:state.context,scope:state.scope,rubric:state.rubric,artifact:state.artifact,diag:state.diag,qnote:state.qnote,abrDiag:state.abrDiag,abrNote:state.abrNote,emailDiag:state.emailDiag,candidates:state.candidates.map(x=>({name:x.name,dom:x.dom,arch:x.arch,gate:x.gate,amen:x.amen,value:x.value,effort:x.effort}))};downloadBytes(strBytes(JSON.stringify(data,null,2)),fileStem()+'.json','application/json');}
 function importSave(file){const rd=new FileReader();rd.onload=()=>{try{const d=JSON.parse(rd.result);
   state.client='blank';state.clientName=d.clientName||'';state.context=d.context||{priorWhat:'',priorResult:'',priorGap:'',deploy:''};state.scope=d.scope||state.scope;state.rubric=d.rubric||state.rubric;state.artifact=d.artifact||{};DIMS.forEach(x=>{if(!state.artifact[x.k])state.artifact[x.k]={};});
   if(d.candidates)state.candidates=d.candidates.map(x=>({...x}));
   state.diag=d.diag||{};state.qnote=d.qnote||{};
   state.abrDiag=d.abrDiag||{};state.abrNote=d.abrNote||{};
   if(!d.abrDiag){DIMS.forEach(dd=>{if(RUBRICS[dd.k].some(f=>f.abr)){state.abrDiag[dd.k]={};RUBRICS[dd.k].forEach(f=>{if(f.abr){const L=(state.rubric[dd.k]&&state.rubric[dd.k][f.k])||0;state.abrDiag[dd.k][f.k]=abrForLevel(L);}});}});}
+  state.emailDiag=state.emailDiag||{};DIMS.forEach(dd=>{if(RUBRICS[dd.k].some(f=>f.elab)){state.emailDiag[dd.k]=(d.emailDiag&&d.emailDiag[dd.k])||{};RUBRICS[dd.k].forEach(f=>{if(f.elab&&state.emailDiag[dd.k][f.k]==null){const L=(state.rubric[dd.k]&&state.rubric[dd.k][f.k])||0;state.emailDiag[dd.k][f.k]=L>0?L:null;}});}});
   DIMS.forEach(dd=>{if(RUBRICS[dd.k].some(f=>f.abr)){state.abrNote[dd.k]=state.abrNote[dd.k]||{};RUBRICS[dd.k].forEach(f=>{if(f.abr&&!state.abrNote[dd.k][f.k])state.abrNote[dd.k][f.k]=[null,null];});}});
   DIMS.forEach(dd=>{if(RUBRICS[dd.k].some(f=>f.diag)){state.qnote[dd.k]=state.qnote[dd.k]||{};RUBRICS[dd.k].forEach(f=>{if(f.diag&&!state.qnote[dd.k][f.k])state.qnote[dd.k][f.k]=[null,null,null,null];});}});
   DIMS.forEach(dd=>{if(RUBRICS[dd.k].some(f=>f.diag)){state.diag[dd.k]=state.diag[dd.k]||{};RUBRICS[dd.k].forEach(f=>{if(f.diag&&!state.diag[dd.k][f.k]){const L=(state.rubric[dd.k]&&state.rubric[dd.k][f.k])||0;state.diag[dd.k][f.k]=diagForLevel(L,f.sc);}});}});
@@ -1818,7 +1899,7 @@ function interpretationText(c){
     ? `${name} sits at a developing stage, ${f} of 5, set by ${floorNames}. Targeted AI is viable now. The task is to standardise what already works and lift the weakest foundation, so that isolated wins become a repeatable capability rather than one-off successes that do not compound.`
     : `${name} is at an advanced stage, ${f} of 5, set by ${floorNames}. Most foundations are in place, so the agenda shifts from readiness to scale and control: extend the proven use cases and tighten governance so growth stays safe as volume rises.`;
   const context = fix
-    ? `The highest-leverage first move is to close the ${dimName(fix.gate)} gap, which alone unblocks ${fix.count} ${fix.count>1?'opportunities':'opportunity'} that are otherwise stranded. This is leverage, not a new initiative: the value is already identified and waiting on one enabling foundation.`
+    ? `The first move that frees the most value is to close the ${dimName(fix.gate)} gap, which alone unblocks ${fix.count} ${fix.count>1?'opportunities':'opportunity'} that are otherwise stranded. This is not a new initiative: the value is already identified and waiting on one enabling foundation.`
     : `No high-value opportunity is currently blocked by a missing foundation, so value can be captured immediately through the ready moves rather than waiting on enabling work.`;
   const bullets=[
     `Readiness is ${f} of 5, the level of the weakest foundation, ${floorNames}. The average across the seven is deliberately not used, because the weakest link is what limits delivery.`,
@@ -1850,7 +1931,7 @@ function fixCard(c,fix){
   const weak=facs.filter(f=>state.rubric[gate][f.k]===lvl);
   const cells=[
     ['What',`Raise ${dimName(gate)} from level ${lvl} to a workable level 3, the point at which the opportunities it gates can proceed.`],
-    ['Why',`${dimName(gate)} is the weakest foundation, so it caps readiness and blocks ${fix.count} otherwise-ready ${fix.count>1?'opportunities':'opportunity'}. It is the highest-leverage single move.`],
+    ['Why',`${dimName(gate)} is the weakest foundation, so it caps readiness and blocks ${fix.count} otherwise-ready ${fix.count>1?'opportunities':'opportunity'}. It is the single move that frees the most value.`],
     ['How',`Turn the specific answers still short of full, listed in the diagnostic, into owned actions with dates. Each is a concrete task, not a theme.`],
     ['Where',`${dimName(gate)}, most acutely in ${weak.map(f=>f.name).join(', ')||'its weakest facets'}.`],
     ['When',`Next. This runs in parallel with the quick wins and precedes the opportunities it unlocks.`],
@@ -1887,7 +1968,7 @@ function renderReport(c){
   if(!ps) return;
   const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   const name=state.clientName||'Your organisation';
-  const modeBadge=`<span class="ps-mode">${state.mode==='abridged'?'Abridged assessment':'Full assessment'}</span>`;
+  const modeBadge=`<span class="ps-mode">${state.mode==='email'?'Email assessment':state.mode==='abridged'?'Abridged assessment':'Full assessment'}</span>`;
   const head=`<div class="ps-head"><div><div class="ps-eyebrow">AI Readiness Assessment</div><h1>${name}</h1></div><div class="ps-headr"><div class="ps-date">${date}</div>${modeBadge}</div></div>`;
   if(c.scoredCount<7){
     ps.innerHTML=head+`<div class="ps-note">This assessment is incomplete: <b>${c.scoredCount} of 7</b> foundations scored. Complete step 2 before exporting a client report. This page exists so an accidental print never produces a misleading result.</div>`;
@@ -1903,6 +1984,7 @@ function renderReport(c){
     return `<tr class="${isFloor?'rd-floor':''}"><td>${d.name}${isFloor?' <span class="rd-cap">caps readiness</span>':''}</td><td class="rd-lvl">${lvl} / 5</td><td>${binder}</td></tr>`;}).join('');
   // diagnostic detail for the binding foundation(s): the specific shortfalls
   const gapDetail=c.floorDims.map(dk=>{const lvl=state.readiness[dk];const facs=RUBRICS[dk];const weak=facs.filter(f=>state.rubric[dk][f.k]===lvl);
+    if(state.mode==='email'){const items=weak.map(f=>{const L=state.rubric[dk][f.k];const cur=f.levels[L-1]||'';const nxt=L<5?(f.levels[L]||''):'';const body=nxt?`<li><span class="gd-why">now</span> ${cur}</li><li><span class="gd-why">next step</span> ${nxt}</li>`:`<li><span class="gd-why">now</span> ${cur}</li><li class="gd-none">Already at the top level.</li>`;return `<div class="gd-facet"><div class="gd-h">${f.name} <span>level ${L}</span></div><ul>${body}</ul></div>`;}).join('');return `<div class="gd-dim"><h4>${dimName(dk)}, the binding constraint</h4>${items}</div>`;}
     const abr=state.mode==='abridged';
     const items=weak.map(f=>{const arr=(abr?(state.abrDiag[dk]&&state.abrDiag[dk][f.k]):(state.diag[dk]&&state.diag[dk][f.k]))||[];const qn=(abr?(state.abrNote[dk]&&state.abrNote[dk][f.k]):(state.qnote[dk]&&state.qnote[dk][f.k]))||[];const qsrc=abr?(f.abr?f.abr.map(a=>a.q):[]):f.diag;const sc=abr?qsrc.map(()=>4):(f.sc||[2,2,2,2]);
       const short=qsrc.map((q,i)=>({q,i})).filter(x=>arr[x.i]!=null&&arr[x.i]<bandMax(sc[x.i]));
@@ -1918,7 +2000,7 @@ function renderReport(c){
         <div class="ps-block ps-floor"><div class="ps-lbl">Readiness</div><div class="ps-big">${c.floor}<span> / 5</span></div>
           <p>Set by ${floorNames}, the weakest of the seven foundations. Readiness is read off the weakest foundation because it caps everything above it. ${c.survivors.length} of ${c.inScope.length} opportunities are ready; ${c.blocked.length} are blocked.</p></div>
         <div class="ps-block"><div class="ps-lbl">The one thing to fix first</div>
-          ${fix?`<div class="ps-fix">${dimName(fix.gate)}</div><p>Closing this single gap unlocks ${fix.count} high-value ${fix.count>1?'opportunities':'opportunity'}. Highest-leverage first move: not a new use case, but removing the constraint that holds several back.</p>`:`<p>No high-value opportunity is currently blocked. Proceed straight to the ready moves.</p>`}</div>
+          ${fix?`<div class="ps-fix">${dimName(fix.gate)}</div><p>Closing this single gap unlocks ${fix.count} high-value ${fix.count>1?'opportunities':'opportunity'}. The first move that frees the most: not a new use case, but removing the constraint that holds several back.</p>`:`<p>No high-value opportunity is currently blocked. Proceed straight to the ready moves.</p>`}</div>
       </div>
     </div>
     <div class="rep-sec">
@@ -1949,18 +2031,62 @@ function renderReport(c){
     <div class="ps-foot">Every figure is derived from the evidence gathered in your session.</div>`;
 }
 function renderPrintSheet(c){return renderReport(c);}
+const PATHS={
+  // steps[] hold the full path for the workshop materials; the email teaser shows only lead + first.
+  // lead = plain gloss of the facet for the readout intro. first = the single "start here" move.
+  route:{lead:"getting AI into production",first:"Take one working pilot and document every step needed to put it in front of real users. The gaps are your route to production.",steps:[
+    "Define one route from idea to live, not just a pilot sandbox.",
+    "Push a single use case all the way through it, so the route is proven once.",
+    "Send two or three more through the same route, so it repeats rather than stays a one-off."]},
+  lifecycle:{lead:"keeping live models working",first:"Take your most-used live model, put one person\u2019s name against it, and set a monthly date to check it still holds up.",steps:[
+    "Name an owner for each live model, so someone is responsible after launch, not only at build.",
+    "Set a simple periodic check of whether the model still performs; by hand is fine to start.",
+    "Write down what \u201cstill working\u201d means for each model, so the check has something to measure against."]},
+  repeat:{lead:"making delivery repeatable",first:"Write a one-page checklist from your last delivery, the steps you would not want to miss again, and use it on the next one.",steps:[
+    "After each delivery, capture what worked and what did not, so the next build starts from it.",
+    "Turn the repeated lessons into a basic checklist or process, even a rough one.",
+    "Use that process on the next two deliveries, so it is followed rather than filed."]},
+  operate:{lead:"keeping live systems watched",first:"For your most important live system, set one simple check that tells you it is running, and decide who looks at it.",steps:[
+    "Decide who watches each live system, so it is not left alone after launch.",
+    "Put basic monitoring on the main systems, enough to see if they are up and behaving.",
+    "Agree what counts as a problem worth acting on, so monitoring leads to a response."]},
+  deliveryown:{lead:"owning and funding delivery",first:"Put one name against getting AI into production, and protect a few hours a week for it rather than leaving it to spare time.",steps:[
+    "Name one person who owns getting AI work into production.",
+    "Give delivery some real time each week, even if funding stays ad hoc, so it is not only borrowed hours.",
+    "Make that ownership visible, so delivery is a recognised job rather than a favour."]}
+};
 function fixBrief(c){
   const gate=state.openFix, lvl=state.readiness[gate];
   const facs=RUBRICS[gate];
   const weak=facs.filter(f=>state.rubric[gate][f.k]===lvl);
+  const teaser=state.mode==='email'&&weak.length&&!!PATHS[weak[0].k];
   const sec=(q,body)=>`<div class="dw-sec"><div class="dw-q">${q}</div>${body}</div>`;
-  const gapItems=weak.map(f=>{
-    const ans=(state.diag[gate]&&state.diag[gate][f.k])||[];
-    const qn=(state.qnote[gate]&&state.qnote[gate][f.k])||[];
-    const nos=f.diag.map((q,i)=>({q,i})).filter(x=>ans[x.i]===false);
-    const list=nos.length?`<ul class="fx-gaps">${nos.map(x=>{const r=(qn[x.i]||'').trim();return `<li>${x.q}${r?`<span class="fx-why">Why: ${r.replace(/</g,'&lt;')}</span>`:''}</li>`;}).join('')}</ul>`:`<p class="fx-none">All four questions here are already Yes.</p>`;
-    return `<div class="fx-facet"><div class="fx-facet-h"><span>${f.name}</span><span class="fx-lvl">Level ${state.rubric[gate][f.k]}</span></div>${list}</div>`;
-  }).join('');
+  const _abr=state.mode==='abridged';
+  const buildItem=f=>{
+    const L=state.rubric[gate][f.k];
+    if(state.mode==='email'){
+      const cur=f.levels[L-1]||'', nxt=L<5?(f.levels[L]||''):'';
+      const body=nxt?`<ul class="fx-gaps fx-ladder"><li><span class="fx-why">Now</span> ${cur}</li><li><span class="fx-why">Next step</span> ${nxt}</li></ul>`:`<p class="fx-none">Already at the top level.</p>`;
+      return `<div class="fx-facet"><div class="fx-facet-h"><span>${f.name}</span><span class="fx-lvl">Level ${L}</span></div>${body}</div>`;
+    }
+    const arr=(_abr?(state.abrDiag[gate]&&state.abrDiag[gate][f.k]):(state.diag[gate]&&state.diag[gate][f.k]))||[];
+    const qn=(_abr?(state.abrNote[gate]&&state.abrNote[gate][f.k]):(state.qnote[gate]&&state.qnote[gate][f.k]))||[];
+    const qsrc=_abr?(f.abr?f.abr.map(a=>a.q):[]):f.diag;
+    const sc=_abr?qsrc.map(()=>4):(f.sc||[2,2,2,2]);
+    const short=qsrc.map((q,i)=>({q,i})).filter(x=>arr[x.i]!=null&&arr[x.i]<bandMax(sc[x.i]));
+    const list=short.length?`<ul class="fx-gaps">${short.map(x=>{const r=(qn[x.i]||'').trim();return `<li>${x.q}${r?`<span class="fx-why">Why: ${r.replace(/</g,'&lt;')}</span>`:''}</li>`;}).join('')}</ul>`:`<p class="fx-none">All answered questions here are already at full.</p>`;
+    return `<div class="fx-facet"><div class="fx-facet-h"><span>${f.name}</span><span class="fx-lvl">Level ${L}</span></div>${list}</div>`;
+  };
+  let gapItems;
+  if(teaser){
+    const f0=weak[0], L0=state.rubric[gate][f0.k], today0=f0.levels[L0-1]||'';
+    const featured=`<div class="fx-facet fx-featured"><div class="fx-facet-h"><span>${f0.name}</span><span class="fx-lvl">Level ${L0}</span></div><div class="fx-now"><span class="fx-why">Today</span> ${today0}</div><div class="fx-first"><span>Start here</span>${PATHS[f0.k].first}</div></div>`;
+    const others=weak.slice(1);
+    const also=others.length?`<div class="fx-also"><div class="fx-also-h">Also weighing on ${dimName(gate)}</div><p class="fx-also-list">${others.map(f=>f.name.replace(/ & /g,' and ')).join('. ')}.</p><p class="fx-also-note">Each carries its own path, prioritised in the session.</p></div>`:'';
+    gapItems=featured+also;
+  } else {
+    gapItems=weak.map(buildItem).join('');
+  }
   const unlocks=(c.bestFix&&c.bestFix.gate===gate)?c.bestFix.list:c.blocked.filter(o=>o.gate===gate);
   const unlockList=unlocks.length?`<ul class="fx-unlocks">${unlocks.map(o=>`<li class="li-click" data-opp="${o.name.replace(/"/g,'&quot;')}"><span>${o.name}</span><span class="li-v">${o.value}/${o.effort}</span></li>`).join('')}</ul>`:'<p>Nothing in scope is blocked by this foundation right now.</p>';
   const afterFix={...state.readiness};afterFix[gate]=Math.max(3,afterFix[gate]||0);
@@ -1979,10 +2105,10 @@ function fixBrief(c){
       </div>
       <div class="dw-body">
         ${sec('Why this one first',`<p>${dimName(gate)} is your weakest foundation, so it caps your readiness. Opportunities that depend on it stay blocked until it reaches level 3 of 5. Raising it is the single move that frees the most value.</p>`)}
-        ${sec('What is holding it down, and the work to do',`<p>The ${dimName(gate)} level is set by its weakest facets. The specific questions still answered No, below, are the concrete tasks. Turn each into an action with an owner and a date.</p>${gapItems}`)}
+        ${sec(teaser?'What is holding it down':'What is holding it down, and the work to do',`<p>${teaser?`${dimName(gate)} is the constraint, and one facet sets the ceiling: ${PATHS[weak[0].k].lead}. Below is where you stand today, and one move to make now. The full sequence is the work of the session.`:(state.mode==='email'?`The ${dimName(gate)} level is set by its weakest facets. For each, this is where you are now and the next level to reach; turn each next step into an action with an owner and a date. This email view sets the direction, and a workshop confirms it and fills in the how.`:`The ${dimName(gate)} level is set by its weakest facets. The specific questions still answered No, below, are the concrete tasks. Turn each into an action with an owner and a date.`)}</p>${gapItems}`)}
         ${sec('What closing it unlocks',unlockList)}
         ${sec('What caps you next',`<p>${nextCap}</p>`)}
-        ${sec('How you track it',`<p>As you complete each item, re-answer that question in step 2. ${dimName(gate)}, and your overall readiness, rise as the No answers turn to Yes.</p>`)}
+        ${sec(teaser?'The next step':'How you track it',`<p>${teaser?`A 90-minute working session, virtual or on-site, to sequence these with your team and assign owners and timelines.`:(state.mode==='email'?`As you close each next step, raise that facet's answer in step 2. ${dimName(gate)}, and your overall readiness, rise as the facets move up their levels.`:`As you complete each item, re-answer that question in step 2. ${dimName(gate)}, and your overall readiness, rise as the No answers turn to Yes.`)}</p>`)}
       </div>
     </aside></div>`;
 }
@@ -2038,6 +2164,7 @@ function bind(){
   document.querySelectorAll('input[data-ev]').forEach(cb=>{cb.onchange=()=>{state.evidence[cb.dataset.ev][+cb.dataset.i]=cb.checked;renderAll();};});
   document.querySelectorAll('.lvlrow[data-lvl]').forEach(row=>{const set=()=>{state.readiness[row.dataset.lvl]=+row.dataset.l;renderAll();};row.onclick=set;row.onkeydown=(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();set();}};});
   document.querySelectorAll('[data-rung]').forEach(b=>{b.onclick=()=>{state.rubric[b.dataset.rung][b.dataset.rf]=+b.dataset.rl;renderAll();};});
+  document.querySelectorAll('[data-elvl]').forEach(b=>{b.onclick=()=>{const dk=b.dataset.elvl,fk=b.dataset.ef,L=+b.dataset.el;state.emailDiag[dk]=state.emailDiag[dk]||{};state.emailDiag[dk][fk]=(state.emailDiag[dk][fk]===L)?null:L;renderAll();};});
   document.querySelectorAll('[data-diag]').forEach(b=>{b.onclick=()=>{const dk=b.dataset.diag,fk=b.dataset.df,i=+b.dataset.di,val=+b.dataset.dv;const store=state.mode==='abridged'?state.abrDiag:state.diag;store[dk]=store[dk]||{};store[dk][fk]=store[dk][fk]||(state.mode==='abridged'?[null,null]:[null,null,null,null]);const arr=store[dk][fk];arr[i]=(arr[i]===val)?null:val;renderAll();};});
   document.querySelectorAll('[data-qnote]').forEach(inp=>{inp.oninput=()=>{const dk=inp.dataset.qnote,fk=inp.dataset.qf,i=+inp.dataset.qi;const store=state.mode==='abridged'?state.abrNote:state.qnote;store[dk]=store[dk]||{};store[dk][fk]=store[dk][fk]||(state.mode==='abridged'?[null,null]:[null,null,null,null]);store[dk][fk][i]=inp.value;};});
   document.querySelectorAll('.facet-note[data-note]').forEach(inp=>{inp.oninput=()=>{state.artifact[inp.dataset.notedim][inp.dataset.note]=inp.value;};});
@@ -2063,6 +2190,7 @@ function bind(){
   document.querySelectorAll('[data-close]').forEach(el=>{el.onclick=()=>{state.openOpp=null;state.openFix=null;renderAll();};});
 }
 renderAll();
+document.addEventListener('click',function(){const d=document.documentElement;if(!document.fullscreenElement){const rq=d.requestFullscreen||d.webkitRequestFullscreen;if(rq)rq.call(d).catch(function(){});}},{once:true});
 window.addEventListener('beforeprint',()=>{try{renderReport(compute());}catch(e){}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&(state.openOpp||state.openFix)){state.openOpp=null;state.openFix=null;renderAll();}});
 </script>

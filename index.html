@@ -676,7 +676,8 @@
 .cap-note{font-size:12px;color:var(--muted);margin:2px 0 14px}
 .cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .cap-f{display:flex;flex-direction:column;gap:5px}
-.cap-f>span{font-size:11.5px;font-weight:600;color:var(--ink)}
+.cap-f>span{font-size:11.5px;font-weight:600;color:var(--ink);min-height:2.6em;display:flex;align-items:flex-start}
+.cap-f select{align-self:stretch;height:38px}
 .cap-f textarea,.cap-f select{font-family:var(--sans);font-size:13px;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical;background:var(--paper)}
 .cap-f textarea:focus,.cap-f select:focus{outline:none;border-color:var(--ink)}
 .cap-trim{grid-column:1 / -1;font-size:12px;color:var(--soft);font-style:italic;align-self:center}
@@ -714,6 +715,13 @@
 .gd-facet li{font-size:11.5px;line-height:1.45;color:var(--text);margin-bottom:3px}
 .gd-why{color:var(--muted);font-style:italic}
 .gd-none{color:var(--soft);list-style:none;margin-left:-16px}
+.gd-featured{border:1px solid rgba(224,4,78,.22);border-radius:8px;padding:10px 12px;background:rgba(224,4,78,.03)}
+.gd-first{font-size:11.5px;color:var(--text);line-height:1.45;background:rgba(224,4,78,.06);border:1px solid rgba(224,4,78,.18);border-radius:7px;padding:7px 9px;margin-top:7px}
+.gd-first span{display:block;color:var(--signal);text-transform:uppercase;letter-spacing:.05em;font-size:9.5px;font-weight:700;margin-bottom:3px}
+.gd-also{margin-top:12px}
+.gd-also-h{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);font-weight:700;margin-bottom:4px}
+.gd-also p{margin:0 0 4px;font-size:11.5px;color:var(--text);line-height:1.45}
+.gd-also-n{color:var(--muted);font-style:italic}
 .cx-row{margin-bottom:10px}
 .cx-row>span{display:block;font-size:11px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
 .cx-row>p{margin:0;font-size:12.5px;line-height:1.5;color:var(--text)}
@@ -1087,6 +1095,39 @@ function facetLevel(dk,fk){const fac=facetDef(dk,fk);
   if(state.mode==='abridged'&&fac.abr){return abrLevel(dk,fk);}
   if(fac.diag){return diagLevel(dk,fk);}
   return (state.rubric[dk]&&state.rubric[dk][fk])||0;}
+function seedModeAnswers(target){
+  DIMS.forEach(d=>{
+    RUBRICS[d.k].forEach(f=>{
+      const L=(state.rubric[d.k]&&state.rubric[d.k][f.k])||0;
+      if(target==='email'){
+        if(!f.elab)return;
+        state.emailDiag[d.k]=state.emailDiag[d.k]||{};
+        if(state.emailDiag[d.k][f.k]==null)state.emailDiag[d.k][f.k]=L>0?L:null;
+      }else if(target==='abridged'){
+        if(!f.abr)return;
+        state.abrDiag[d.k]=state.abrDiag[d.k]||{};
+        state.abrNote[d.k]=state.abrNote[d.k]||{};
+        const cur=state.abrDiag[d.k][f.k];
+        if(!cur||cur[0]==null)state.abrDiag[d.k][f.k]=abrForLevel(L);
+        if(!state.abrNote[d.k][f.k])state.abrNote[d.k][f.k]=[null,null];
+      }else{
+        if(!f.diag)return;
+        state.diag[d.k]=state.diag[d.k]||{};
+        state.qnote[d.k]=state.qnote[d.k]||{};
+        const cur=state.diag[d.k][f.k];
+        if(!cur||cur[0]==null)state.diag[d.k][f.k]=diagForLevel(L,f.sc);
+        if(!state.qnote[d.k][f.k])state.qnote[d.k][f.k]=[null,null,null,null];
+      }
+    });
+  });
+}
+function switchMode(m){
+  if(!m||m===state.mode)return;
+  syncRubric();
+  state.mode=m;
+  seedModeAnswers(m);
+  renderAll();
+}
 function syncRubric(){
   if(!state.rubric)return;
   DIMS.forEach(d=>{
@@ -1204,9 +1245,9 @@ function renderSidebar(c){
         <button class="stool" id="btnLoad" data-help="Load a previously saved assessment file and continue it.">Load</button>
         <button class="stool" id="btnXlsx" data-help="Export every answer and result to an Excel workbook: readiness, opportunities and the plan.">Excel</button>
       </div>
-      <button class="side-export${c.scoredCount>=7?'':' locked'}" id="btnReport" data-help="Generate the full client report as a printable PDF. Unlocks once all seven foundations are scored."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12M8 11l4 4 4-4M4 20h16"/></svg>Export report (PDF)</button>
-      <div class="export-hint">${c.scoredCount>=7?'For a clean PDF, in the print dialog choose "Save as PDF", set paper to A4 and margins to Default, and switch off "Headers and footers" so your file path and the date do not print.':'<svg class="lock-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>The report unlocks once all seven foundations are scored ('+c.scoredCount+' of 7 done).'}</div>
-      <label class="fac-toggle" data-help="Shows or hides the two built-in example companies, Blue Tokai and Meridian, in the assessment dropdown at the top left. On for rehearsing or demoing a full worked example; off in a live client session. It only changes the dropdown, never your current answers."><input type="checkbox" id="facToggle" ${state.facilitator?'checked':''}> Facilitator mode: show reference cases</label>
+      <button class="side-export${c.scoredCount>=7?'':' locked'}" id="btnReport" data-help="Generate the client report as a printable PDF. Unlocks once all seven foundations are scored. In the email version this is the trimmed client copy; tick facilitator mode for the full internal version."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12M8 11l4 4 4-4M4 20h16"/></svg>Export report (PDF)</button>
+      <div class="export-hint">${c.scoredCount>=7?(state.mode==='email'&&!state.facilitator?'This is the trimmed client copy: readiness, the binding constraint and one first move. Tick facilitator mode for the full internal version. ':'')+'For a clean PDF, in the print dialog choose "Save as PDF", set paper to A4 and margins to Default, and switch off "Headers and footers" so your file path and the date do not print.':'<svg class="lock-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>The report unlocks once all seven foundations are scored ('+c.scoredCount+' of 7 done).'}</div>
+      <label class="fac-toggle" data-help="Two jobs. It shows or hides the two built-in example companies, Blue Tokai and Meridian, in the assessment dropdown at the top left. In the email version it also switches the report from the trimmed client copy to the full internal one, so you can prepare from the same answers. Off in anything a client will see. It never changes your current answers."><input type="checkbox" id="facToggle" ${state.facilitator?'checked':''}> Facilitator mode: reference cases and full report</label>
       <input type="file" id="loadFile" accept="application/json,.json" style="display:none">
     </div>`;
 }
@@ -1391,8 +1432,8 @@ function stageReadiness(c){
   const flags=c.flags.length?c.flags.map(f=>`<div class="flag"><span class="fi">!</span><span><b>${f.h}:</b> ${f.t}</span></div>`).join(''):`<div class="flags-empty">No conflicting signals at these scores.</div>`;
   return `<div class="stage">
     <div class="lede"><div class="eyebrow">Step 2 of 5</div><h1>Where you stand</h1>
-    <p>Step 1 mapped <b>where</b> AI could help. This step is different: these seven foundations are organisation-wide capabilities that apply across every area you selected, and they decide what any of them can actually reach ${tip('production',T.production)}. We assess each from ${tip('evidence',T.evidence)}, and your true readiness is the weakest of them, because your ${tip('weakest foundation',T.weakest)} sets the ceiling for everything above.</p>
-    <div class="who">Answered with leadership and the heads of each area, backed by evidence</div></div>
+    <p>Step 1 mapped <b>where</b> AI could help. This step is different: these seven foundations are organisation-wide capabilities that apply across every area you selected, and they decide what any of them can actually reach ${tip('production',T.production)}. ${state.mode==='email'?'You assess each from what you know today':`We assess each from ${tip('evidence',T.evidence)}`}, and your true readiness is the weakest of them, because your ${tip('weakest foundation',T.weakest)} sets the ceiling for everything above.</p>
+    <div class="who">${state.mode==='email'?'Answered by you, on your own, from what you know today':'Answered with leadership and the heads of each area, backed by evidence'}</div></div>
     <div class="section-label lbl-help" data-help="The organisation-wide capabilities any AI needs to work, such as data or governance. They cut across every business area, so there are only seven. This is the 'are we ready' axis, separate from the business areas in scope. Readiness is set by the weakest of the seven.">The seven foundations<svg class="lbl-i" viewBox="0 0 20 20" aria-hidden="true" fill="currentColor"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14.4A6.4 6.4 0 1110 3.6a6.4 6.4 0 010 12.8z"/><circle cx="10" cy="6.4" r="1.2"/><rect x="9" y="8.7" width="2" height="5.6" rx="1"/></svg></div>
     <div class="foundations">${items}</div>
     <div class="guide">
@@ -1723,18 +1764,19 @@ function hwScoringChain(){
   const cell=(x,y,w,label,lvl,red)=>`<rect x="${x}" y="${y}" width="${w}" height="30" rx="6" fill="${red?'var(--signal)':'var(--surface)'}" stroke="${red?'none':'var(--line)'}" stroke-width="1.3"/><text x="${x+w/2}" y="${y+20}" font-size="13" font-family="var(--mono)" font-weight="700" fill="${red?'#fff':'var(--ink)'}" text-anchor="middle">${lvl}</text><text x="${x+w/2}" y="${y+43}" font-size="8" fill="${red?'var(--signal)':'var(--soft)'}" text-anchor="middle" font-weight="${red?700:400}">${label}</text>`;
   const arrow=(x,y)=>`<path d="M${x} ${y} L${x+18} ${y}" stroke="var(--soft)" stroke-width="1.4"/><path d="M${x+13} ${y-4} L${x+19} ${y} L${x+13} ${y+4}" fill="none" stroke="var(--soft)" stroke-width="1.4"/>`;
   const result=(x,y,label,val)=>`<text x="${x}" y="${y}" font-size="12" fill="var(--muted)">${label} = <tspan font-size="15" font-weight="700" fill="var(--signal)" font-family="var(--mono)">${val}</tspan></text>`;
-  const f=[['Quality',4,false],['Access',3,false],['Gov',2,true],['Coverage',4,false],['Fresh',3,false]];
+  const f=[['Quality',4,false],['Access',3,false],['Ownership',2,true],['Coverage',4,false],['Fresh',3,false]];
   const fw=64,fg=8,fx0=14,fy=40;let r1='';f.forEach((c,i)=>r1+=cell(fx0+i*(fw+fg),fy,fw,c[0],c[1],c[2]));
   const f1end=fx0+5*(fw+fg)-fg;
   const fo=[['Strategy',3,false],['Data',2,true],['Tech',3,false],['Skills',3,false],['Gov',3,false],['Adopt.',3,false],['Deliv.',3,false]];
   const ow=46,og=7,ox0=14,oy=132;let r2='';fo.forEach((c,i)=>r2+=cell(ox0+i*(ow+og),oy,ow,c[0],c[1],c[2]));
   const o1end=ox0+7*(ow+og)-og;
-  return `<svg viewBox="0 0 640 208" role="img" aria-label="The scoring chain from facets to foundation to readiness">
-    <text x="14" y="28" font-size="9" fill="var(--soft)" letter-spacing=".06em">A FOUNDATION, FROM ITS FIVE FACETS</text>
+  return `<svg viewBox="0 0 640 220" role="img" aria-label="The scoring chain from facets to foundation to readiness">
+    <text x="14" y="28" font-size="9" fill="var(--soft)" letter-spacing=".06em">STEP 1. ONE FOUNDATION, DATA, FROM ITS FIVE FACETS</text>
     ${r1}${arrow(f1end+10,fy+15)}${result(f1end+34,fy+20,'Data','2')}
-    <text x="14" y="120" font-size="9" fill="var(--soft)" letter-spacing=".06em">READINESS, FROM ITS SEVEN FOUNDATIONS</text>
+    <text x="14" y="120" font-size="9" fill="var(--soft)" letter-spacing=".06em">STEP 2. READINESS, FROM ALL SEVEN FOUNDATIONS, DATA AMONG THEM</text>
     ${r2}${arrow(o1end+10,oy+15)}${result(o1end+34,oy+20,'Readiness','2')}
-    <text x="14" y="198" font-size="9.5" fill="var(--soft)">The same weakest-link rule at both levels: the weakest facet caps the foundation, the weakest foundation caps readiness.</text>
+    <text x="14" y="196" font-size="9.5" fill="var(--soft)">The same weakest-link rule at both levels: the weakest facet caps the foundation, the weakest foundation caps readiness.</text>
+    <text x="14" y="208" font-size="9" fill="var(--soft)">Facets are not foundations. Most foundations have five facets; Skills and Governance have six.</text>
   </svg>`;
 }
 function hwRubric(){
@@ -1775,7 +1817,7 @@ function howItWorks(){
   return `
     <div class="hw-head"><div class="hw-head-row"><div><div class="eyebrow">How it works</div><h1>What this tool does, in plain terms</h1></div>
       <div class="mode-toggle" role="group" aria-label="Assessment length"><span class="mode-lbl">Length</span><button class="mode-btn${state.mode==='email'?' on':''}" data-mode="email">Email &middot; 37</button><button class="mode-btn${state.mode==='abridged'?' on':''}" data-mode="abridged">Abridged &middot; 74</button><button class="mode-btn${state.mode==='full'?' on':''}" data-mode="full">Workshop &middot; 148</button></div></div>
-      <p>Read top to bottom, this is the whole assessment: why it exists, what you get, how the number is worked out, how it runs, and who it is for. The length toggle, top right, switches between the abridged run of 74 questions and the full 148; it opens on abridged and keeps every answer when you switch.</p></div>
+      <p>Read top to bottom, this is the whole assessment: why it exists, what you get, how the number is worked out, how it runs, and who it is for. The length toggle, top right, sets how many questions you answer: 37 for the email version, 74 for the abridged session, 148 for the full workshop. It opens on email, and your answers carry across when you switch.</p></div>
     <div class="hw-narrative">
 
       <section class="hw-beat"><div class="hw-beat-n">1</div><div class="hw-beat-b">
@@ -1795,7 +1837,7 @@ function howItWorks(){
 
       <section class="hw-beat"><div class="hw-beat-n">4</div><div class="hw-beat-b">
         <h3>How the score is worked out</h3>
-        <p>Your score is built from facts, not opinions. Each foundation breaks into parts, and each part into concrete questions. Existence questions are answered Yes or No; coverage questions run None, Some, Most, All, so being most of the way counts instead of being lost as a No. Higher answers lift the part, a part scores as low as its weakest signal, and your readiness scores as low as your weakest foundation. The picture below shows it, from parts to foundation to readiness.</p>
+        <p>Your score is built from facts, not opinions. Each foundation breaks into facets, and each facet into concrete questions. ${state.mode==='email'?'In the email version each facet has one question, and you pick the description that matches where you are today.':'Existence questions are answered Yes or No; coverage questions run None, Some, Most, All, so being most of the way counts instead of being lost as a No.'} Higher answers lift the facet, a facet scores as low as its weakest signal, and your readiness scores as low as your weakest foundation. The picture below shows it, from facets to foundation to readiness.</p>
         <div class="hw-vcard hw-inline">${hwScoringChain()}</div>
       </div></section>
 
@@ -1813,7 +1855,7 @@ function howItWorks(){
 
       <section class="hw-beat"><div class="hw-beat-n">7</div><div class="hw-beat-b">
         <h3>Who runs it, where and when</h3>
-        <p>It is run by a facilitator with your leadership and the heads of each area, not filled in alone, because the answers need people who know the ground truth. It is sector-agnostic: the seven foundations are universal, and the business areas span the whole organisation, from operations to finance, so nothing is left out. Use it at the start to set a baseline, and again later to measure how far you have moved.</p>
+        <p>The email version is answered on your own: 37 questions, about ten minutes, no facilitator needed. The abridged and workshop versions are run by a facilitator with your leadership and the heads of each area, because those answers need the people who know the ground truth. It is sector-agnostic: the seven foundations are universal, and the business areas span the whole organisation, from operations to finance, so nothing is left out. Use it at the start to set a baseline, and again later to measure how far you have moved.</p>
       </div></section>
 
     </div>`;
@@ -1859,7 +1901,7 @@ function buildAssessmentXlsx(c){
     ['Set by',c.floorDims.map(dimName).join(', ')||'-'],
     ['Opportunities ready',c.survivors.length],['Opportunities blocked',c.blocked.length],
     ['The one thing to fix first',fix?dimName(fix.gate):'-'],['Unlocked by fixing it',fix?fix.count:0],[],
-    ['Areas in scope',inScopeAreas],[],['Context (not scored)'],['What AI has been tried',(state.context&&state.context.priorWhat)||'-'],['Performance vs plan',(state.context&&state.context.priorResult)||'-'],['What was missing',(state.context&&state.context.priorGap)||'-'],['Deployment approach',(state.context&&state.context.deploy)||'-'],['Assessment length',state.mode==='email'?'Email (37)':state.mode==='abridged'?'Abridged (74)':'Full (148)']];
+    ['Areas in scope',inScopeAreas],[],['Context (not scored)'],['What AI has been tried',(state.context&&state.context.priorWhat)||'-'],['Performance vs plan',(state.context&&state.context.priorResult)||'-'],['What was missing',(state.context&&state.context.priorGap)||'-'],['Deployment approach',(state.context&&state.context.deploy)||'-'],['Assessment length',state.mode==='email'?'Email (37)':state.mode==='abridged'?'Abridged (74)':'Workshop (148)']];
   const readiness=[['Foundation','Derived level','Facet','Facet level','Descriptor','Evidence note']];
   DIMS.forEach(d=>{const facs=RUBRICS[d.k];const derived=state.readiness[d.k]||0;
     facs.forEach(fac=>{const lvl=state.rubric[d.k][fac.k]||0;const desc=lvl?fac.levels[lvl-1]:'';
@@ -1891,11 +1933,13 @@ function importSave(file){const rd=new FileReader();rd.onload=()=>{try{const d=J
   state.readiness={};state.evidence={};state.view='step';state.stage=0;state.openDim='strategy';state.hardFilter=true;state.quadFilter=null;state.openOpp=null;renderedStage=-1;renderedView='';renderAll();
 }catch(e){alert('Could not load this file: '+e.message);}};rd.readAsText(file);}
 function printReport(){const c=compute();if(!(state.clientName||'').trim()){alert('Enter a name for this assessment (top left) before exporting, so the report is not addressed to "Your organisation".');return;}if(c.scoredCount<7){alert('Complete all seven foundations in step 2 before exporting the report.');return;}renderReport(c);window.print();}
+function repTrimmed(){return state.mode==='email'&&!state.facilitator;}
+function listOf(a){return a.length<2?(a[0]||''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];}
 function interpretationText(c){
   const f=c.floor, name=state.clientName||'Your organisation';
   const bands={1:'Very early',2:'Early',3:'Developing',4:'Advanced',5:'Leading'};
   const band=bands[f]||'Early';
-  const floorNames=c.floorDims.map(dimName).join(' and ');
+  const floorNames=listOf(c.floorDims.map(dimName));
   const fix=(c.bestFix&&c.blockedHi.length)?c.bestFix:null;
   const ready=c.survivors.length, blocked=c.blocked.length, scope=c.inScope.length;
   const lead = f<=2
@@ -1910,9 +1954,13 @@ function interpretationText(c){
     `Readiness is ${f} of 5, the level of the weakest foundation, ${floorNames}. The average across the seven is deliberately not used, because the weakest link is what limits delivery.`,
     fix?`Closing the ${dimName(fix.gate)} gap is the single first move: it unlocks ${fix.count} blocked ${fix.count>1?'opportunities':'opportunity'} at once, more than any individual use case would return.`:`With nothing high-value blocked, sequencing is about impact and effort, not about clearing a constraint.`,
     `${ready} of ${scope} ${ready===1?'opportunity is':'opportunities are'} ready to start now; ${blocked} ${blocked===1?'is':'are'} blocked until the binding foundation is raised.`,
-    `The plan sequences these into now, next and later, each carrying an owner, a first pilot and a measure, so it can be executed rather than admired.`
+    repTrimmed()
+      ? `Which of those to run, in what order, and what each needs is the work of the session. This readout stops at the constraint.`
+      : `The plan sequences these into now, next and later, each carrying an owner, a first pilot and a measure, so it can be executed rather than admired.`
   ];
-  const close=`Read this as a plan, not a scorecard. The sections that follow set out where you stand, where AI can help, the one constraint to remove first, and the ordered moves to make. Every figure is derived from the evidence gathered in the session, so nothing here is self-rated.`;
+  const close=repTrimmed()
+    ? `Read this as a direction, not a plan. It sets out where you stand, the one constraint that caps everything else, and one move to make now. The sequence, the owners and the mapped opportunities are worked out together in a session. Your answers here are self-reported, so treat the number as a starting position to test rather than an audited result.`
+    : `Read this as a plan, not a scorecard. The sections that follow set out where you stand, where AI can help, the one constraint to remove first, and the ordered moves to make. Every figure is derived from the evidence gathered in the session, so nothing here is self-rated.`;
   return `<div class="rep-sec rep-exec"><div class="ps-lbl">Executive summary</div>`+
     `<p class="exec-lead"><b>${band}.</b> ${lead}</p>`+
     `<p class="exec-mid">${context}</p>`+
@@ -1968,18 +2016,44 @@ function renderHeaderName(){
   const el=document.getElementById('hdrclient');
   if(el) el.textContent = state.clientName ? state.clientName : '';
 }
+function teaserDetail(c,fix){
+  const gate=(fix&&fix.gate)||c.floorDims[0];
+  if(!gate)return '';
+  const lvl=state.readiness[gate];
+  const weak=RUBRICS[gate].filter(f=>state.rubric[gate][f.k]===lvl);
+  if(!weak.length)return '';
+  const f0=weak[0], L0=state.rubric[gate][f0.k], today=f0.levels[L0-1]||'', next=L0<5?(f0.levels[L0]||''):'';
+  const authored=!!PATHS[f0.k];
+  const lead=authored
+    ? `${dimName(gate)} is the constraint, and one facet sets the ceiling: ${PATHS[f0.k].lead}. Below is where you stand today, and one move to make now.`
+    : `${dimName(gate)} is the constraint, and one facet sets the ceiling. Below is where you stand today, and the next rung up.`;
+  const move=authored
+    ? `<div class="gd-first"><span>Start here</span>${PATHS[f0.k].first}</div>`
+    : (next?`<div class="gd-first"><span>Next step</span>${next}</div>`:`<div class="gd-first"><span>Next step</span>This facet is already at the top level.</div>`);
+  const others=weak.slice(1);
+  const also=others.length
+    ? `<div class="gd-also"><div class="gd-also-h">Also weighing on ${dimName(gate)}</div><p>${others.map(f=>f.name.replace(/ &amp; | & /g,' and ')).join('. ')}.</p><p class="gd-also-n">Each carries its own path, prioritised in the session.</p></div>`
+    : '';
+  const otherFloors=c.floorDims.filter(d=>d!==gate);
+  const rest=otherFloors.length
+    ? `<p class="rep-note">${listOf(otherFloors.map(dimName))} ${otherFloors.length>1?'sit':'sits'} at the same level and will need the same treatment. ${dimName(gate)} comes first because it frees the most.</p>`
+    : '';
+  return `<div class="gd-dim"><h4>${dimName(gate)}, the binding constraint</h4><p class="rep-note">${lead}</p>`+
+    `<div class="gd-facet gd-featured"><div class="gd-h">${f0.name} <span>level ${L0}</span></div>`+
+    `<ul><li><span class="gd-why">today</span> ${today}</li></ul>${move}</div>${also}${rest}</div>`;
+}
 function renderReport(c){
   const ps=document.getElementById('printsheet');
   if(!ps) return;
   const date=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   const name=state.clientName||'Your organisation';
-  const modeBadge=`<span class="ps-mode">${state.mode==='email'?'Email assessment':state.mode==='abridged'?'Abridged assessment':'Full assessment'}</span>`;
+  const modeBadge=`<span class="ps-mode">${state.mode==='email'?(state.facilitator?'Email assessment, facilitator copy':'Email assessment'):state.mode==='abridged'?'Abridged assessment':'Workshop assessment'}</span>`;
   const head=`<div class="ps-head"><div><div class="ps-eyebrow">AI Readiness Assessment</div><h1>${name}</h1></div><div class="ps-headr"><div class="ps-date">${date}</div>${modeBadge}</div></div>`;
   if(c.scoredCount<7){
     ps.innerHTML=head+`<div class="ps-note">This assessment is incomplete: <b>${c.scoredCount} of 7</b> foundations scored. Complete step 2 before exporting a client report. This page exists so an accidental print never produces a misleading result.</div>`;
     return;
   }
-  const floorNames=c.floorDims.map(dimName).join(' and ');
+  const floorNames=listOf(c.floorDims.map(dimName));
   const fix=(c.bestFix&&c.blockedHi.length)?c.bestFix:null;
   const now=[...c.survivors].sort((a,b)=>(b.value-b.effort)-(a.value-a.effort)).slice(0,6);
   const unlocks=fix?fix.list.filter(x=>x.value>=4):[];
@@ -1988,7 +2062,7 @@ function renderReport(c){
   const rdRows=DIMS.map(d=>{const lvl=state.readiness[d.k];const facs=RUBRICS[d.k];const bf=facs.filter(f=>state.rubric[d.k][f.k]===lvl);const binder=bf.length===facs.length?'all facets at this level':bf.length===1?bf[0].name:bf.map(f=>f.name).join(', ')+' (tied)';const isFloor=c.floorDims.indexOf(d.k)>=0;
     return `<tr class="${isFloor?'rd-floor':''}"><td>${d.name}${isFloor?' <span class="rd-cap">caps readiness</span>':''}</td><td class="rd-lvl">${lvl} / 5</td><td>${binder}</td></tr>`;}).join('');
   // diagnostic detail for the binding foundation(s): the specific shortfalls
-  const gapDetail=c.floorDims.map(dk=>{const lvl=state.readiness[dk];const facs=RUBRICS[dk];const weak=facs.filter(f=>state.rubric[dk][f.k]===lvl);
+  const gapDetail=repTrimmed()?teaserDetail(c,fix):c.floorDims.map(dk=>{const lvl=state.readiness[dk];const facs=RUBRICS[dk];const weak=facs.filter(f=>state.rubric[dk][f.k]===lvl);
     if(state.mode==='email'){const items=weak.map(f=>{const L=state.rubric[dk][f.k];const cur=f.levels[L-1]||'';const nxt=L<5?(f.levels[L]||''):'';const body=nxt?`<li><span class="gd-why">now</span> ${cur}</li><li><span class="gd-why">next step</span> ${nxt}</li>`:`<li><span class="gd-why">now</span> ${cur}</li><li class="gd-none">Already at the top level.</li>`;return `<div class="gd-facet"><div class="gd-h">${f.name} <span>level ${L}</span></div><ul>${body}</ul></div>`;}).join('');return `<div class="gd-dim"><h4>${dimName(dk)}, the binding constraint</h4>${items}</div>`;}
     const abr=state.mode==='abridged';
     const items=weak.map(f=>{const arr=(abr?(state.abrDiag[dk]&&state.abrDiag[dk][f.k]):(state.diag[dk]&&state.diag[dk][f.k]))||[];const qn=(abr?(state.abrNote[dk]&&state.abrNote[dk][f.k]):(state.qnote[dk]&&state.qnote[dk][f.k]))||[];const qsrc=abr?(f.abr?f.abr.map(a=>a.q):[]):f.diag;const sc=abr?qsrc.map(()=>4):(f.sc||[2,2,2,2]);
@@ -2014,6 +2088,11 @@ function renderReport(c){
       <p class="rep-note">Each foundation scores as low as its weakest facet; each facet is computed from concrete questions, not chosen. The rows marked cap your readiness.</p>
       ${gapDetail}
     </div>
+    ${repTrimmed()?`
+    <div class="rep-sec rep-break">
+      <div class="ps-lbl">The next step</div>
+      <p class="rep-note">${c.inScope.length} ${c.inScope.length===1?'opportunity has':'opportunities have'} been identified across the areas you selected, and ${c.blocked.length} of ${c.inScope.length} ${c.blocked.length===1?'is':'are'} held back by the constraint above. Which to run, in what order, what each needs and who owns it is worked out in a 90-minute working session, virtual or on-site, with your team.</p>
+    </div>`:`
     <div class="rep-sec rep-break">
       <div class="ps-lbl">Where AI can help</div>
       <p class="rep-note">The moves to act on now and those the fix unlocks. Each carries a full What, Why, How, Where, When and Who, with its measure and prerequisite.</p>
@@ -2027,13 +2106,13 @@ function renderReport(c){
         <div><h4>Fix next</h4><ul>${fix?`<li>Close the ${dimName(fix.gate)} gap <span>unlocks ${fix.count}</span></li>`+unlocks.map(o=>`<li>&#8627; ${o.name}</li>`).join(''):'<li class="none">Nothing to unblock</li>'}</ul></div>
         <div><h4>Later</h4><ul>${later.map(o=>`<li>${o.name}<span>impact ${o.value} / effort ${o.effort}</span></li>`).join('')||'<li class="none">None yet</li>'}</ul></div>
       </div>
-    </div>
+    </div>`}
     ${contextSection()}
     <div class="rep-sec rep-method">
       <div class="ps-lbl">Method and basis</div>
-      <p class="rep-note">Readiness is the level of the weakest of seven foundations; each foundation is the level of its weakest facet; each facet is computed from your answers, existence questions as yes or no and coverage questions as none, some, most or all. Opportunities are ready only when the one foundation they depend on reaches level 3. Impact and effort are calibrated against your own numbers. This was ${state.mode==='abridged'?'an abridged run of 74 questions, the two most telling per facet':'a full run of 148 questions'}; nothing is self-rated.</p>
+      <p class="rep-note">Readiness is the level of the weakest of seven foundations; each foundation is the level of its weakest facet; each facet is computed from your answers, never chosen directly. ${state.mode==='email'?'This was the email version: 37 questions, one per facet, each answered by picking the description that matches where you are today.':state.mode==='abridged'?'This was the abridged version: 74 questions, the two most telling per facet, answered as none, some, most or all.':'This was the full workshop version: 148 questions, four per facet, existence questions as yes or no and coverage questions as none, some, most or all.'} Opportunities are ready only when the one foundation they depend on reaches level 3. Impact and effort are calibrated against your own numbers.</p>
     </div>
-    <div class="ps-foot">Every figure is derived from the evidence gathered in your session.</div>`;
+    <div class="ps-foot">${state.mode==='email'?'Answered by you, unfacilitated and self-reported. A facilitated session tests these answers against evidence.':'Every figure is derived from the evidence gathered in your session.'}</div>`;
 }
 function renderPrintSheet(c){return renderReport(c);}
 const PATHS={
@@ -2183,7 +2262,7 @@ function bind(){
   const bx=document.getElementById('btnXlsx');if(bx)bx.onclick=exportExcel;
   const br=document.getElementById('btnReport');if(br)br.onclick=printReport;
   const ft=document.getElementById('facToggle');if(ft)ft.onchange=()=>{state.facilitator=ft.checked;renderAll();};
-  document.querySelectorAll('[data-mode]').forEach(b=>{b.onclick=()=>{state.mode=b.dataset.mode;renderAll();};});
+  document.querySelectorAll('[data-mode]').forEach(b=>{b.onclick=()=>{switchMode(b.dataset.mode);};});
   document.querySelectorAll('[data-cx]').forEach(el=>{const h=()=>{state.context=state.context||{};state.context[el.dataset.cx]=el.value;};el.oninput=h;el.onchange=h;});
   const rb=document.getElementById('resetbtn');if(rb)rb.onclick=()=>{loadClient(state.client);renderAll();};
   document.querySelectorAll('.backcue-btn').forEach(b=>{b.onclick=()=>{state.view='step';state.stage=1;renderAll();};});
